@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- Message queue, 2 of 4: where the topic is published. -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
+    <publisher topic="acme.reference.item.saved">
+        <connection name="db" exchange="magento-db"/>
+    </publisher>
+</config>

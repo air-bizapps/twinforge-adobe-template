@@ -1,0 +1,64 @@
+# twinforge/roles.yaml
+#
+# Mapeia as chaves de papel usadas em workflow.yaml (agent:tech_lead,
+# human:client_approver, etc.) para identidades concretas nesta instância do
+# TwinForge. Isso muda por projeto/cliente — workflow.yaml não deveria
+# precisar mudar quando isso muda, e vice-versa: trocar quem é o Tech Lead
+# não deveria exigir mexer no fluxo.
+
+version: 1
+
+# Mesmo escopo declarado em workflow.yaml: só os agentes do pod de Magento.
+# O Workflow Manager audita este arquivo contra `twinforgecli agent list`,
+# mas nunca adiciona um agente de outro projeto (ex. Mobile Tech Lead,
+# Mobile Developer) aqui — eles têm seu próprio roster, se precisarem de um.
+scope:
+  project_id: "{{project_id}}"
+  repo: "<org>/<repo-do-projeto>"
+  excludes:
+    - project: "<outro-projeto-do-mesmo-company>"
+      project_id: "{{outro_project_id}}"
+
+roles:
+  tech_lead:
+    kind: agent
+    id: "{{tech_lead_agent_id}}"
+
+  openspec_manager:
+    kind: agent
+    id: "{{openspec_manager_agent_id}}"
+
+  backend_dev:
+    kind: agent
+    id: "{{backend_dev_agent_id}}" # Magento Backend Developer
+
+  frontend_dev:
+    kind: agent
+    id: "{{frontend_dev_agent_id}}" # Magento Frontend Developer
+
+  workflow_manager:
+    kind: agent
+    id: "{{workflow_manager_agent_id}}"
+    # dono deste diretório (twinforge/) — não é um papel referenciado em
+    # nenhuma fase de workflow.yaml hoje, mas entra aqui porque é ele quem
+    # audita e mantém este próprio arquivo em sincronia com o roster real.
+
+  verifier:
+    kind: agent
+    id: "{{verifier_agent_id}}" # Verificador (process, sem LLM)
+    # Participante do estágio de revisão de toda subtarefa de dev (bunge-subtask-contract §4).
+    # Criado em 2026-10-21 (passo 7 do roteiro); o mesmo id está no contrato.
+
+  client_approver:
+    kind: human
+    id: "zKCKeiFpjszwCIrujWle8voAIbrX8Ebn" # Kaio
+    # Id do usuário no Slack (não é segredo). O slack-bridge só aceita ações de quem estiver
+    # em policies.notifications.who_may_act no workflow.yaml E tiver este campo preenchido.
+    slack_user_id: "U0AQ7A2EE22"
+
+# Grupos — usados em workflow.yaml onde qualquer um dos papéis do grupo pode
+# assumir a fase (ex. owner: agent:dev em "implementation" e "dev_review").
+groups:
+  dev:
+    - backend_dev
+    - frontend_dev

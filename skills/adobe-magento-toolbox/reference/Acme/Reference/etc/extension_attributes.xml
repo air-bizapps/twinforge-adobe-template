@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+Extension attributes: add a field to a CORE data interface without changing it. Magento generates
+getAcmeReferenceNote()/setAcmeReferenceNote() on the *ExtensionInterface; a plugin fills the value
+(Plugin/Sales/OrderRepositoryPlugin) and the field appears in REST and GraphQL responses.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
+        <attribute code="acme_reference_note" type="string"/>
+    </extension_attributes>
+    <extension_attributes for="Magento\Quote\Api\Data\AddressInterface">
+        <attribute code="acme_reference_note" type="string"/>
+    </extension_attributes>
+</config>

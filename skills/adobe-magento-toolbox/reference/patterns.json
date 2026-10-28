@@ -1,0 +1,610 @@
+{
+  "module": "Acme/Reference",
+  "patterns": [
+    {
+      "id": "module",
+      "title": "Modulo novo: registration, module.xml (sequence) e composer.json",
+      "aliases": [
+        "module",
+        "modulo",
+        "registration",
+        "module.xml",
+        "sequence",
+        "new module"
+      ],
+      "files": [
+        "registration.php",
+        "etc/module.xml",
+        "composer.json"
+      ]
+    },
+    {
+      "id": "service-contract",
+      "title": "Service contract: interfaces Api, repositorio, getList com SearchCriteria, update parcial",
+      "aliases": [
+        "repository",
+        "repositorio",
+        "service contract",
+        "api interface",
+        "data interface",
+        "getlist",
+        "search criteria",
+        "searchcriteria"
+      ],
+      "files": [
+        "Model/ItemRepository.php",
+        "Api/ItemRepositoryInterface.php",
+        "Api/Data/ItemInterface.php",
+        "Api/Data/ItemSearchResultsInterface.php",
+        "Model/ItemSearchResults.php",
+        "etc/di.xml"
+      ]
+    },
+    {
+      "id": "model",
+      "title": "Model, resource model e collection",
+      "aliases": [
+        "model",
+        "resource model",
+        "resourcemodel",
+        "collection",
+        "abstractmodel",
+        "entidade",
+        "entity"
+      ],
+      "files": [
+        "Model/Item.php",
+        "Model/ResourceModel/Item.php",
+        "Model/ResourceModel/Item/Collection.php"
+      ]
+    },
+    {
+      "id": "db-schema",
+      "title": "Declarative schema: tabela, unique, foreign key, fulltext, coluna em tabela do core",
+      "aliases": [
+        "db_schema",
+        "db schema",
+        "table",
+        "tabela",
+        "column",
+        "coluna",
+        "declarative schema",
+        "foreign key",
+        "unique",
+        "index",
+        "whitelist"
+      ],
+      "files": [
+        "etc/db_schema.xml",
+        "etc/db_schema_whitelist.json"
+      ]
+    },
+    {
+      "id": "data-patch",
+      "title": "Data patch idempotente",
+      "aliases": [
+        "data patch",
+        "patch",
+        "seed",
+        "setup"
+      ],
+      "files": [
+        "Setup/Patch/Data/AddDefaultItems.php"
+      ]
+    },
+    {
+      "id": "eav-product-attribute",
+      "title": "Atributo de produto (EAV) em data patch reversivel",
+      "aliases": [
+        "product attribute",
+        "atributo de produto",
+        "eav",
+        "eavsetup"
+      ],
+      "files": [
+        "Setup/Patch/Data/AddProductAttribute.php"
+      ]
+    },
+    {
+      "id": "eav-customer-attribute",
+      "title": "Atributo de cliente com used_in_forms",
+      "aliases": [
+        "customer attribute",
+        "atributo de cliente",
+        "used_in_forms",
+        "customersetup"
+      ],
+      "files": [
+        "Setup/Patch/Data/AddCustomerAttribute.php"
+      ]
+    },
+    {
+      "id": "plugin",
+      "title": "Plugin before, around e after numa classe (service contract)",
+      "aliases": [
+        "plugin",
+        "plugin before",
+        "plugin around",
+        "plugin after",
+        "before",
+        "around",
+        "after",
+        "interceptor",
+        "interceptacao"
+      ],
+      "files": [
+        "Plugin/ItemRepositoryPlugin.php",
+        "etc/di.xml"
+      ]
+    },
+    {
+      "id": "extension-attribute",
+      "title": "Extension attribute em entidade do core (pedido) preenchido por plugin",
+      "aliases": [
+        "extension attribute",
+        "extension_attributes",
+        "extension attributes",
+        "plugin core",
+        "order extension",
+        "orderrepository"
+      ],
+      "files": [
+        "Plugin/Sales/OrderRepositoryPlugin.php",
+        "etc/extension_attributes.xml",
+        "etc/di.xml",
+        "etc/db_schema.xml"
+      ]
+    },
+    {
+      "id": "rest",
+      "title": "REST CRUD (webapi.xml) com ACL",
+      "aliases": [
+        "rest",
+        "webapi",
+        "web api",
+        "api rest",
+        "endpoint",
+        "crud rest"
+      ],
+      "files": [
+        "etc/webapi.xml",
+        "Api/ItemRepositoryInterface.php",
+        "Api/Data/ItemInterface.php",
+        "etc/acl.xml"
+      ]
+    },
+    {
+      "id": "graphql",
+      "title": "GraphQL: query com cache, mutations com ACL, resolvers",
+      "aliases": [
+        "graphql",
+        "resolver",
+        "schema.graphqls",
+        "mutation",
+        "query graphql",
+        "crud graphql"
+      ],
+      "files": [
+        "etc/schema.graphqls",
+        "Model/Resolver/Items.php",
+        "Model/Resolver/Item.php",
+        "Model/Resolver/SaveItem.php",
+        "Model/Resolver/DeleteItem.php",
+        "Model/Resolver/Item/Identity.php",
+        "Model/Resolver/ItemFormatter.php"
+      ]
+    },
+    {
+      "id": "ui-listing",
+      "title": "Grid admin (UI Component listing): filtros, busca, mass action, inline edit, acoes",
+      "aliases": [
+        "grid",
+        "listing",
+        "ui component grid",
+        "ui_component listing",
+        "admin grid",
+        "mass action",
+        "massaction",
+        "inline edit",
+        "actions column"
+      ],
+      "files": [
+        "view/adminhtml/ui_component/acme_reference_item_listing.xml",
+        "etc/di.xml",
+        "Ui/Component/Listing/Column/ItemActions.php",
+        "Controller/Adminhtml/Item/MassDelete.php",
+        "Controller/Adminhtml/Item/InlineEdit.php",
+        "view/adminhtml/layout/acme_reference_item_index.xml"
+      ]
+    },
+    {
+      "id": "ui-form",
+      "title": "Formulario admin (UI Component form): DataProvider, botoes, campos, data",
+      "aliases": [
+        "form",
+        "formulario",
+        "ui component form",
+        "ui_component form",
+        "admin form",
+        "data provider",
+        "dataprovider",
+        "buttons",
+        "botao",
+        "date field",
+        "campo data"
+      ],
+      "files": [
+        "view/adminhtml/ui_component/acme_reference_item_form.xml",
+        "Ui/DataProvider/ItemFormDataProvider.php",
+        "Block/Adminhtml/Item/Edit/SaveButton.php",
+        "Block/Adminhtml/Item/Edit/DeleteButton.php",
+        "Block/Adminhtml/Item/Edit/BackButton.php",
+        "Block/Adminhtml/Item/Edit/GenericButton.php",
+        "view/adminhtml/layout/acme_reference_item_edit.xml",
+        "view/adminhtml/layout/acme_reference_item_new.xml"
+      ]
+    },
+    {
+      "id": "admin-controller",
+      "title": "Controllers admin (GET/POST, ACL), rota admin, menu e acl.xml",
+      "aliases": [
+        "admin controller",
+        "adminhtml controller",
+        "controller admin",
+        "save controller",
+        "acl",
+        "menu",
+        "admin route",
+        "rota admin"
+      ],
+      "files": [
+        "Controller/Adminhtml/Item/Save.php",
+        "Controller/Adminhtml/Item/Index.php",
+        "Controller/Adminhtml/Item/Edit.php",
+        "Controller/Adminhtml/Item/NewAction.php",
+        "Controller/Adminhtml/Item/Delete.php",
+        "etc/adminhtml/routes.xml",
+        "etc/adminhtml/menu.xml",
+        "etc/acl.xml"
+      ]
+    },
+    {
+      "id": "config",
+      "title": "Configuracao admin (system.xml), defaults, leitura tipada e campo criptografado",
+      "aliases": [
+        "system.xml",
+        "config",
+        "configuracao",
+        "scope config",
+        "scopeconfig",
+        "encrypted",
+        "obscure",
+        "source model",
+        "source_model"
+      ],
+      "files": [
+        "etc/adminhtml/system.xml",
+        "Model/Config.php",
+        "etc/config.xml",
+        "Model/Source/Status.php"
+      ]
+    },
+    {
+      "id": "observer",
+      "title": "Observer de evento proprio e de evento do core",
+      "aliases": [
+        "observer",
+        "event",
+        "evento",
+        "events.xml",
+        "dispatch"
+      ],
+      "files": [
+        "etc/events.xml",
+        "Observer/PublishItemSaved.php",
+        "Observer/Sales/OrderPlacedObserver.php"
+      ]
+    },
+    {
+      "id": "queue",
+      "title": "Fila (message queue) com publisher e consumer",
+      "aliases": [
+        "queue",
+        "fila",
+        "consumer",
+        "publisher",
+        "message queue",
+        "amqp",
+        "rabbitmq",
+        "assincrono"
+      ],
+      "files": [
+        "etc/communication.xml",
+        "etc/queue_publisher.xml",
+        "etc/queue_topology.xml",
+        "etc/queue_consumer.xml",
+        "Model/Queue/ItemSavedPublisher.php",
+        "Model/Queue/ItemSavedConsumer.php"
+      ]
+    },
+    {
+      "id": "email",
+      "title": "E-mail transacional (template declarado, remetente por escopo)",
+      "aliases": [
+        "email",
+        "e-mail",
+        "transactional email",
+        "template de email",
+        "transportbuilder",
+        "notificacao"
+      ],
+      "files": [
+        "Model/Email/ItemNotificationSender.php",
+        "etc/email_templates.xml",
+        "view/frontend/email/item_notification.html",
+        "etc/config.xml"
+      ]
+    },
+    {
+      "id": "cron",
+      "title": "Cron job",
+      "aliases": [
+        "cron",
+        "crontab",
+        "job",
+        "agendamento"
+      ],
+      "files": [
+        "Cron/DeactivateStaleItems.php",
+        "etc/crontab.xml"
+      ]
+    },
+    {
+      "id": "cli",
+      "title": "Comando bin/magento com Proxy",
+      "aliases": [
+        "cli",
+        "console",
+        "command",
+        "comando",
+        "bin/magento",
+        "proxy"
+      ],
+      "files": [
+        "Console/Command/ListItems.php",
+        "etc/di.xml"
+      ]
+    },
+    {
+      "id": "logger",
+      "title": "Log em arquivo proprio (virtualType, sem classe PHP)",
+      "aliases": [
+        "logger",
+        "log",
+        "custom log",
+        "monolog"
+      ],
+      "files": [
+        "etc/di.xml",
+        "Model/Queue/ItemSavedConsumer.php"
+      ]
+    },
+    {
+      "id": "http-client",
+      "title": "Cliente de API externa (config, token criptografado, erros)",
+      "aliases": [
+        "http client",
+        "http",
+        "curl",
+        "external api",
+        "api externa",
+        "integration",
+        "integracao"
+      ],
+      "files": [
+        "Model/Http/ExternalItemClient.php",
+        "Model/Config.php"
+      ]
+    },
+    {
+      "id": "frontend-page",
+      "title": "Pagina do storefront: rota, controller, layout, template e ViewModel",
+      "aliases": [
+        "frontend",
+        "storefront",
+        "frontend controller",
+        "page",
+        "pagina",
+        "layout",
+        "frontend route",
+        "rota frontend"
+      ],
+      "files": [
+        "Controller/Index/Index.php",
+        "etc/frontend/routes.xml",
+        "view/frontend/layout/acme_reference_index_index.xml",
+        "view/frontend/templates/items.phtml",
+        "ViewModel/ItemList.php"
+      ]
+    },
+    {
+      "id": "viewmodel",
+      "title": "ViewModel e template com escape",
+      "aliases": [
+        "viewmodel",
+        "view model",
+        "block",
+        "template",
+        "phtml",
+        "escaper",
+        "escape"
+      ],
+      "files": [
+        "ViewModel/ItemList.php",
+        "view/frontend/templates/items.phtml",
+        "view/frontend/layout/acme_reference_index_index.xml"
+      ]
+    },
+    {
+      "id": "customer-account",
+      "title": "Pagina em Minha Conta com link na navegacao",
+      "aliases": [
+        "my account",
+        "minha conta",
+        "customer account",
+        "account link",
+        "area do cliente"
+      ],
+      "files": [
+        "Controller/Account/Index.php",
+        "view/frontend/layout/customer_account.xml",
+        "view/frontend/layout/acme_reference_account_index.xml"
+      ]
+    },
+    {
+      "id": "js",
+      "title": "JavaScript: x-magento-init, data-mage-init (widget), uiComponent Knockout, requirejs-config",
+      "aliases": [
+        "javascript",
+        "js",
+        "x-magento-init",
+        "data-mage-init",
+        "requirejs",
+        "requirejs-config",
+        "widget",
+        "knockout",
+        "ko",
+        "uicomponent",
+        "ui component js"
+      ],
+      "files": [
+        "view/frontend/templates/items.phtml",
+        "view/frontend/requirejs-config.js",
+        "view/frontend/web/js/item-list.js",
+        "view/frontend/web/js/toggle-description.js",
+        "view/frontend/web/js/view/item-counter.js",
+        "view/frontend/web/template/item-counter.html"
+      ]
+    },
+    {
+      "id": "mixin",
+      "title": "Mixin JS de modulo do core",
+      "aliases": [
+        "mixin",
+        "js mixin",
+        "mixins",
+        "wrapper"
+      ],
+      "files": [
+        "view/frontend/web/js/action/set-shipping-information-mixin.js",
+        "view/frontend/requirejs-config.js"
+      ]
+    },
+    {
+      "id": "less",
+      "title": "Estilo do modulo (_module.less)",
+      "aliases": [
+        "less",
+        "css",
+        "style",
+        "estilo",
+        "_module.less"
+      ],
+      "files": [
+        "view/frontend/web/css/source/_module.less"
+      ]
+    },
+    {
+      "id": "checkout-field",
+      "title": "Campo no checkout ate o pedido: jsLayout, mixin, quote, fieldset, extension attribute",
+      "aliases": [
+        "checkout",
+        "checkout field",
+        "campo no checkout",
+        "layout processor",
+        "layoutprocessor",
+        "jslayout",
+        "quote to order",
+        "fieldset",
+        "shipping information"
+      ],
+      "files": [
+        "Plugin/Checkout/LayoutProcessorPlugin.php",
+        "view/frontend/web/js/action/set-shipping-information-mixin.js",
+        "Plugin/Checkout/ShippingInformationManagementPlugin.php",
+        "etc/extension_attributes.xml",
+        "etc/fieldset.xml",
+        "etc/db_schema.xml",
+        "etc/frontend/di.xml",
+        "etc/di.xml"
+      ]
+    },
+    {
+      "id": "unit-test",
+      "title": "Teste unitario (PHPUnit 9, mocks, sem propriedade dinamica)",
+      "aliases": [
+        "unit test",
+        "phpunit",
+        "teste unitario",
+        "teste",
+        "mock",
+        "test"
+      ],
+      "files": [
+        "Test/Unit/Plugin/ItemRepositoryPluginTest.php",
+        "Test/Unit/Model/ItemRepositoryTest.php",
+        "Test/Unit/Model/Resolver/Item/IdentityTest.php"
+      ]
+    }
+  ],
+  "maps": [
+    {
+      "id": "map-storefront",
+      "title": "Mapa: da URL do storefront ate o JavaScript",
+      "file": "maps/storefront.md",
+      "aliases": [
+        "url ate o js",
+        "url ao js",
+        "request flow",
+        "fluxo storefront",
+        "como a url chega",
+        "layout ate o js",
+        "rota ate o template"
+      ]
+    },
+    {
+      "id": "map-admin-ui",
+      "title": "Mapa: grid e form do admin e o spinner infinito",
+      "file": "maps/admin-ui-component.md",
+      "aliases": [
+        "spinner",
+        "spinner infinito",
+        "fluxo admin",
+        "ui component fluxo",
+        "mui render"
+      ]
+    },
+    {
+      "id": "map-rest",
+      "title": "Mapa: chamada REST ate o banco",
+      "file": "maps/rest.md",
+      "aliases": [
+        "fluxo rest",
+        "rest ate o banco",
+        "webapi fluxo",
+        "docblock webapi",
+        "update parcial"
+      ]
+    },
+    {
+      "id": "map-checkout",
+      "title": "Mapa: campo no checkout ate o pedido",
+      "file": "maps/checkout.md",
+      "aliases": [
+        "fluxo checkout",
+        "checkout ate o pedido",
+        "jslayout fluxo"
+      ]
+    }
+  ]
+}

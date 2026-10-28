@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+Observers. Keep them light: react to the event, push heavy work to a queue.
+- acme_reference_item_save_commit_after: dispatched by AbstractModel thanks to $_eventPrefix, AFTER
+  the transaction commits (a consumer reading the row will find it; _save_after would be too early).
+- sales_order_place_after: a core event.
+Area: etc/events.xml = every area; etc/frontend/events.xml or etc/adminhtml/events.xml restrict it.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="acme_reference_item_save_commit_after">
+        <observer name="acme_reference_publish_item_saved" instance="Acme\Reference\Observer\PublishItemSaved"/>
+    </event>
+    <event name="sales_order_place_after">
+        <observer name="acme_reference_log_order_note" instance="Acme\Reference\Observer\Sales\OrderPlacedObserver"/>
+    </event>
+</config>

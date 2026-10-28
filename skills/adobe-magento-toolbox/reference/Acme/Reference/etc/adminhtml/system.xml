@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!--
+Admin configuration (Stores > Configuration). The root is <config><system>: a <section> directly
+under <config> is ignored. The schema is Magento_Config:etc/system_file.xsd.
+- each field: source_model for selects, backend_model to process the saved value, validate for
+  client-side rules, depends to show it only when another field has a value, canRestore to allow
+  "use default";
+- secrets: type="obscure" + Magento\Config\Model\Config\Backend\Encrypted (read with decrypt());
+- e-mail selects use the real core sources Magento\Config\Model\Config\Source\Email\Identity and
+  Magento\Config\Model\Config\Source\Email\Template.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="acme" translate="label" sortOrder="900">
+            <label>Acme</label>
+        </tab>
+        <section id="acme_reference" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Reference Module</label>
+            <tab>acme</tab>
+            <resource>Acme_Reference::config</resource>
+            <group id="general" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="default_status" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Default Item Status</label>
+                    <source_model>Acme\Reference\Model\Source\Status</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="cleanup_days" translate="label comment" type="text" sortOrder="30" showInDefault="1" canRestore="1">
+                    <label>Deactivate Items Not Updated For (days)</label>
+                    <comment>Used by the nightly cron job.</comment>
+                    <validate>required-entry validate-digits validate-greater-than-zero</validate>
+                </field>
+            </group>
+            <group id="api" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1">
+                <label>External API</label>
+                <field id="endpoint" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1">
+                    <label>Endpoint URL</label>
+                    <validate>validate-url</validate>
+                </field>
+                <field id="token" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1">
+                    <label>Token</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="timeout" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Timeout (seconds)</label>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
+            </group>
+            <group id="notification" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Notifications</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Send E-mail When an Item Is Saved</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="recipient" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Recipient</label>
+                    <validate>validate-email</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="identity" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Sender</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="template" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

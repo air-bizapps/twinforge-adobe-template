@@ -1,0 +1,391 @@
+# twinforge/workflow.yaml
+#
+# O fluxo de desenvolvimento orquestrado pelos agentes TwinForge, de ponta a
+# ponta: quem faz cada fase (agente, humano ou externo/cliente), se roda
+# automático ou precisa de aprovação, e como o trabalho se ramifica por
+# complexidade. O agente Tech Lead lê este arquivo no momento da triagem para
+# decidir se trava o desenvolvimento ou não — não é documentação solta, é a
+# config que o agente segue.
+#
+# Este arquivo é mais granular que a visão narrativa do fluxo (fases maiores,
+# pensadas pra leitura humana) — ver a doc complementar:
+#   https://claude.ai/code/artifact/{{uuid}}
+# Quem quiser entender o "porquê" antes do "como", comece pela doc.
+#
+# Modelo de referência: um híbrido de pipeline de CI/CD (estágios, gate de
+# aprovação manual, tipo GitHub Actions/GitLab CI) com máquina de estados
+# (nó de decisão com ramificação condicional, tipo Step Functions) — plain CI
+# YAML não expressa bem ramificação/loop, e uma spec de máquina de estados
+# completa (Amazon States Language) é verbosa demais pro que precisamos aqui.
+#
+# Pensado pra ser reaproveitado por outros times/projetos Magento: o número
+# de fases pode mudar bastante (um time pode ter menos gates, outro pode
+# inserir um fluxo externo do cliente no meio) — o que não muda é o
+# vocabulário abaixo.
+
+version: 1
+
+meta:
+  project: bunge-magento2
+  companion_doc: "https://claude.ai/code/artifact/{{uuid}}"
+  roles_file: "./roles.yaml"
+
+# Escopo: este arquivo só vale para o pod de e-commerce (Tech Lead,
+# OpenSpec Manager, Backend/Frontend Magento). Não se aplica ao pod de
+# Mobile, que tem repo, projeto e fluxo próprios (sem OpenSpec):
+# `bunge-mobile-flow`. Um agente que encontrar este arquivo referenciado
+# numa issue de outro projeto deve tratar isso como um erro de roteamento,
+# não seguir o fluxo mesmo assim.
+scope:
+  project_id: "{{uuid}}" # projeto "Onboarding" / Adobe Commerce
+  repo: "<org>/<repo-do-projeto>"
+  excludes:
+    - project: "Bunge Mobile"
+      project_id: "{{uuid}}"
+      reason: "Fluxo próprio, mais leve, sem OpenSpec — ver bunge-mobile-flow"
+
+# ---------------------------------------------------------------------------
+# Vocabulário (vale para todo o arquivo)
+#
+# type: task    — alguém faz um trabalho e segue para o próximo nó (`next`).
+# type: choice  — nó de decisão: nenhum trabalho novo, só avalia `choices` em
+#                 ordem e segue a primeira cujo `when` for verdadeiro.
+#
+# owner — quem executa um nó do tipo `task`, como "<kind>:<role>":
+#   agent:<role>    — um agente TwinForge (role é uma chave de roles.yaml)
+#   human:<role>    — uma pessoa (Tech Lead humano, aprovador do cliente)
+#   external:<role> — alguém fora da empresa (o cliente, respondendo pergunta)
+#
+# mode (só em `task`):
+#   automatic — roda sem esperar ninguém.
+#   manual    — uma pessoa literalmente faz o trabalho (não é um agente
+#               rodando sozinho); normalmente tooling: claude_code.
+#
+# gate (só em uma entrada de `choices`): approval_required — antes de seguir
+#   para `next`, o agente cria uma interaction `ask_user_questions` dirigida
+#   ao `approver`, pedindo permissão explícita pra seguir, e deixa a issue em
+#   `status: in_review` (NUNCA `blocked` — ver convenção de status abaixo).
+#
+# `when` referencia nomes de sinal (ex. info_complete, low_complexity) que o
+# próprio agente da fase anterior avalia, ou um caminho dentro de `policies`
+# (ex. policies.standard_path.requires_proposal_approval). Isso é o que
+# plugamos para variar comportamento por cliente sem mexer no grafo de fases.
+#
+# Convenção de status (vale pra qualquer fase, não só as com `gate`): ver a
+# skill `blocked-exige-blocker-declarado` (anexada a todo agente deste pod)
+# — ela é a fonte de verdade sobre quando usar `in_review` + interaction vs.
+# `blocked`, e o payload exato da interaction. Resumo: `in_review` pra
+# esperar um humano responder algo, `blocked` só pra dependência estrutural
+# entre issues.
+#
+# Notificações (policies.notifications): toda espera por humano que a plataforma
+# deixa visível vira card no Slack — gate `approval_required` (interaction pendente +
+# `in_review`), pergunta ao `external:client` (`ask_client`) e `blocked` que não é só
+# "esperando filhas". O bloco é LIDO pelo integrations/slack-bridge (não é instrução pra
+# agente) e `npm test` lá dentro trava qualquer divergência entre ele e as `phases`/roles.yaml:
+# se você criar uma fase com gate ou owner external, o teste exige atualizar `covers`.
+# Fases `owner: human:*` com `mode: manual` NÃO deixam sinal detectável na plataforma —
+# ficam em `not_covered` de propósito (lacuna declarada, não esquecimento).
+#
+# Convenção de worktree (vale pra qualquer fase que crie uma branch —
+# `policies.concurrency.worktree_required: true`): nenhum agente faz
+# `git checkout <branch-da-card>` no diretório compartilhado do workspace.
+# Esse diretório fica permanentemente em `$BUNGE_BASE_BRANCH` (variável de
+# projeto, hoje "twinforge") e serve só de fonte read-only pra cortar
+# worktrees novos. Protocolo:
+#   cd "$REPO" && git checkout "$BUNGE_BASE_BRANCH" \
+#     && git fetch origin "$BUNGE_BASE_BRANCH" \
+#     && git merge --ff-only "origin/$BUNGE_BASE_BRANCH"
+#   git worktree add "$WS/worktrees/<ID-externo>" \
+#     -b "feature/BUN-<ID-externo>" "origin/$BUNGE_BASE_BRANCH"
+# O worktree nasce de `origin/$BUNGE_BASE_BRANCH` (a ref remota recém
+# atualizada), nunca da branch local — protege contra criar algo a partir
+# de um checkout desatualizado mesmo se o fetch acima falhar silenciosamente.
+# Um worktree por card (não por subtarefa — subtarefas da mesma card
+# dividem o mesmo worktree/branch, como já era). `vendor/` é symlink do
+# checkout principal, não `composer install` por worktree — exceto quando a
+# própria tarefa muda `composer.json`/`composer.lock`, aí instala de
+# verdade naquele worktree. Quem fecha a card remove o worktree
+# (`git worktree remove`) no mesmo passo em que já tira o PR de draft.
+# ---------------------------------------------------------------------------
+
+policies:
+  # Os únicos valores que um time/cliente deveria precisar ajustar com
+  # frequência. O grafo de `phases` abaixo é a forma do processo e muda
+  # raramente; os dials abaixo são a política de negócio sobre essa forma.
+
+  intake:
+    max_rounds: 3 # rodadas de pergunta ao cliente antes de escalar pro Tech Lead
+    on_limit_exceeded: escalate_to_tech_lead
+
+  complexity:
+    # sinais que a fase `intake` calcula e `complexity_routing` consome
+    low_complexity_signals:
+      max_modules_touched: 1
+      touches_sensitive_area: false
+    # espelhado em agents/tech_lead/AGENTS.md (gatilhos de OpenSpec): os agentes não leem este repo
+    sensitive_modules: # tocar qualquer um destes força o caminho padrão,
+      - BungeProposalOffer # mesmo que o resto pareça simples
+      - BungePriceSimulation
+      - BungeTax
+      - CustomBraspagPagador
+      - PaymentTerm
+      - CustomCompany # cadastro B2B: integra com SAP e trata dado pessoal (LGPD)
+      - CustomCustomer
+
+  low_complexity_path:
+    requires_proposal_approval: false # pula aprovação humana antes de desenvolver
+    requires_architecture_approval: false # não há fase de arquitetura separada aqui
+    requires_human_code_review: true # mas o PR ainda passa por humano antes do merge
+
+  standard_path:
+    requires_proposal_approval: true
+    requires_architecture_approval: true
+    requires_human_code_review: false # review entre devs já é suficiente
+
+  concurrency:
+    worktree_required: true # nenhuma branch nasce direto no checkout compartilhado
+    base_branch_env_var: "BUNGE_BASE_BRANCH" # hoje resolve pra "twinforge"
+    max_concurrent_runs_per_agent: 5 # era 1 (serialização por checkout único); teto, não ilimitado
+
+  notifications:
+    # Quem é notificado, de quê, e quem pode agir. Instância-específico (token, id do canal,
+    # workspace) NÃO mora aqui: vem do ambiente do bridge. Detalhes: integrations/slack-bridge/README.md
+    channel: slack
+    who_may_act: # papéis humanos de roles.yaml (precisam de slack_user_id); lista vazia = ninguém age
+      - human:client_approver
+    reminders:
+      after_hours: 24 # relembra em thread se o card seguir pendente
+      max: 3
+    events: # chaves = tipos de item que o bridge detecta; `actions` só aceita as ações daquele tipo
+      blocked: # status blocked com atenção necessária (falha, bloqueio sem filhas ativas)
+        notify: true
+        actions: [guide_and_resume, cancel]
+      blocked_waiting_children: # blocked legítimo: dependência estrutural; inclui card com pelo menos um filho em andamento (subtarefas de dev nascem sem responsável por desenho)
+        notify: false
+      confirmation: # request_confirmation pendente (issue em in_review)
+        notify: true
+        actions: [accept, reject]
+      question: # ask_user_questions de 1 pergunta, escolha única
+        notify: true
+        actions: [answer]
+      approval: # approval formal pendente
+        notify: true
+        actions: [approve, reject_approval]
+      other: # suggest_tasks, perguntas múltiplas etc. — só link; decisão complexa fica na UI
+        notify: true
+        actions: []
+    covers: # espelho das `phases` (o teste do bridge exige que bata)
+      gates: [propose_auto_gate, proposal_approval, architecture_approval, code_review_gate]
+      external: [ask_client]
+    not_covered: # sem sinal na plataforma pra detectar; hoje depende de a pessoa acompanhar
+      human_manual: [escalate_to_tech_lead, propose_human, architecture]
+
+  integrations:
+    azure_devops:
+      enabled: false # a integração ainda não existe — é trabalho futuro
+      # Quando true: a fase `ask_client` comenta direto no card do Azure
+      # DevOps e aguarda resposta por lá. Enquanto false, o mesmo papel é
+      # cumprido comentando/perguntando na própria issue do TwinForge
+      # (`ask_user_questions`) — ninguém trava esperando uma integração que
+      # não está ligada. Vira `true` quando a integração for plugada; os
+      # agentes não precisam de outra mudança neste arquivo pra isso, só a
+      # flag.
+      planned_channel: azure_devops_comment
+      fallback_channel: twinforge_issue_comment
+
+phases:
+  # ---- intake: nunca decide sozinho que "já chega", só decide quando
+  # continuar perguntando e quando escalar (ver doc, seção "intake e
+  # roteamento por complexidade") ----
+
+  - id: intake
+    name: Triagem automática
+    type: task
+    owner: agent:tech_lead
+    mode: automatic
+    description: >
+      Checklist determinístico sobre o card — não é o modo "explore" livre do
+      OpenSpec. Só checa se há informação suficiente e calcula um sinal de
+      complexidade (módulos tocados, área sensível).
+    next: intake_gate
+
+  - id: intake_gate
+    name: Info suficiente?
+    type: choice
+    choices:
+      - when: info_complete
+        next: complexity_routing
+      - when: not info_complete and rounds_used < policies.intake.max_rounds
+        next: ask_client
+      - when: not info_complete and rounds_used >= policies.intake.max_rounds
+        next: escalate_to_tech_lead
+
+  - id: ask_client
+    name: Pergunta ao cliente
+    type: task
+    owner: external:client
+    mode: automatic
+    channel: policies.integrations.azure_devops.enabled
+      and policies.integrations.azure_devops.planned_channel
+      or policies.integrations.azure_devops.fallback_channel
+    description: >
+      Agente pergunta o que falta e aguarda resposta. Hoje
+      (policies.integrations.azure_devops.enabled: false) isso roda via
+      comentário/ask_user_questions na própria issue do TwinForge; quando a
+      integração existir, passa a comentar direto no card do Azure DevOps —
+      sem mudar nada nesta fase além da flag.
+    next: intake_gate # loop — nova resposta pode abrir novo gap
+
+  - id: escalate_to_tech_lead
+    name: Escalar para o Tech Lead
+    type: task
+    owner: human:tech_lead
+    mode: manual
+    description: >
+      Limite de rodadas estourado sem checklist completo. O card não trava
+      indefinidamente — vira tarefa manual do Tech Lead decidir como seguir.
+
+  # ---- roteamento por complexidade ----
+
+  - id: complexity_routing
+    name: Complexidade / sensibilidade
+    type: choice
+    choices:
+      - when: low_complexity and not touches_sensitive_module
+        next: propose_auto
+      - when: otherwise
+        next: propose_human
+
+  # ---- caminho simples: explore + propose na mesma sessão do agente ----
+
+  - id: propose_auto
+    name: "[Simples] Explore profundo + Propose"
+    type: task
+    owner: agent:openspec_manager
+    mode: automatic
+    description: >
+      Explore profundo roda de novo aqui — não reaproveita o explore raso da
+      triagem — e já produz proposal.md/specs/tasks.md em openspec/.
+    next: propose_auto_gate
+
+  - id: propose_auto_gate
+    name: Aprovação da proposta (caminho simples)
+    type: choice
+    choices:
+      - when: policies.low_complexity_path.requires_proposal_approval
+        gate: approval_required
+        approver: human:client_approver
+        next: decomposition
+      - when: otherwise
+        next: decomposition
+
+  # ---- caminho complexo/sensível: explore + propose com o Tech Lead ----
+
+  - id: propose_human
+    name: "[Complexo] Explore profundo + Propose"
+    type: task
+    owner: human:tech_lead
+    mode: manual
+    tooling: claude_code
+    description: >
+      Tech Lead assume via Claude Code. Sem limite de tempo imposto pelo
+      fluxo — só ele decide quando "já chega" (mesma regra do modo explore
+      original do OpenSpec).
+    next: dev_review
+
+  - id: dev_review
+    name: Review técnico da proposta
+    type: task
+    owner: agent:dev
+    mode: automatic
+    description: Pode devolver pro autor da proposta (request changes) antes de seguir.
+    next: proposal_approval
+
+  - id: proposal_approval
+    name: Aprovação da proposta
+    type: choice
+    choices:
+      - when: policies.standard_path.requires_proposal_approval
+        gate: approval_required
+        approver: human:client_approver
+        next: architecture
+      - when: otherwise
+        next: architecture
+
+  - id: architecture
+    name: Definição de arquitetura
+    type: task
+    owner: human:tech_lead
+    mode: manual
+    next: architecture_approval
+
+  - id: architecture_approval
+    name: Aprovação da arquitetura
+    type: choice
+    choices:
+      - when: policies.standard_path.requires_architecture_approval
+        gate: approval_required
+        approver: human:client_approver
+        next: decomposition
+      - when: otherwise
+        next: decomposition
+
+  # ---- a partir daqui os dois caminhos convergem ----
+
+  - id: decomposition
+    name: Decomposição em subtarefas
+    type: task
+    owner: agent:tech_lead
+    mode: automatic
+    next: implementation
+
+  - id: implementation
+    name: Implementação
+    type: task
+    owner: agent:dev
+    mode: automatic
+    next: code_review_gate
+
+  - id: code_review_gate
+    name: Review de código
+    type: choice
+    choices:
+      - when: >
+          (complexity_routing == low_complexity and
+           policies.low_complexity_path.requires_human_code_review) or
+          (complexity_routing == standard and
+           policies.standard_path.requires_human_code_review)
+        gate: approval_required
+        approver: human:client_approver
+        next: testing
+      - when: otherwise
+        next: testing # review entre devs (fase `implementation` já cobre isso)
+
+  - id: testing
+    name: Testes
+    type: task
+    owner: agent:dev
+    mode: automatic
+    description: >
+      Verificação automática antes do done: o dev roda o magento-verify
+      (skill adobe-magento-toolbox) até VERIFY OK e o Tech Lead repete no gate
+      entre subtarefas. Não há meta de cobertura. Próximo passo do plano: um
+      agente Verificador como stage de revisão de cada subtarefa e checagens
+      no PR (navegador e Claude revisor no laptop).
+    next: archive
+
+  - id: archive
+    name: Archive
+    type: task
+    owner: agent:openspec_manager
+    mode: automatic
+    description: Confere tarefas [x], valida --strict, arquiva (funde as specs).
+    next: merge
+
+  - id: merge
+    name: Push e fechamento
+    type: task
+    owner: agent:tech_lead
+    mode: automatic
+    description: Push do código, abre/tira de draft o PR, fecha a card.

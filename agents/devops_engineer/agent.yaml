@@ -1,0 +1,53 @@
+# agents/devops_engineer/agent.yaml
+#
+# Definição portável do agente — {{company_id}} é resolvido pelo instalador
+# na hora de criar o agente numa company TwinForge real. reports_to usa a chave
+# de papel (não um id cru).
+
+role_key: devops_engineer
+name: "DevOps Engineer"
+role: devops  # enum nativo do TwinForge (pm, engineer, ceo, qa, devops, general)
+title: "DevOps / Platform Engineer"
+icon: null
+reports_to: tech_lead
+
+adapter_type: pi_local  # pi_local | crucible_local
+adapter_config:
+  model: air-bizapps/twinforge-coder  # pi_local exige o id com prefixo do provedor
+
+runtime_config:
+  heartbeat:
+    enabled: false
+    wake_on_demand: true
+    max_concurrent_runs: 20
+
+budget_monthly_cents: 15000  # nunca 0 — ver reference_budget_monthly_cents_zero_bug
+
+permissions:
+  can_create_agents: false
+  can_create_skills: false
+
+desired_skills:
+  - air-bizapps/agentes-forjados/agent-framework-add-agent
+  - air-bizapps/agentes-forjados/agent-framework-scaffold
+  - air-bizapps/twinf-forge/para-memory-files
+  - air-bizapps/bundled/twinforge-operations/reflection-coach
+  - air-bizapps/bundled/twinforge-operations/summarize-status
+  - air-bizapps/agentes-forjados/tim-prompt-engineering
+  - air-bizapps/twinf-forge/twinforge
+  - company/{{company_id}}/adobe-magento-toolbox
+  - company/{{company_id}}/adobe-magento-environment-engineer
+  - company/{{company_id}}/adobe-magento-deployment-engineer
+  - company/{{company_id}}/adobe-magento-upgrade-specialist
+  - company/{{company_id}}/adobe-magento-cache-analyst
+  - company/{{company_id}}/adobe-magento-index-analyst
+  - company/{{company_id}}/adobe-magento-local-environment-specialist
+  - company/{{company_id}}/adobe-magento-issue-debugger
+
+instructions:
+  entry_file: AGENTS.md
+  files:
+    - AGENTS.md
+    - HEARTBEAT.md
+    - SOUL.md
+    - TOOLS.md

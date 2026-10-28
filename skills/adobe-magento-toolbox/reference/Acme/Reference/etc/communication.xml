@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!--
+Message queue, 1 of 4: the topic and its message type. With the "db" connection (queue_*.xml) it
+runs on MySQL with no broker; for RabbitMQ change the connection to "amqp" and the exchange to
+"magento". Run the consumer: bin/magento queue:consumers:start acme.reference.item.saved
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic name="acme.reference.item.saved" request="string"/>
+</config>

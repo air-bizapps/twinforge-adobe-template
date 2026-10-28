@@ -1,0 +1,47 @@
+# agents/po/agent.yaml
+#
+# Definição portável do agente — {{company_id}} é resolvido pelo instalador
+# na hora de criar o agente numa company TwinForge real. reports_to usa a chave
+# de papel (não um id cru).
+
+role_key: po
+name: PO
+role: ceo  # enum nativo do TwinForge (pm, engineer, ceo, qa, devops, general)
+title: null
+icon: null
+reports_to: null  # raiz da company — nenhum agente deste repo cria um PO novo
+
+adapter_type: pi_local  # pi_local | crucible_local
+adapter_config:
+  model: air-bizapps/twinforge-coder  # pi_local exige o id com prefixo do provedor
+
+runtime_config:
+  heartbeat:
+    enabled: false
+    wake_on_demand: true
+    max_concurrent_runs: 20
+
+budget_monthly_cents: 15000  # nunca 0 — ver reference_budget_monthly_cents_zero_bug
+
+permissions:
+  can_create_agents: true
+  can_create_skills: true
+
+# Variáveis de ambiente do agente. Só REFERÊNCIAS a secrets da company (pela
+# chave) — nunca o valor. O secret precisa existir antes (twinforgecli secrets
+# create) e a ligação é feita em adapterConfig.env, como secret_ref.
+env:
+  SLACK_BOT_TOKEN:
+    secret_ref: slack_bot_token  # bot token do app Slack; notifica bloqueios em #twinforge-adobe-template
+
+desired_skills:
+  - air-bizapps/bundled/twinforge-operations/issue-triage
+  - company/{{company_id}}/bunge-po-issue-recovery
+
+instructions:
+  entry_file: AGENTS.md
+  files:
+    - AGENTS.md
+    - HEARTBEAT.md
+    - SOUL.md
+    - TOOLS.md

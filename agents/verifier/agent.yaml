@@ -1,0 +1,59 @@
+# agents/verifier/agent.yaml
+#
+# Verificador: participante do estágio de revisão de toda subtarefa de dev. Adapter `process`,
+# sem LLM e sem instruções (não há AGENTS.md: nada vira prompt). A TwinForge roda o
+# verify-stage.php da skill adobe-magento-toolbox, que roda o magento-verify no worktree entregue e
+# aprova ou devolve ao dev com os itens; o docblock do script descreve as regras da plataforma.
+#
+# Placeholders além de {{company_id}}, preenchidos na criação (passo 6 de
+# context/roteiro-ativacao-verificador.md), porque são caminhos do servidor:
+#   {{toolbox_dir}}    pasta da skill adobe-magento-toolbox no disco do servidor
+#   {{workspace_dir}}  o "$WS" das subtarefas (raiz dos worktrees)
+# Testado na TwinForge local em 2026-10-21 (ciclo devolve -> dev corrige -> aprova).
+
+role_key: verifier
+name: "Verificador"
+role: qa  # enum nativo do TwinForge (pm, engineer, ceo, qa, devops, general)
+title: "Verificador (estagio deterministico, sem LLM)"
+icon: null
+reports_to: tech_lead
+capabilities: >-
+  Participante do estagio de revisao das subtarefas de dev: roda o magento-verify no worktree
+  entregue e aprova ou devolve ao dev com os itens. Nao executa trabalho.
+
+adapter_type: process
+adapter_config:
+  command: php
+  args:  # tem que ser lista: o adapter process ignora string
+    - "{{toolbox_dir}}/scripts/verify-stage.php"
+  cwd: "{{workspace_dir}}"  # sem cwd o processo roda na pasta do servidor
+  timeout_sec: 1800         # 0 = 7200 s; o JWT do run vale 1 h
+  grace_sec: 15
+
+runtime_config:
+  heartbeat:
+    enabled: false
+    wake_on_demand: true
+    max_concurrent_runs: 1  # uma verificação por vez (o padrão da plataforma é 20)
+
+# Sem budget_monthly_cents: process não consome LLM, e 0 é "sem limite" no servidor (o problema do 0
+# registrado em context/twinforge-context.md é de agente LLM lendo o próprio registro).
+
+permissions:
+  can_assign_tasks: true  # devolve ao dev uma issue reaberta que caiu com ele
+  can_create_agents: false
+  can_create_skills: false
+
+env:
+  VERIFY_WORKSPACE:
+    plain: "{{workspace_dir}}"
+  VERIFY_MODE:
+    plain: observe  # observe nos 3 primeiros dias (mede falso positivo), depois enforce
+  VERIFY_MAX_ROUNDS:
+    plain: "3"
+  BUNGE_BASE_BRANCH:
+    plain: twinforge
+  VERIFY_SETTLE_SEC:
+    plain: "60"
+
+desired_skills: []  # process não carrega skill; o script é chamado pelo caminho

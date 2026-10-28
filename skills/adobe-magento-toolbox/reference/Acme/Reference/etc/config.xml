@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+Default values of the system.xml fields (section/group/field ids). The e-mail template default is
+the template id from etc/email_templates.xml.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <acme_reference>
+            <general>
+                <enabled>1</enabled>
+                <default_status>1</default_status>
+                <cleanup_days>90</cleanup_days>
+            </general>
+            <api>
+                <timeout>10</timeout>
+            </api>
+            <notification>
+                <enabled>0</enabled>
+                <identity>general</identity>
+                <template>acme_reference_notification_template</template>
+            </notification>
+        </acme_reference>
+    </default>
+</config>

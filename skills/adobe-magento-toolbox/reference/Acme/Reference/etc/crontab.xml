@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+Cron job: group "default" unless the job needs its own process (then declare etc/cron_groups.xml).
+The schedule may also come from config: <config_path>acme_reference/general/cron_schedule</config_path>.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="acme_reference_deactivate_stale_items" instance="Acme\Reference\Cron\DeactivateStaleItems" method="execute">
+            <schedule>0 3 * * *</schedule>
+        </job>
+    </group>
+</config>

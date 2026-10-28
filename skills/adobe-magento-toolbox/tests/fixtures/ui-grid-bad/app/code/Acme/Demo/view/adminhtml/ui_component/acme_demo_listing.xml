@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">acme_demo_listing.acme_demo_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>acme_columns</spinner>
+        <deps>
+            <dep>acme_demo_listing.acme_demo_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="acme_demo_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="acme_demo_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <columns name="acme_demo_columns">
+        <column name="mark_to_remove" component="Magento_Ui/js/grid/columns/select" dataType="select">
+            <settings>
+                <label translate="true">Remover</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Magento\Cms\Ui\Component\Listing\Column\BlockActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">entity_id</item>
+                </item>
+                <item name="actions" xsi:type="array">
+                    <item name="edit" xsi:type="array">
+                        <item name="type" xsi:type="string">edit</item>
+                    </item>
+                </item>
+            </argument>
+        </actionsColumn>
+    </columns>
+</listing>

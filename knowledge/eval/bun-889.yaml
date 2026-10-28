@@ -1,0 +1,8 @@
+card: BUN-889
+descricao: campo vendedor no cadastro B2B + CRUD admin de Seller
+base: 220abd63
+pares:
+  - {antes: d1ed6563^, depois: d1ed6563, some: [CLASS-MISSING, DI-VIRTUALTYPE-SELF, PHP-LOAD, PHP-PARENT-CTOR]}
+  - {antes: 0c8c6d7e^, depois: 0c8c6d7e, some: [PHP-LOAD]}
+  - {antes: 064858c3^, depois: 064858c3, some: [XML-XSD]}
+resultado_2026_10_21: "cada fix remove exatamente os achados que corrigiu"

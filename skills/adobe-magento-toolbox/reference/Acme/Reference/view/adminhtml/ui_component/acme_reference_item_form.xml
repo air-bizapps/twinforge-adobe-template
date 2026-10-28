@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Admin edit form (same shape as Magento_Cms cms_block_form). What makes it render:
+- the dataSource declares component="Magento_Ui/js/form/provider"; without it the form spins
+  forever with no error anywhere;
+- provider and deps = <file name>.<dataSource name>;
+- a simple form uses the collapsible template (or declares a tabs layout in settings);
+- buttons are classes (ButtonProviderInterface);
+- dataProvider is a real class, constructed with name, primaryFieldName and requestFieldName;
+- fields: formElement + settings (dataType, label, validation, dataScope); a date field is
+  formElement="date" with no invented elementTmpl, template or dateComponent.
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">acme_reference_item_form.acme_reference_item_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Item</item>
+        <!-- simple form: without this the default template waits for a tab area (<name>.areas) that
+             only exists when settings/layout declares tabs, and the spinner never goes away -->
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="save" class="Acme\Reference\Block\Adminhtml\Item\Edit\SaveButton"/>
+            <button name="delete" class="Acme\Reference\Block\Adminhtml\Item\Edit\DeleteButton"/>
+            <button name="back" class="Acme\Reference\Block\Adminhtml\Item\Edit\BackButton"/>
+        </buttons>
+        <namespace>acme_reference_item_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>acme_reference_item_form.acme_reference_item_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="acme_reference_item_form_data_source" component="Magento_Ui/js/form/provider">
+        <settings>
+            <submitUrl path="acme_reference/item/save"/>
+        </settings>
+        <dataProvider class="Acme\Reference\Ui\DataProvider\ItemFormDataProvider" name="acme_reference_item_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>item_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label/>
+        </settings>
+        <field name="item_id" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>item_id</dataScope>
+            </settings>
+        </field>
+        <field name="status" sortOrder="10" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="default" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Enabled</label>
+                <dataScope>status</dataScope>
+            </settings>
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+        <field name="code" sortOrder="20" formElement="input">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-code" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Code</label>
+                <notice translate="true">Letters, digits and underscore. Saved in upper case.</notice>
+                <dataScope>code</dataScope>
+            </settings>
+        </field>
+        <field name="name" sortOrder="30" formElement="input">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Name</label>
+                <dataScope>name</dataScope>
+            </settings>
+        </field>
+        <field name="price" sortOrder="40" formElement="input">
+            <settings>
+                <validation>
+                    <rule name="validate-zero-or-greater" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Price</label>
+                <dataScope>price</dataScope>
+            </settings>
+        </field>
+        <field name="valid_from" sortOrder="50" formElement="date">
+            <settings>
+                <validation>
+                    <rule name="validate-date" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Valid From</label>
+                <dataScope>valid_from</dataScope>
+            </settings>
+        </field>
+        <field name="store_id" sortOrder="60" formElement="select">
+            <settings>
+                <dataType>int</dataType>
+                <label translate="true">Store View</label>
+                <dataScope>store_id</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Store\Ui\Component\Listing\Column\Store\Options"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="description" sortOrder="70" formElement="textarea">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Description</label>
+                <dataScope>description</dataScope>
+            </settings>
+        </field>
+    </fieldset>
+</form>

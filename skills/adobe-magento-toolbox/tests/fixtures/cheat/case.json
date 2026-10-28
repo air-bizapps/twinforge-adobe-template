@@ -1,0 +1,3 @@
+{"expect": ["CHEAT-SUPPRESS", "CHEAT-TEST-DELETED", "CHEAT-PROTECTED"],
+ "deleted": ["app/code/Acme/Demo/Test/Unit/Model/OldTest.php"],
+ "changed": ["phpstan-baseline.neon"]}

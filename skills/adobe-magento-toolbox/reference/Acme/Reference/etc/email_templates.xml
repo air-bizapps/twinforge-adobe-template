@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!--
+E-mail template declaration: id (used as the config default in etc/config.xml), file in
+view/<area>/email/, area. The admin can copy it in Marketing > Email Templates.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="acme_reference_notification_template" label="Acme Reference Item Saved" file="item_notification.html" type="html" module="Acme_Reference" area="frontend"/>
+</config>

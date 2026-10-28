@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+Admin menu: the third level must hang from a group of the second level (Content > Elements here);
+resource is the ACL id that hides the item from users without permission.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Acme_Reference::item" title="Reference Items" translate="title" module="Acme_Reference"
+             sortOrder="100" parent="Magento_Backend::content_elements" action="acme_reference/item/index"
+             resource="Acme_Reference::item"/>
+    </menu>
+</config>

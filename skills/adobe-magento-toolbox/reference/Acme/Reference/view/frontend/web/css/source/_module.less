@@ -1,0 +1,39 @@
+// Reference module of the adobe-magento-toolbox skill.
+//
+// Module styles compiled with the theme (Magento UI library). Rules:
+// - everything that is not inside a media query goes in "& when (@media-common = true)";
+// - breakpoints with .media-width() and the library variables (@screen__m, @indent__s, colours);
+// - this file is _module.less (with underscore) in view/frontend/web/css/source/.
+
+& when (@media-common = true) {
+    .acme-reference-items {
+        &__list {
+            .lib-list-reset-styles();
+        }
+
+        &__item {
+            cursor: pointer;
+            margin-bottom: @indent__s;
+            padding: @indent__xs;
+
+            &.is-highlighted {
+                background: @color-gray94;
+            }
+        }
+
+        &__code {
+            color: @color-gray40;
+            margin-left: @indent__xs;
+        }
+
+        &__counter {
+            margin-bottom: @indent__base;
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .acme-reference-items__list {
+        column-count: 2;
+    }
+}

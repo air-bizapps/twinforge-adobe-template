@@ -1,0 +1,64 @@
+# GraphQL schema of the module (merged with every module's schema.graphqls).
+# - queries are public storefront reads (only enabled items) and cached: @cache with an identity class
+#   whose tags match Item::getIdentities(), so saving an item invalidates the cached answers;
+# - mutations check the ACL resource of the admin or integration token (WebapiRoleLocator in the
+#   graphql area), the same resources as REST;
+# - filter inputs reuse the core FilterEqualTypeInput / FilterMatchTypeInput;
+# - resolver class names use double backslashes.
+
+type Query {
+    acmeReferenceItems(
+        filter: AcmeReferenceItemFilterInput @doc(description: "Filters applied to the enabled items.")
+        pageSize: Int = 20 @doc(description: "Items per page.")
+        currentPage: Int = 1 @doc(description: "Page number, starting at 1.")
+    ): AcmeReferenceItems @resolver(class: "Acme\\Reference\\Model\\Resolver\\Items") @doc(description: "Enabled reference items.") @cache(cacheIdentity: "Acme\\Reference\\Model\\Resolver\\Item\\Identity")
+
+    acmeReferenceItem(
+        code: String! @doc(description: "Item code.")
+    ): AcmeReferenceItem @resolver(class: "Acme\\Reference\\Model\\Resolver\\Item") @doc(description: "One enabled reference item.") @cache(cacheIdentity: "Acme\\Reference\\Model\\Resolver\\Item\\Identity")
+}
+
+type Mutation {
+    createAcmeReferenceItem(
+        input: AcmeReferenceItemInput! @doc(description: "Item data; code and name are required.")
+    ): AcmeReferenceItem @resolver(class: "Acme\\Reference\\Model\\Resolver\\SaveItem") @doc(description: "Create an item (ACL Acme_Reference::item_save).")
+
+    updateAcmeReferenceItem(
+        id: Int! @doc(description: "Item id.")
+        input: AcmeReferenceItemInput! @doc(description: "Only the fields sent are changed.")
+    ): AcmeReferenceItem @resolver(class: "Acme\\Reference\\Model\\Resolver\\SaveItem") @doc(description: "Update an item (ACL Acme_Reference::item_save).")
+
+    deleteAcmeReferenceItem(
+        id: Int! @doc(description: "Item id.")
+    ): Boolean @resolver(class: "Acme\\Reference\\Model\\Resolver\\DeleteItem") @doc(description: "Delete an item (ACL Acme_Reference::item_delete).")
+}
+
+input AcmeReferenceItemFilterInput @doc(description: "Filters of acmeReferenceItems.") {
+    code: FilterEqualTypeInput @doc(description: "Exact code.")
+    name: FilterMatchTypeInput @doc(description: "Part of the name.")
+}
+
+input AcmeReferenceItemInput @doc(description: "Fields of a reference item.") {
+    code: String @doc(description: "Unique code.")
+    name: String @doc(description: "Name.")
+    status: Int @doc(description: "1 enabled, 0 disabled.")
+    price: Float @doc(description: "Price.")
+    valid_from: String @doc(description: "Date in YYYY-MM-DD.")
+    description: String @doc(description: "Description.")
+}
+
+type AcmeReferenceItem @doc(description: "A reference item.") {
+    id: Int @doc(description: "Item id.")
+    code: String @doc(description: "Unique code.")
+    name: String @doc(description: "Name.")
+    status: Int @doc(description: "1 enabled, 0 disabled.")
+    price: Float @doc(description: "Price.")
+    valid_from: String @doc(description: "Date in YYYY-MM-DD.")
+    description: String @doc(description: "Description.")
+}
+
+type AcmeReferenceItems @doc(description: "A page of reference items.") {
+    items: [AcmeReferenceItem] @doc(description: "Items of the page.")
+    total_count: Int @doc(description: "Total of items that match the filter.")
+    page_info: SearchResultPageInfo @doc(description: "Paging information.")
+}

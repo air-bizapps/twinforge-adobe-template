@@ -1,0 +1,10 @@
+# Oráculo do verificador: os erros têm que aparecer em agent_head e sumir em human_head.
+card: BUN-14079
+descricao: CRUD admin de tabela de preço (grid + form) — módulo Webjump_BungeListPriceAdmin
+base: 92121603
+agent_head: 35cbae78
+human_head: 8a1b6b11
+esperado_em_agent_head: [XML-MALFORMED, XML-XSD, CLASS-MISSING, PHP-LOAD, UI-DS-NO-COMPONENT,
+  UI-TEMPLATE-MISSING, UI-COLUMN-DATATYPE-ATTR, UI-LEGACY-ACTIONS, JS-REQUIREJS-TARGET]
+esperado_em_human_head: sem erro fora de Test/ (os testes do agente seguem com namespace antigo)
+resultado_2026_10_21: {agent_head: "26 erros fora de teste, 9/9 fixes cobertos", human_head: "0 erros fora de teste"}

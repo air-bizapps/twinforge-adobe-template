@@ -1,0 +1,35 @@
+{
+    "acme_reference_item": {
+        "column": {
+            "item_id": true,
+            "code": true,
+            "name": true,
+            "status": true,
+            "price": true,
+            "valid_from": true,
+            "store_id": true,
+            "description": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "ACME_REFERENCE_ITEM_STATUS": true,
+            "ACME_REFERENCE_ITEM_CODE_NAME": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ACME_REFERENCE_ITEM_CODE": true,
+            "ACME_REFERENCE_ITEM_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "quote": {
+        "column": {
+            "acme_reference_note": true
+        }
+    },
+    "sales_order": {
+        "column": {
+            "acme_reference_note": true
+        }
+    }
+}

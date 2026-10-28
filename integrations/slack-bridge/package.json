@@ -1,0 +1,20 @@
+{
+  "name": "bunge-slack-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sensor determinístico: espelha bloqueios e pedidos de decisão humana da TwinForge no Slack e executa as ações de humanos autorizados.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "once": "node src/index.js once",
+    "run": "node src/index.js run",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@slack/bolt": "^4.0.0",
+    "@slack/web-api": "^7.0.0",
+    "yaml": "^2.9.1"
+  }
+}

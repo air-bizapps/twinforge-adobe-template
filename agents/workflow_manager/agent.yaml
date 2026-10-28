@@ -1,0 +1,41 @@
+# agents/workflow_manager/agent.yaml
+#
+# Definição portável do agente — {{company_id}} é resolvido pelo instalador
+# na hora de criar o agente numa company TwinForge real. reports_to usa a chave
+# de papel (não um id cru) — o instalador resolve pra o id real já criado,
+# exceto "po", que nunca é criado por este instalador: toda company TwinForge
+# já tem seu próprio PO; o instalador só aponta pra ele.
+
+role_key: workflow_manager
+name: "Workflow Manager"
+role: pm  # enum nativo do TwinForge (pm, engineer, ceo, qa, devops, general)
+title: "Workflow Manager"
+icon: cog
+reports_to: po
+
+adapter_type: pi_local  # pi_local | crucible_local — ver README deste diretório
+adapter_config:
+  model: air-bizapps/twinforge-coder
+  thinking: high
+
+runtime_config:
+  heartbeat:
+    enabled: false
+    wake_on_demand: true
+    max_concurrent_runs: 5
+
+budget_monthly_cents: 15000  # nunca 0 — ver reference_budget_monthly_cents_zero_bug
+
+permissions:
+  can_create_agents: false
+  can_create_skills: true
+
+desired_skills:
+  - company/{{company_id}}/bunge-openspec-flow
+  - company/{{company_id}}/bunge-engineering-practices
+  - air-bizapps/agentes-forjados/blocked-exige-blocker-declarado
+
+instructions:
+  entry_file: AGENTS.md
+  files:
+    - AGENTS.md

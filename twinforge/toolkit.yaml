@@ -1,0 +1,25 @@
+# twinforge/toolkit.yaml
+#
+# Lido pelo Agentic Toolkit (funcionalidade "Twinforge"): o app local que mostra esta
+# instância como um quadro de cards com subtarefas, fases e problemas, e que monitora o
+# quadro em segundo plano. Este arquivo ajusta as regras que encontram os problemas; os
+# valores aqui valem para quem abrir o app com este repositório como "repositório de
+# configuração". Sem ele, o app usa os mesmos padrões abaixo.
+#
+# Cada regra é um padrão de falha já visto no fluxo (context/licoes-fluxo-openspec.md).
+# Mudou uma lição que muda uma regra? Ajuste aqui e em context/agentic-toolkit.md no mesmo PR.
+# Nada aqui é dado de instância: sem URL, id de issue ou token.
+
+version: 1
+
+health:
+  # in_progress/in_review sem heartbeat rodando e sem atividade por mais que isso = "parada"
+  stalled_minutes: 45
+  # todas as subtarefas fechadas e a card aberta, sem atividade por mais que isso = "card-esquecida"
+  forgotten_minutes: 60
+  # marcadores de título das subtarefas de desenvolvimento ([BACK] Persistir…) — "pai-errado" e "dev-concorrente"
+  dev_tags: [BACK, FRONT, DEV, BACKEND, FRONTEND, MOBILE, DEVOPS]
+  # marcador das subtarefas do OpenSpec ([OPENSPEC] Proposta…, [OPENSPEC] Arquivar…)
+  openspec_tag: OPENSPEC
+  # regras desligadas, pelo id (lista completa em context/agentic-toolkit.md)
+  disabled_rules: []

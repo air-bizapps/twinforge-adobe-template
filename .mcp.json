@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "agentic-toolkit": {
+      "type": "http",
+      "url": "http://127.0.0.1:4310/api/mcp",
+      "headers": {
+        "Authorization": "Bearer ${AGENTIC_MCP_TOKEN:-}"
+      }
+    }
+  }
+}

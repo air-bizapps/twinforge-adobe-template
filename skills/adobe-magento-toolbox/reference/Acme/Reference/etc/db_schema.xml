@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+Declarative schema: the desired state of the tables. After any change regenerate
+etc/db_schema_whitelist.json with the command setup:db-declaration:generate-whitelist, option
+module-name=Acme_Reference (the whitelist is what lets Magento drop a column later).
+An XML comment never contains two hyphens in a row: the file stops being XML.
+- Unique key: constraint xsi:type="unique" (an index has no "unique" indexType).
+- Foreign key referenceId: TABLE_COLUMN_REFTABLE_REFCOLUMN.
+- Columns added to core tables (quote, sales_order) use that table's resource (checkout, sales).
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="acme_reference_item" resource="default" engine="innodb" comment="Acme Reference Item">
+        <column xsi:type="int" name="item_id" unsigned="true" nullable="false" identity="true" comment="Item ID"/>
+        <column xsi:type="varchar" name="code" nullable="false" length="64" comment="Code"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Name"/>
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" default="1" comment="Status"/>
+        <column xsi:type="decimal" name="price" scale="4" precision="12" unsigned="false" nullable="true" comment="Price"/>
+        <column xsi:type="date" name="valid_from" nullable="true" comment="Valid From"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" default="0" comment="Store ID"/>
+        <column xsi:type="text" name="description" nullable="true" comment="Description"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="item_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="ACME_REFERENCE_ITEM_CODE">
+            <column name="code"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="ACME_REFERENCE_ITEM_STORE_ID_STORE_STORE_ID"
+                    table="acme_reference_item" column="store_id" referenceTable="store" referenceColumn="store_id"
+                    onDelete="CASCADE"/>
+        <index referenceId="ACME_REFERENCE_ITEM_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+        <!-- the admin grid keyword search (filterSearch) needs a fulltext index -->
+        <index referenceId="ACME_REFERENCE_ITEM_CODE_NAME" indexType="fulltext">
+            <column name="code"/>
+            <column name="name"/>
+        </index>
+    </table>
+    <table name="quote" resource="checkout">
+        <column xsi:type="varchar" name="acme_reference_note" nullable="true" length="255" comment="Acme Reference Note"/>
+    </table>
+    <table name="sales_order" resource="sales">
+        <column xsi:type="varchar" name="acme_reference_note" nullable="true" length="255" comment="Acme Reference Note"/>
+    </table>
+</schema>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+REST CRUD over the repository (the same shape as Magento_Cms cmsBlock).
+- {placeholders} match the parameter names of the method (getById(int $itemId) <- :itemId).
+- PUT /items/:id fills setId() of the body object, so the body may omit the id.
+- Every route has an ACL resource. "anonymous" only when the business rule requires public
+  access (and then validate everything); "self" for the logged-in customer's own data.
+- Clients send {"item": {...}} for save(): the key is the parameter name.
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/acme-reference/items/:itemId" method="GET">
+        <service class="Acme\Reference\Api\ItemRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="Acme_Reference::item"/>
+        </resources>
+    </route>
+    <route url="/V1/acme-reference/items" method="GET">
+        <service class="Acme\Reference\Api\ItemRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Acme_Reference::item"/>
+        </resources>
+    </route>
+    <route url="/V1/acme-reference/items" method="POST">
+        <service class="Acme\Reference\Api\ItemRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Acme_Reference::item_save"/>
+        </resources>
+    </route>
+    <route url="/V1/acme-reference/items/:id" method="PUT">
+        <service class="Acme\Reference\Api\ItemRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Acme_Reference::item_save"/>
+        </resources>
+    </route>
+    <route url="/V1/acme-reference/items/:itemId" method="DELETE">
+        <service class="Acme\Reference\Api\ItemRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Acme_Reference::item_delete"/>
+        </resources>
+    </route>
+</routes>

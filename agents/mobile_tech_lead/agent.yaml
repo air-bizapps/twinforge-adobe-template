@@ -1,0 +1,43 @@
+# agents/mobile_tech_lead/agent.yaml
+#
+# Definição portável do agente — {{company_id}} é resolvido pelo instalador
+# na hora de criar o agente numa company TwinForge real. reports_to usa a chave
+# de papel (não um id cru).
+
+role_key: mobile_tech_lead
+name: "Mobile Tech Lead"
+role: pm  # enum nativo do TwinForge (pm, engineer, ceo, qa, devops, general)
+title: "Mobile Tech Lead"
+icon: rocket
+reports_to: po
+
+adapter_type: pi_local  # pi_local | crucible_local
+adapter_config:
+  model: air-bizapps/twinforge-coder
+  thinking: medium
+
+runtime_config:
+  heartbeat:
+    enabled: false
+    wake_on_demand: true
+    max_concurrent_runs: 20
+
+budget_monthly_cents: 15000  # nunca 0 — ver reference_budget_monthly_cents_zero_bug
+
+permissions:
+  can_create_agents: false
+  can_create_skills: true
+
+desired_skills:
+  - company/{{company_id}}/adobe-requirements-refinement-fundamentals
+  - company/{{company_id}}/adobe-srs
+  - company/{{company_id}}/bunge-backlog-item
+  - company/{{company_id}}/bunge-link-verification
+  - company/{{company_id}}/react-native-standards
+  - company/{{company_id}}/bunge-mobile-flow
+  - air-bizapps/agentes-forjados/blocked-exige-blocker-declarado
+
+instructions:
+  entry_file: AGENTS.md
+  files:
+    - AGENTS.md

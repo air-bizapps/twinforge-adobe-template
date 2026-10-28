@@ -1,0 +1,14 @@
+{
+    "name": "acme/module-reference",
+    "description": "Reference module of the adobe-magento-toolbox skill: one working example of each Magento customization pattern.",
+    "type": "magento2-module",
+    "license": "proprietary",
+    "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": "*"
+    },
+    "autoload": {
+        "files": ["registration.php"],
+        "psr-4": {"Acme\\Reference\\": ""}
+    }
+}

@@ -1,0 +1,60 @@
+# agents/frontend_dev/agent.yaml
+#
+# Definição portável do agente — {{company_id}} é resolvido pelo instalador
+# na hora de criar o agente numa company TwinForge real. reports_to usa a chave
+# de papel (não um id cru) — o instalador resolve pra o id real já criado,
+# exceto "po", que nunca é criado por este instalador: toda company TwinForge
+# já tem seu próprio PO; o instalador só aponta pra ele.
+
+role_key: frontend_dev
+name: "Magento Frontend Developer"
+role: engineer  # enum nativo do TwinForge (pm, engineer, ceo, qa, devops, general)
+title: "Magento Frontend Developer"
+icon: code
+reports_to: tech_lead
+
+adapter_type: pi_local  # pi_local | crucible_local — ver README deste diretório
+adapter_config:
+  model: air-bizapps/twinforge-coder
+
+runtime_config:
+  heartbeat:
+    enabled: false
+    wake_on_demand: true
+    max_concurrent_runs: 5
+
+budget_monthly_cents: 15000  # nunca 0 — ver reference_budget_monthly_cents_zero_bug
+
+permissions:
+  can_create_agents: false
+  can_create_skills: true
+
+desired_skills:
+  - company/{{company_id}}/adobe-commerce-standards
+  - company/{{company_id}}/adobe-magento-frontend-standards
+  - company/{{company_id}}/bunge-frontend-code-quality
+  - company/{{company_id}}/bunge-engineering-practices
+  - company/{{company_id}}/adobe-magento-toolbox
+  - company/{{company_id}}/adobe-magento-house-rules
+  - company/{{company_id}}/engineering-memory
+  - company/{{company_id}}/bunge-link-verification
+  - company/{{company_id}}/bunge-openspec-flow
+  - company/{{company_id}}/bunge-subtask-contract
+  - company/{{company_id}}/openspec-review-proposal
+  - company/{{company_id}}/openspec-apply-change
+  - company/{{company_id}}/bunge-domain-lookup
+  - air-bizapps/agentes-forjados/blocked-exige-blocker-declarado
+  - company/{{company_id}}/adobe-magento-frontend-developer
+  - company/{{company_id}}/adobe-magento-theme-developer
+  - company/{{company_id}}/adobe-magento-luma-specialist
+  - company/{{company_id}}/adobe-magento-css-specialist
+  - company/{{company_id}}/adobe-magento-knockout-specialist
+  - company/{{company_id}}/adobe-magento-requirejs-specialist
+  - company/{{company_id}}/adobe-magento-xml-specialist
+  - company/{{company_id}}/adobe-magento-issue-debugger
+
+instructions:
+  entry_file: AGENTS.md
+  files:
+    - AGENTS.md
+    - CONTEXT.md

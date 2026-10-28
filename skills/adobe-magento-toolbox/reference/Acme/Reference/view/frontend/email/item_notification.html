@@ -1,0 +1,11 @@
+<!--@subject {{trans "Item %code was saved" code=$item_code}} @-->
+<!--@vars {
+"var item_code":"Item code",
+"var item_name":"Item name"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<p>{{trans "The item %name (%code) was saved." name=$item_name code=$item_code}}</p>
+
+{{template config_path="design/email/footer_template"}}

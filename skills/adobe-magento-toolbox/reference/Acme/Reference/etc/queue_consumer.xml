@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!-- Message queue, 4 of 4: the consumer that processes the queue (handler = class::method). -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+    <consumer name="acme.reference.item.saved" queue="acme.reference.item.saved" connection="db"
+              maxMessages="100" handler="Acme\Reference\Model\Queue\ItemSavedConsumer::process"/>
+</config>

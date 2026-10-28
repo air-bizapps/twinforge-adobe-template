@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- "My Account" page: inherits the account layout (navigation on the left). -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <body>
+        <referenceContainer name="content">
+            <block name="acme.reference.account.items" template="Acme_Reference::items.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Acme\Reference\ViewModel\ItemList</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

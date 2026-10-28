@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+Global DI. Area-specific config goes to etc/adminhtml/di.xml, etc/frontend/di.xml, etc/graphql/di.xml.
+- preference: only for this module's own interfaces. To change core behaviour use a plugin.
+- virtualType: a configured copy of a class, usable ONLY in DI (never in PHP code).
+- a virtualType name never equals its type: to configure a real class use <type name="...">.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- service contract implementations -->
+    <preference for="Acme\Reference\Api\Data\ItemInterface" type="Acme\Reference\Model\Item"/>
+    <preference for="Acme\Reference\Api\Data\ItemSearchResultsInterface" type="Acme\Reference\Model\ItemSearchResults"/>
+    <preference for="Acme\Reference\Api\ItemRepositoryInterface" type="Acme\Reference\Model\ItemRepository"/>
+
+    <!-- plugins: before / around / after on this module's service contract -->
+    <type name="Acme\Reference\Api\ItemRepositoryInterface">
+        <plugin name="acme_reference_item_repository" type="Acme\Reference\Plugin\ItemRepositoryPlugin" sortOrder="10"/>
+    </type>
+
+    <!-- plugins on core service contracts -->
+    <type name="Magento\Sales\Api\OrderRepositoryInterface">
+        <plugin name="acme_reference_order_note" type="Acme\Reference\Plugin\Sales\OrderRepositoryPlugin"/>
+    </type>
+    <type name="Magento\Checkout\Api\ShippingInformationManagementInterface">
+        <plugin name="acme_reference_shipping_note" type="Acme\Reference\Plugin\Checkout\ShippingInformationManagementPlugin"/>
+    </type>
+
+    <!-- admin grid: the listing data source name maps to a grid collection (virtualType) -->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="acme_reference_item_listing_data_source" xsi:type="string">Acme\Reference\Model\ResourceModel\Item\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Acme\Reference\Model\ResourceModel\Item\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="const">Acme\Reference\Model\ResourceModel\Item::TABLE</argument>
+            <argument name="resourceModel" xsi:type="string">Acme\Reference\Model\ResourceModel\Item</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- dedicated log file var/log/acme_reference.log: two virtualTypes, no PHP class -->
+    <virtualType name="Acme\Reference\Logger\Handler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/acme_reference.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Acme\Reference\Logger\Logger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">acme_reference</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="file" xsi:type="object">Acme\Reference\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Acme\Reference\Model\Queue\ItemSavedConsumer">
+        <arguments>
+            <argument name="logger" xsi:type="object">Acme\Reference\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Acme\Reference\Model\Email\ItemNotificationSender">
+        <arguments>
+            <argument name="logger" xsi:type="object">Acme\Reference\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Acme\Reference\Model\Http\ExternalItemClient">
+        <arguments>
+            <argument name="logger" xsi:type="object">Acme\Reference\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Acme\Reference\Cron\DeactivateStaleItems">
+        <arguments>
+            <argument name="logger" xsi:type="object">Acme\Reference\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Acme\Reference\Observer\Sales\OrderPlacedObserver">
+        <arguments>
+            <argument name="logger" xsi:type="object">Acme\Reference\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <!-- CLI command; the Proxy delays building the repository until the command runs -->
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="acme_reference_items_list" xsi:type="object">Acme\Reference\Console\Command\ListItems</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Acme\Reference\Console\Command\ListItems">
+        <arguments>
+            <argument name="itemRepository" xsi:type="object">Acme\Reference\Api\ItemRepositoryInterface\Proxy</argument>
+        </arguments>
+    </type>
+</config>

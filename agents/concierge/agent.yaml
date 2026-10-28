@@ -1,0 +1,36 @@
+# agents/concierge/agent.yaml
+#
+# Definição portável do agente — {{company_id}} é resolvido pelo instalador
+# na hora de criar o agente numa company TwinForge real. reports_to usa a chave
+# de papel (não um id cru).
+
+role_key: concierge
+name: Concierge
+role: general  # enum nativo do TwinForge (pm, engineer, ceo, qa, devops, general)
+title: Concierge
+icon: messages-square
+reports_to: po
+
+adapter_type: pi_local  # pi_local | crucible_local
+adapter_config:
+  model: air-bizapps/twinforge-coder
+
+runtime_config:
+  heartbeat:
+    enabled: false
+    wake_on_demand: true
+    max_concurrent_runs: 20
+
+budget_monthly_cents: 15000  # nunca 0 — ver reference_budget_monthly_cents_zero_bug
+
+permissions:
+  can_create_agents: false
+  can_create_skills: false
+  built_in_mutation_policy: {'requiresdisplayeddiff': true, 'applyinseparatefollowuprun': false, 'requiresacceptedtaskinteraction': true}
+
+desired_skills:
+  - company/{{company_id}}/bunge-domain-lookup
+
+instructions:
+  entry_file: null  # nenhum arquivo próprio hoje — roda só com as skills anexadas
+  files: []

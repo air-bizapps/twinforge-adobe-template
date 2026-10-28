@@ -1,0 +1,5 @@
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Escolha local da instância TwinForge (twinforge-instancias)
+.twinforge/

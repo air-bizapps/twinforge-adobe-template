@@ -1,0 +1,1 @@
+{"expect": ["PHP-PARENT-CTOR"], "forbid": ["PHP-LOAD", "CLASS-MISSING"]}

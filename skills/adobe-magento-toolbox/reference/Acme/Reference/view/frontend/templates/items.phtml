@@ -1,0 +1,41 @@
+<?php
+/**
+ * Reference module of the adobe-magento-toolbox skill: copy the pattern, rename Acme\Reference.
+ *
+ * Template pattern:
+ * - every value printed goes through $escaper (escapeHtml for text, escapeHtmlAttr for attributes,
+ *   escapeUrl for links); only JSON built with JsonHexTag is printed with @noEscape;
+ * - no logic, no ObjectManager, no repository here: ask the ViewModel;
+ * - JavaScript starts in three ways: x-magento-init (selector => component), data-mage-init
+ *   (on one element) and a Knockout scope (uiComponent created by Magento_Ui/js/core/app).
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+/** @var \Acme\Reference\ViewModel\ItemList $viewModel */
+$viewModel = $block->getData('view_model');
+$items = $viewModel->getItems();
+?>
+<div class="acme-reference-items" id="acme-reference-items">
+    <div class="acme-reference-items__counter" data-bind="scope: 'acmeReferenceCounter'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+    <?php if (!$items): ?>
+        <div class="message info empty"><span><?= $escaper->escapeHtml(__('There are no items yet.')) ?></span></div>
+    <?php else: ?>
+        <ul class="acme-reference-items__list">
+            <?php foreach ($items as $item): ?>
+                <li class="acme-reference-items__item"
+                    data-mage-init='<?= $escaper->escapeHtmlAttr($viewModel->getToggleInitJson()) ?>'>
+                    <strong class="acme-reference-items__name"><?= $escaper->escapeHtml($item->getName()) ?></strong>
+                    <span class="acme-reference-items__code"><?= $escaper->escapeHtml($item->getCode()) ?></span>
+                    <?php if ($item->getDescription()): ?>
+                        <p class="acme-reference-items__description"><?= $escaper->escapeHtml($item->getDescription()) ?></p>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+</div>
+<script type="text/x-magento-init"><?= /* @noEscape */ $viewModel->getInitJson() ?></script>

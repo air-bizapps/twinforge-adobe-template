@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">acme_demo_form.acme_demo_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Item</item>
+    </argument>
+    <settings>
+        <namespace>acme_demo_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>acme_demo_form.acme_demo_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="acme_demo_form_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\Cms\Model\Block\DataProvider</argument>
+            <argument name="name" xsi:type="string">acme_demo_form_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
+            <argument name="requestFieldName" xsi:type="string">entity_id</argument>
+        </argument>
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label/>
+        </settings>
+        <field name="code" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Codigo</label>
+            </settings>
+        </field>
+    </fieldset>
+</form>

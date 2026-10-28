@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+Storefront route: URL /acme-reference/<controller>/<action> (frontName), layout handle
+acme_reference_<controller>_<action> (route id). Controller class:
+Controller/<Controller>/<Action>.php, e.g. /acme-reference/index/index -> Controller/Index/Index.php.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="acme_reference" frontName="acme-reference">
+            <module name="Acme_Reference"/>
+        </route>
+    </router>
+</config>

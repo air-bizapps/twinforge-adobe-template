@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+Storefront page. A template block with a ViewModel argument: the block class is the default
+Template, the logic lives in the ViewModel (no custom Block class, no ObjectManager in templates).
+Template path: Acme_Reference::items.phtml = view/frontend/templates/items.phtml.
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block name="acme.reference.items" template="Acme_Reference::items.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Acme\Reference\ViewModel\ItemList</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

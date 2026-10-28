@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!-- Message queue, 3 of 4: binds the topic to a queue (created by setup:upgrade). -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="magento-db" type="topic" connection="db">
+        <binding id="acmeReferenceItemSavedBinding" topic="acme.reference.item.saved" destinationType="queue" destination="acme.reference.item.saved"/>
+    </exchange>
+</config>
