@@ -2,7 +2,7 @@
 
 Skills e comandos do Claude Code para usar o `twinforgecli` em projetos Adobe Commerce (Magento 2), direto do terminal.
 
-> **Estado:** as cinco skills (`*/SKILL.md`) e os oito comandos (`commands/twinforge/`) já foram escritos, mas **ainda não foram testados em uso real** (nem instalados em `~/.claude`). Este documento descreve como tudo **deve funcionar**. A fonte de verdade do planejamento é a mudança OpenSpec `openspec/changes/twinforge-adobe-skills-v1/` (proposal, specs, design e tasks). Quando algo aqui divergir de lá, vale o que está lá.
+> **Estado:** as seis skills (`*/SKILL.md`) e os nove comandos (`commands/twinforge/`) já foram escritos, mas **ainda não foram testados em uso real** (nem instalados em `~/.claude`). Este documento descreve como tudo **deve funcionar**. A fonte de verdade do planejamento é a mudança OpenSpec `openspec/changes/twinforge-adobe-skills-v1/` (proposal, specs, design e tasks). Quando algo aqui divergir de lá, vale o que está lá.
 
 ## Para quem é
 
@@ -29,17 +29,31 @@ Seis skills (cada uma é uma pasta com um `SKILL.md`) e nove comandos finos que 
 | `twinforge-apply` | Envia uma mudança de planejamento para a instância remota |
 | `twinforge-workspace` | Conecta o repositório GitHub do projeto à instância (workspace e segredo do PAT) |
 
-| Comando | Skill acionada | O que faz |
-|---|---|---|
-| `/twinforge:setup` | `twinforge-setup` | Configura do zero ou retoma de onde parou |
-| `/twinforge:instances` | `twinforge-instancias` | Lista e troca de instância |
-| `/twinforge:status` | `twinforge-diagnostico` | Verifica os pré-requisitos e diz se está tudo certo (só leitura) |
-| `/twinforge:fix` | `twinforge-diagnostico` | Corrige o que o status encontrou, com confirmação |
-| `/twinforge:update` | `twinforge-diagnostico` | Atualiza o `twinforgecli` |
-| `/twinforge:projects` | `twinforge` | Lista os projetos da company (aceita uma company como argumento) |
-| `/twinforge:explore` | `twinforge` | Inicia um modo de conversa em linguagem natural |
-| `/twinforge:apply` | `twinforge-apply` | Envia uma mudança do OpenSpec para a instância |
-| `/twinforge:workspace` | `twinforge-workspace` | Conecta o repositório do projeto e o segredo do PAT do GitHub, sem o token na conversa |
+| Comando | O que faz |
+|---|---|
+| **`/twinforge:explore`** | **Linguagem natural: peça qualquer coisa** ("quais cards estão em andamento?", "cria uma card…", "lista os agentes", "quanto gastamos este mês?"). Leitura roda direto; escrita mostra o rascunho e pede confirmação. |
+| `/twinforge:setup` | Configuração inicial. Sempre pergunta: continuar um setup em andamento, revalidar uma instância ou configurar uma nova. |
+| `/twinforge:projects` | Lista os projetos da company (aceita uma company como argumento). |
+| `/twinforge:instances` | Lista, mostra e troca a instância em uso. |
+| `/twinforge:workspace` | Conecta o repositório GitHub do projeto: workspace e segredo do PAT, com o token fora da conversa. |
+| `/twinforge:apply` | Envia uma mudança do OpenSpec para a instância (issue pai, documentos e uma filha por grupo de tarefas, em `backlog` e sem responsável). |
+| `/twinforge:status` | Checa os pré-requisitos do `twinforgecli` e diz se está tudo certo (só leitura). |
+| `/twinforge:fix` | Corrige o que o `status` encontrou, com plano, confirmação e cópia de segurança. |
+| `/twinforge:update` | Atualiza o `twinforgecli` para a versão mais recente. |
+
+O template acrescenta os comandos do repositório de configuração:
+
+| Comando | O que faz |
+|---|---|
+| `/twinforge:repo:init` | Primeira configuração guiada de uma company (company, PAT, projeto e primeiro agente). |
+| `/twinforge:repo:status` | Compara as skills e os agentes do repositório com a company ao vivo (só leitura). |
+| `/twinforge:repo:pull` | Traz da company para o repositório as skills e as instruções dos agentes (a nuvem vence). |
+| `/twinforge:repo:push` | Aplica as skills do repositório na instância e re-sincroniza o `desiredSkills` dos agentes existentes. **Não cria agentes.** Escreve na instância. |
+| `/twinforge:repo:agent` | Operação pontual em um agente (status, skills, wake, instructions). |
+| `/twinforge:repo:local-sync` | Sincroniza a instância local (127.0.0.1) com a nuvem via `twinforgecli sync`. |
+| `/twinforge:repo:help` | Lista os comandos. |
+
+Os comandos `repo:*` fixam a instância e **param** se `scope.project_id` de `twinforge/roles.yaml` não existir nela.
 
 Os comandos são opcionais: as skills também são acionadas por pedidos em linguagem natural.
 
@@ -87,24 +101,37 @@ Para trabalhar em outra instância no meio da sessão, peça a troca; ela refaz 
 
 Mesmo com uma única instância, **toda escrita** mostra instância e company e pede confirmação.
 
-## `/twinforge:setup`: do zero até ver seus projetos
+## `/twinforge:setup`: o que cada passo faz
 
-O setup **lê o estado real** (máquina e instância) a cada execução e **sempre começa perguntando como você quer seguir**: continuar um setup em andamento, revalidar uma instância (checkup) ou configurar uma instância nova.
+O setup **lê o estado real** (máquina e instância) a cada execução e **sempre começa perguntando como você quer seguir**: continuar um setup em andamento, revalidar uma instância (checkup) ou configurar uma nova. Nada é escrito em uma instância sem a sua confirmação.
 
-```
-1 CLI --> 2 Instância --> 3 Login --> 4 Perfil --> 5 Projetos --> 6 Permissão --> 7 Repo (opcional) --> 8 Auditoria --> 9 Conferência --> 10 Subir template (opcional)
-```
+| Passo | O que é feito |
+|---|---|
+| **1. CLI** | • confere Node 20+ e `twinforgecli --version`<br>• se faltar, mostra `npm install -g twinforgecli` e instala só com a sua confirmação<br>• com `E404` e registry privado, repete com o registry público<br>• avisa se a versão está antiga (`/twinforge:update`) |
+| **2. Como seguir** | • levanta o estado de cada instância **só com leitura** (login, perfil, company, projetos e, para o padrão da pasta, se o `roles.yaml` está adaptado)<br>• mostra uma tabela: **completa** ou **em andamento**, e o que falta<br>• faz **uma pergunta**, sempre, com recomendação: **continuar** um setup em andamento, **revalidar** uma instância (checkup) ou **configurar uma nova**<br>• para instância nova, pede a URL (`https://`) e valida `/api/health` |
+| **3. Login** | • gera o link de aprovação da CLI com um contexto vazio (evita o erro 500 causado pela company de outra instância)<br>• você entra ou cria a conta pelo próprio link e aprova: **um login só**<br>• confirma com `auth whoami`; a credencial é por endereço e as outras instâncias não são afetadas |
+| **4. Perfil** | • grava o perfil com nome único (`context set`, sem `--use`: o perfil ativo global não muda)<br>• oferece salvar como padrão da pasta (`.twinforge/context.json`, sem token, no `.gitignore`) |
+| **5. Projetos** (automático) | • lista company e projetos por nome (equivale ao `/twinforge:projects`)<br>• lista vazia não é sucesso: explica as causas e os próximos passos |
+| **6. Permissão** (automático) | • lê o seu papel (`auth whoami`)<br>• regrava o `AGENTS.md` de **um** agente parado com o **mesmo conteúdo**, para testar a escrita<br>• se falhar, orienta pedir **owner ou admin** no canal do Slack `bizapps-twinforge-forjadores` e não oferece o passo 10 |
+| **7. Repositório de configuração** (opcional) | • pular (e diz o que se perde)<br>• apontar um clone existente<br>• criar a partir do repositório base da organização (você informa a URL)<br>• puxar o que existe na instância |
+| **8. Auditoria** | • com o `roles.yaml` adaptado, compara agentes da instância × `roles.yaml` por `id`<br>• com placeholders, não roda e lista o que falta trocar<br>• somente leitura |
+| **9. Conferência e próximo passo** | • resumo: CLI, instância, login, perfil, company, projetos, permissão e repositório do projeto<br>• mostra o que existe no repositório × na instância<br>• lista os comandos (tabela abaixo)<br>• faz **uma pergunta** de próximo passo: subir o template, pedir algo em linguagem natural, ver a instância ou terminar |
+| **10. Subir o template** (opcional) | • escolhe o projeto-alvo<br>• **conecta o repositório do projeto** (`/twinforge:workspace`: segredo do PAT sem o token na conversa, vínculo ao env sem apagar variáveis e workspace)<br>• avisa do conteúdo do projeto de origem e oferece subir só o genérico primeiro<br>• mostra a diferença (`/twinforge:repo:status`) e aplica as skills (`/twinforge:repo:push`)<br>• cria os agentes com confirmação, **preservando os existentes** e criando o PO na raiz (papel `general`)<br>• nenhum agente é acionado |
 
-1. **CLI.** Verifica `twinforgecli --version` e o Node 20+. Se faltar, mostra `npm install -g twinforgecli` e instala só com a sua confirmação.
-2. **Como você quer seguir (sempre pergunta).** Mostra as instâncias que você já tem, com o estado de cada uma (**completa** ou **em andamento**, e o que falta), e pergunta, com uma recomendação: **continuar um setup em andamento** (retoma no primeiro passo pendente), **revalidar uma instância** (checkup: percorre todo o setup sem alterar nada na instância remota, só repara falhas) ou **configurar uma instância nova** (pede a URL, que precisa ser `https://`). Nem um padrão salvo na pasta dispensa a pergunta.
-3. **Login (uma vez só).** Se `twinforgecli auth whoami` já responde, pula. Senão, gera o link de aprovação da CLI e você entra (ou cria a conta) pelo próprio link e aprova. Em instância nova, o login usa um contexto vazio, para a CLI não enviar a company de outra instância.
-4. **Perfil.** Grava um perfil com nome único (sem `--use`: o perfil ativo global não muda) e oferece salvá-lo como padrão da pasta (`.twinforge/context.json`, sem token).
-5. **Company e projetos.** Roda automaticamente (é o `/twinforge:projects`): lista e mostra os projetos por nome, nunca por uuid. Lista vazia não é sucesso.
-6. **Permissão para editar agentes.** Roda automaticamente: lê seu papel e regrava o `AGENTS.md` de **um** agente (que não esteja em execução) com o **mesmo conteúdo** para testar a escrita. Se falhar por permissão, orienta a pedir no canal do Slack `bizapps-twinforge-forjadores` a mudança do papel para owner ou admin.
-7. **Repositório de configuração dos agentes (opcional).** Pasta com `agents/`, `skills/` e `twinforge/roles.yaml`. Opções: pular, apontar um clone existente, criar a partir do repositório base da organização (você informa a URL) ou puxar o que existe na instância.
-8. **Auditoria.** Só com repositório adaptado: compara por `id` os agentes da instância com `roles.yaml`, sem alterar nada.
-9. **Conferência final e próximo passo.** Mostra o que há no repositório e na instância, a lista de comandos (linguagem natural em destaque) e faz **uma pergunta** de próximo passo com a recomendação.
-10. **Subir o template (opcional).** Só se você escolher e a permissão do passo 6 passou: projeto-alvo, skills pelo `/twinforge:repo:push` e criação guiada dos agentes, com confirmação antes de cada escrita. Os agentes que a instância já tem **nunca são alterados nem apagados** pelo passo: a estrutura nova nasce de um PO criado na raiz (papel `general`, sem `reportsTo`), ao lado do agente de topo existente, ou de um existente que você indicar.
+**Revalidar (checkup):**
+
+| Passo | Checagem (só leitura) | Se falhar |
+|---|---|---|
+| 1 CLI | `twinforgecli --version`, Node 20+, versão publicada | passo 1 |
+| 2 Instância | `/api/health` | considera o horário de funcionamento; nada local a corrigir |
+| 3 Login | `auth whoami` | passo 3 (novo link de aprovação) |
+| 4 Perfil | perfil existe e bate com a URL e a company | passo 4, com cópia de segurança do contexto |
+| 5 Projetos | `company list` e `project list` | passo 5 |
+| 5b Repositório do projeto | workspace e `GH_TOKEN` (`twinforge-workspace`) | `/twinforge:workspace` |
+| 6 Permissão | regravação idêntica do `AGENTS.md` | orienta o pedido no Slack |
+| 7 e 8 | pasta, `roles.yaml` e auditoria | só relata |
+
+O checkup **não altera a instância remota**, exceto para reparar uma falha e na regravação idêntica do passo 6. Não executa o passo 10.
 
 ## Linguagem natural: `twinforge` e `/twinforge:explore`
 
@@ -208,12 +235,16 @@ Se o token for colado na conversa por engano, a skill avisa que ele foi exposto 
 
 Registradas em `openspec/changes/twinforge-adobe-skills-v1/design.md`:
 
-- **Restrições da chave** de `issue document:put`: o limite de tamanho vem de `attachmentMaxBytes` da company (10 MiB na instância testada); as regras da chave não foram verificadas.
+- **Fluxo do `/twinforge:workspace` de ponta a ponta:** criar o segredo pelo terminal do usuário, vincular ao projeto e criar o workspace só foi validado na leitura; falta testar a escrita e o prompt oculto no `zsh`.
+- **Criação dos agentes** no passo 10 do setup: o `agent.yaml` não é o payload do `agent create` e não há instalador; o passo é guiado e ainda não foi exercitado.
+- **Verificação de permissão** (passo 6): a mensagem exata de erro de um usuário operador não foi observada.
+- **Restrições da chave** de `issue document:put`: o limite vem de `attachmentMaxBytes` da company (10 MiB na instância testada); as regras da chave não foram verificadas.
 - **Envio repetido do `apply`:** a busca pelo marcador usa `issue list --match` (filtro local, sem paginação); o reenvio sem duplicar só será validado numa instância de teste.
-- **Publicação** em `air-bizapps/twinforge-adobe-skills`, depois dos testes locais.
+- **Sobreposição** entre `/twinforge:setup` e `/twinforge:repo:init`, e a limpeza das menções ao projeto de origem no template.
+- **Publicação** em `air-bizapps/twinforge-adobe-skills`, depois dos testes.
 - **Servidor local** (`twinforgecli run --instance`): fora do v1.
 
-Já verificados na CLI 0.6.0: formato da URL de aprovação do `auth login --no-browser --json` (sai em stderr) e ausência de conflito do prefixo `twinforge:`.
+Já verificados na CLI 0.6.0: formato da URL de aprovação do `auth login --no-browser --json` (sai em stderr), o erro 500 quando o contexto padrão de outra instância é usado no login, e a regravação idêntica do `AGENTS.md` por um admin.
 
 ## Desenvolvimento deste repositório
 
