@@ -18,7 +18,7 @@ Princípios:
 
 ## O que vem no pacote
 
-Cinco skills (cada uma é uma pasta com um `SKILL.md`) e oito comandos finos que só acionam a skill certa.
+Seis skills (cada uma é uma pasta com um `SKILL.md`) e nove comandos finos que só acionam a skill certa.
 
 | Skill | Para que serve |
 |---|---|
@@ -27,6 +27,7 @@ Cinco skills (cada uma é uma pasta com um `SKILL.md`) e oito comandos finos que
 | `twinforge` | Linguagem natural: traduz o pedido em comando do `twinforgecli` |
 | `twinforge-diagnostico` | `status`, `fix` e `update` do próprio CLI |
 | `twinforge-apply` | Envia uma mudança de planejamento para a instância remota |
+| `twinforge-workspace` | Conecta o repositório GitHub do projeto à instância (workspace e segredo do PAT) |
 
 | Comando | Skill acionada | O que faz |
 |---|---|---|
@@ -38,6 +39,7 @@ Cinco skills (cada uma é uma pasta com um `SKILL.md`) e oito comandos finos que
 | `/twinforge:projects` | `twinforge` | Lista os projetos da company (aceita uma company como argumento) |
 | `/twinforge:explore` | `twinforge` | Inicia um modo de conversa em linguagem natural |
 | `/twinforge:apply` | `twinforge-apply` | Envia uma mudança do OpenSpec para a instância |
+| `/twinforge:workspace` | `twinforge-workspace` | Conecta o repositório do projeto e o segredo do PAT do GitHub, sem o token na conversa |
 
 Os comandos são opcionais: as skills também são acionadas por pedidos em linguagem natural.
 
@@ -181,6 +183,19 @@ destino: projeto escolhido por nome, status backlog, sem responsável
 - **Rascunho antes de enviar:** instância, company, projeto, título, quantidade de documentos e de filhas, status, responsável e o resultado da busca por envio anterior.
 - **Sem duplicar:** a skill procura no projeto uma issue com o marcador da mudança. Se achar, oferece atualizar em vez de criar outra.
 - **Fora do escopo:** não sincroniza de volta (os checkboxes de `tasks.md` não são marcados quando os agentes concluem) e não implementa nada localmente. O andamento você acompanha por leituras, por exemplo no `/twinforge:explore`.
+
+## `/twinforge:workspace`: repositório do projeto e PAT do GitHub
+
+Os agentes só conseguem puxar e alterar o código se o projeto tiver o **repositório** e um **segredo com o PAT do GitHub**. O `/twinforge:workspace` faz isso (e o `setup` o chama **antes** de subir skills e agentes):
+
+1. Escolhe o projeto por nome e pede a URL `https://github.com/<org>/<repo>`.
+2. Lê o estado (somente leitura): workspace, chaves do env do projeto e segredos da company.
+3. **O PAT nunca passa pela conversa.** A skill orienta criar o token no GitHub (escopo só desse repositório) e entrega um comando para você rodar em **outro terminal**: ele lê o token por um prompt sem eco (`read -s`), grava o segredo com `--value-env` e limpa a variável. O comando não contém o token e nada vai para o histórico.
+4. Confirma o segredo pelo nome (`secrets list`, que só mostra metadados).
+5. Vincula o segredo ao projeto **sem apagar as outras variáveis** do env (o comando substitui o env inteiro, então a skill lê, mescla e mostra o diff antes).
+6. Cria o workspace (`project-workspace create`) com a `repoUrl`. Toda escrita pede confirmação.
+
+Se o token for colado na conversa por engano, a skill avisa que ele foi exposto e pede para revogá-lo no GitHub.
 
 ## Segurança, em resumo
 

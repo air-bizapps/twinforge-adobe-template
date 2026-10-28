@@ -17,7 +17,7 @@ Base para configurar um projeto **TwinForge + Adobe Commerce (Magento 2)**: o pa
 
 | Onde | O que é |
 |---|---|
-| `.claude/skills/` | Pacote de skills `twinforge`: `twinforge`, `twinforge-setup`, `twinforge-instancias`, `twinforge-diagnostico`, `twinforge-apply`. |
+| `.claude/skills/` | Pacote de skills `twinforge`: `twinforge`, `twinforge-setup`, `twinforge-instancias`, `twinforge-diagnostico`, `twinforge-apply`, `twinforge-workspace`. |
 | `commands/twinforge/` | `/twinforge:setup`, `:instances`, `:status`, `:projects`, `:update`, `:fix`, `:explore`, `:apply`. Cada um só aciona a skill. |
 | `commands/twinforge/repo/` | Repositório de configuração: `/twinforge:repo:init`, `:status`, `:pull`, `:push`, `:agent`, `:local-sync`, `:help`. Fixam a instância e conferem o projeto antes de escrever. |
 | `agents/` | 12 agentes (`agent.yaml` portável + `AGENTS.md`/`CONTEXT.md`). |
