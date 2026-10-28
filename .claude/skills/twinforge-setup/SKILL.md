@@ -32,7 +32,7 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
 ## Como este fluxo trabalha
 
 - **Estado lido, nunca guardado.** A cada execução, rode a checagem de cada passo, pule o que já está pronto e comece no **primeiro passo pendente**. Não crie arquivo de progresso. Com tudo pronto, mostre só a conferência final (passo 8) e **não execute nenhuma escrita**.
-- **O setup NÃO usa a regra "uma candidata → siga sem perguntar"** da seção "Instância da sessão": essa regra serve às outras skills. Aqui, a **primeira decisão é sempre perguntar qual instância configurar** (Passo 2), mesmo com um único perfil e login válido. Não conclua o setup, não rode os passos 3 a 8 e não mostre company ou projetos de uma instância antes de o usuário responder. Quem roda `/twinforge:setup` pode estar justamente tentando conectar uma instância **nova**.
+- **O setup NÃO usa a regra "uma candidata → siga sem perguntar"** da seção "Instância da sessão": essa regra serve às outras skills. Aqui, a **primeira decisão é perguntar qual instância configurar** (Passo 2), mesmo com um único perfil e login válido. **Exceção (setup retomado):** se a pasta já tem um padrão salvo (`.twinforge/context.json` com perfil válido) **e** o login dessa instância responde, a instância já foi escolhida: anuncie `Usando <perfil> (<URL>), padrão desta pasta` e **vá direto ao primeiro passo pendente**, sem perguntar de novo. Não conclua o setup, não rode os passos 3 a 8 e não mostre company ou projetos de uma instância antes de o usuário responder. Quem roda `/twinforge:setup` pode estar justamente tentando conectar uma instância **nova**.
 - Anuncie o que encontrou antes de agir: "CLI ok, login ok, falta o perfil".
 - A única coisa que o usuário precisa trazer é a **URL da instância**.
 - Se o diretório de dados estiver isolado (`TWINFORGE_HOME` ou `--data-dir`), use-o em todos os comandos e não toque em `~/.twinforge`.
@@ -45,9 +45,9 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
 - `E404` e registry privado configurado no `~/.npmrc`: proponha repetir com `--registry https://registry.npmjs.org`.
 - Versão antiga (confira com `npm view twinforgecli version`): avise e sugira `/twinforge:update`, sem bloquear.
 
-## Passo 2. Qual instância configurar? (sempre pergunta)
+## Passo 2. Qual instância configurar?
 
-1. **Pergunte primeiro, sempre.** Reúna as candidatas (seção "Instância da sessão") e mostre-as: perfil, URL, company e se o login responde (`auth whoami`). Depois pergunte, em uma única pergunta, com estas opções: **usar uma das existentes** (diga qual) ou **conectar uma instância nova** (peça a URL). Isso vale mesmo com uma só candidata e login válido: **nunca** assuma que a existente é a que o usuário quer configurar.
+1. **Pergunte primeiro**, a menos que seja um setup retomado (padrão da pasta salvo e login válido; veja "Como este fluxo trabalha"). Reúna as candidatas (seção "Instância da sessão") e mostre-as: perfil, URL, company e se o login responde (`auth whoami`). Depois pergunte, em uma única pergunta, com estas opções: **usar uma das existentes** (diga qual) ou **conectar uma instância nova** (peça a URL). Isso vale mesmo com uma só candidata e login válido: **nunca** assuma que a existente é a que o usuário quer configurar.
    - **Dica de padrão:** se `twinforge/roles.yaml` da pasta tiver `scope.project_id` ou ids em placeholder (`{{...}}`), este repositório ainda não pertence a nenhuma instância: sugira **conectar uma instância nova** como a opção provável, sem decidir pelo usuário.
    - Conectar outra **não remove nem altera** as conexões existentes: o login é guardado por endereço, então no final há várias instâncias e dá para alternar entre elas (`/twinforge:instances`). Escolhendo uma existente, siga para o Passo 3 só para conferir o login.
 2. Sem URL: se o usuário não a tem, diga o que pedir aos responsáveis pela instância: **a URL** e **o convite ou usuário na instância**. Encerre o passo sem erro.
@@ -83,13 +83,30 @@ A **CLI é a prioridade**: o login do `twinforgecli` é o que importa, e o login
 
 ## Passo 5. Company e projetos
 
+Executado **automaticamente** logo depois do perfil (Passo 4), sem perguntar: é o mesmo que o `/twinforge:projects`. Antes de o perfil existir, use `--api-base` **e** o `--context` vazio do Passo 3; depois, `--context "<arquivo>" --profile "<perfil>"`.
+
 1. `twinforgecli company list --json --api-base "<URL>"` (ou com o perfil). Mostre as companies **por nome**; o usuário escolhe, você usa o id. Uma única: proponha como padrão e peça confirmação. Na 0.6.0 as chaves são `id` e `name` (company) e `id`, `name` (projeto); mesmo assim inspecione o JSON em vez de supor.
 2. `twinforgecli project list --json -C "<companyId>" --api-base "<URL>"`. Mostre os projetos por nome. **Nunca peça uuid.**
 3. Várias companies e o usuário não sabe onde está o projeto: ofereça listar os projetos de cada company antes de escolher.
 4. **Lista vazia não é sucesso.** Explique as causas prováveis (company errada, convite incompleto, permissões), ofereça olhar as outras companies e, se persistir, diga o que pedir aos responsáveis. Não conclua o passo como concluído.
 5. Ao final, **exiba os projetos encontrados**.
 
-## Passo 6. Repositório de configuração dos agentes (opcional)
+## Passo 6. Permissão para criar e editar agentes
+
+Roda **automaticamente** depois dos projetos (Passo 5), sem perguntar: usuários com papel de operador **não** conseguem criar nem editar agentes, e é melhor descobrir isso agora. A checagem é refeita a cada execução do setup.
+
+1. **Papel.** `twinforgecli auth whoami` (instância fixada): leia `memberships[].membershipRole` (por exemplo `owner` ou `admin`) e informe. É só um sinal; o teste abaixo é o que vale.
+2. **Escolha um agente:** `twinforgecli agent list --json`. Pegue **um** que **não** esteja em execução (`running`) e prefira um com `AGENTS.md` editável. Sem agentes na instância: pule o teste e avise que ele será feito quando houver um.
+3. **Teste de escrita que não muda nada.** Anuncie em uma linha: "Vou testar sua permissão regravando o `AGENTS.md` do agente <nome> com o **mesmo conteúdo** (nada muda)". Esta é a **única exceção** à confirmação prévia de escrita, e só vale para esta regravação idêntica, em um único agente:
+   - Leia: `twinforgecli agent instructions-file:get <agentId> --path AGENTS.md --json` e grave o campo `content` em um arquivo temporário (scratchpad), **sem exibi-lo**. Se `editable` for `false` ou o arquivo for `virtual`, escolha outro agente; se nenhum servir, diga que o bundle não é editável (isso **não** é problema de permissão).
+   - Grave de volta o mesmo conteúdo: `twinforgecli agent instructions-file:put <agentId> --path AGENTS.md --content-file "<temporário>"`. **A resposta do `put` repete o conteúdo inteiro do arquivo**: redirecione-a para `/dev/null` (ou descarte) e use só o código de saída; **nunca a exiba**.
+   - Confira com um novo `instructions-file:get` que o conteúdo continua idêntico e apague o temporário. **Nunca** altere o conteúdo, nunca teste em mais de um agente e nunca em um agente em execução.
+4. **Resultado:**
+   - **Funcionou:** "Você pode editar agentes (papel <papel>)." Siga em frente.
+   - **Falhou por permissão** (403, `forbidden`, "does not have access", "permission"): diga que o usuário **não tem permissão para criar ou editar agentes** nesta instância (informe o papel). Oriente: peça, no canal do Slack **`bizapps-twinforge-forjadores`**, a mudança do seu papel para **owner ou admin**, informando o e-mail, a URL da instância e a company. Ofereça um texto pronto para copiar (a skill **não envia** a mensagem). Quando o papel mudar, é só rodar `/twinforge:setup` de novo: ele retoma neste passo. Enquanto isso, **não ofereça** o Passo 10 (subir o template); o restante do setup segue normalmente.
+   - **Falhou por outro motivo** (500, rede, 401): não é permissão; trate pela tabela de erros da skill `twinforge` e não repita em laço.
+
+## Passo 7. Repositório de configuração dos agentes (opcional)
 
 Nunca bloqueia o setup. É uma pasta com `agents/`, `skills/` e `twinforge/roles.yaml`. Pergunte se o usuário quer (checagem: existe `twinforge/roles.yaml` na pasta atual ou em um caminho já informado?). Opções:
 
@@ -101,13 +118,13 @@ Nunca bloqueia o setup. É uma pasta com `agents/`, `skills/` e `twinforge/roles
 
 Sem repositório, uma card pode ser criada sem responsável (`assigneeAgentId` é opcional): sem responsável ou em `backlog`, ninguém é acordado, e o usuário direciona depois para o agente que quiser.
 
-## Passo 7. Auditoria (só com repositório)
+## Passo 8. Auditoria (só com repositório)
 
 Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...}}`), **não rode a comparação**: diga que o repositório ainda não foi adaptado à instância (e liste o que falta trocar: `scope.project_id`, os ids dos papéis e o repositório do projeto), e ofereça a adaptação como próximo passo. Caso contrário, compare os agentes da instância (`twinforgecli agent list --json`) com `twinforge/roles.yaml`. No formato do repositório base, `roles:` mapeia uma chave de papel para `{kind, id}` (com `kind: agent`, o `id` é o uuid do agente), e há um bloco `scope` com o `project_id`. Compare por **`id`** e mostre o `name` da instância ao lado. Papéis com `kind` diferente de `agent` não entram na comparação. Se o arquivo não seguir esse formato, **mostre ao usuário como o interpretou** antes de comparar, ou diga que não foi possível, em vez de adivinhar. Um `scope.project_id` que não existe na instância indica um fork ainda não adaptado: avise. Relate agentes que existem de um lado e não do outro. **Somente leitura**: ofereça, mas não execute, uma correção.
 
-## Passo 8. Conferência final e próximo passo
+## Passo 9. Conferência final e próximo passo
 
-1. **Resumo.** Versão do CLI, instância (URL), identidade logada, perfil, company, **projetos encontrados** e situação do repositório de agentes. **Não diga "setup concluído" se algo ficou pendente:** com placeholders em `roles.yaml`, diga "instância configurada; repositório ainda não adaptado" e liste a pendência.
+1. **Resumo.** Versão do CLI, instância (URL), identidade logada, perfil, company, **projetos encontrados** e situação do repositório de agentes e o **resultado da verificação de permissão** do Passo 6. **Não diga "setup concluído" se algo ficou pendente:** com placeholders em `roles.yaml`, diga "instância configurada; repositório ainda não adaptado" e liste a pendência.
 2. **O que existe no repositório e o que a instância já tem** (só se a pasta tiver `agents/`, `skills/` e `twinforge/`). Leia, não suponha:
    - **Agentes do repositório:** os `agents/*/agent.yaml` (papel e nome). **Fluxo:** as `phases` de `twinforge/workflow.yaml`, em uma frase. **Skills:** quantas há em `skills/` e quais são genéricas (`adobe-*`, `openspec-*`, sem prefixo) e quais são do projeto de origem (`projeto-*`, `bunge-*`; veja `TEMPLATE.md`).
    - **Na instância:** `agent list` e `skill list` da instância fixada (quantos e quais).
@@ -125,13 +142,13 @@ Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...
 | `/tfrepo:agent` · `:init` · `:local-sync` · `:help` | Operação pontual em um agente, primeira configuração, sincronização local e a lista completa. |
 
 4. **Faça UMA pergunta de próximo passo**, com a ferramenta de pergunta com opções (`AskUserQuestion`) quando existir; senão, uma lista numerada. Opções, nesta ordem:
-   1. **Subir os agentes, skills e fluxo do template nesta instância** (só se a pasta tiver `commands/tfrepo/`). Descreva em 3 linhas o que será feito e **marque como recomendada** quando `roles.yaml` tiver placeholders ou a instância tiver menos agentes ou skills que o repositório. Seja honesto: o `/tfrepo:push` aplica as **skills** e re-sincroniza o `desiredSkills` de agentes que já existem; **criar os agentes** a partir de `agents/<papel>/agent.yaml` é um passo guiado, sem instalador automático. Tudo com plano e confirmação antes de escrever.
+   1. **Subir os agentes, skills e fluxo do template nesta instância** (só se a pasta tiver `commands/tfrepo/` **e** a verificação de permissão do Passo 6 passou; se falhou, não ofereça e lembre do pedido no canal do Slack). Descreva em 3 linhas o que será feito e **marque como recomendada** quando `roles.yaml` tiver placeholders ou a instância tiver menos agentes ou skills que o repositório. Seja honesto: o `/tfrepo:push` aplica as **skills** e re-sincroniza o `desiredSkills` de agentes que já existem; **criar os agentes** a partir de `agents/<papel>/agent.yaml` é um passo guiado, sem instalador automático. Tudo com plano e confirmação antes de escrever.
    2. **Pedir algo em linguagem natural agora** (`/twinforge:explore`). Marque como recomendada quando o repositório já estiver adaptado e a instância já tiver o que precisa.
    3. **Ver o que há na instância** (`/twinforge:projects` e `/twinforge:status`).
    4. **Terminar por aqui.**
-5. Ao escolher a opção 1, siga o Passo 9. Ao escolher a 2, 3 ou outra coisa, acione a skill ou o comando correspondente.
+5. Ao escolher a opção 1, siga o Passo 10. Ao escolher a 2, 3 ou outra coisa, acione a skill ou o comando correspondente.
 
-## Passo 9. Subir o template na instância (só se o usuário escolher)
+## Passo 10. Subir o template na instância (só se o usuário escolher)
 
 Sempre com a instância fixada (`--context`/`--profile`), plano mostrado e confirmação **antes de cada escrita**. Nada é atribuído nem iniciado: agentes só são acionados com confirmação específica.
 

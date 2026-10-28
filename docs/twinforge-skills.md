@@ -90,18 +90,19 @@ Mesmo com uma única instância, **toda escrita** mostra instância e company e 
 O setup **lê o estado real** (máquina e instância) a cada execução, pula o que já está feito e continua do primeiro passo pendente. Rodar de novo com tudo pronto só mostra a conferência final.
 
 ```
-1 CLI --> 2 URL --> 3 Login --> 4 Perfil --> 5 Company/Projetos --> 6 Repo (opcional) --> 7 Auditoria --> 8 Conferência
+1 CLI --> 2 Instância --> 3 Login --> 4 Perfil --> 5 Projetos --> 6 Permissão --> 7 Repo (opcional) --> 8 Auditoria --> 9 Conferência --> 10 Subir template (opcional)
 ```
 
-1. **CLI.** Verifica `twinforgecli --version` e o Node 20+. Se faltar, mostra `npm install -g twinforgecli` e só instala com a sua confirmação.
-2. **URL da instância.** É a única coisa que você precisa trazer. Se o CLI já tem perfil e login válidos, a skill usa essa instância e não pergunta. Senão, valida que é `https` e que `GET <url>/api/health` responde. Sem URL, a skill diz o que pedir aos responsáveis: a URL e o convite ou usuário na instância.
-3. **Login.** Se `twinforgecli auth whoami` já responde, pula. Senão, roda `auth login --no-browser --api-base <URL> --json` em segundo plano, captura a URL de aprovação e entrega a você. Você aprova no navegador e a skill confirma com `whoami`. O plugin Claude in Chrome pode abrir a URL e clicar em aprovar, mas **nunca** digita senha: se a instância pedir login, a skill para e devolve a vez a você.
-4. **Perfil.** `twinforgecli context set --profile <nome> --api-base <URL> --company-id <id> --persona board`, mostrando os valores antes de gravar. Se já existir um perfil com o mesmo nome e valores diferentes, mostra a diferença e pede confirmação.
-5. **Company e projetos.** Lista com `company list` e `project list` e você escolhe por nome, nunca por uuid. Ao final **mostra os projetos encontrados**. Lista vazia não é sucesso: a skill explica as causas prováveis (company errada, convite incompleto, permissões) e oferece olhar as outras companies.
-6. **Repositório de configuração dos agentes (opcional).** Pasta com `agents/`, `skills/` e `twinforge/roles.yaml`. Nunca bloqueia. Opções: pular, apontar um clone existente, criar um fork do repositório base da organização (você informa a URL; o fork traz dados do projeto de origem, então é rotulado como base a adaptar e nada é aplicado na instância antes da sua revisão) ou puxar o que existe na instância. Ao pular, a skill diz o que se perde (análise do fluxo dos agentes, aba Engenharia, comparação agente × instância, commits novos do repositório) e que dá para retomar depois. Sem repositório, uma card pode ser criada sem responsável; sem responsável ou em `backlog`, nenhum agente é acordado.
-7. **Auditoria.** Só com repositório: compara por `id` os agentes da instância com `roles.yaml` e relata divergências, sem alterar nada.
-8. **Conferência final.** Resumo com versão do CLI, instância, identidade logada, perfil, company, projetos encontrados e situação do repositório, e sugere `/twinforge:projects`, `/twinforge:status` ou `/twinforge:explore`.
-
+1. **CLI.** Verifica `twinforgecli --version` e o Node 20+. Se faltar, mostra `npm install -g twinforgecli` e instala só com a sua confirmação.
+2. **Qual instância configurar.** Mostra as instâncias que você já tem e pergunta se usa uma delas ou conecta uma **nova** (aí pede a URL, que precisa ser `https://`). Se a pasta já tem um padrão salvo e o login responde, **não pergunta**: retoma do primeiro passo pendente.
+3. **Login (uma vez só).** Se `twinforgecli auth whoami` já responde, pula. Senão, gera o link de aprovação da CLI e você entra (ou cria a conta) pelo próprio link e aprova. Em instância nova, o login usa um contexto vazio, para a CLI não enviar a company de outra instância.
+4. **Perfil.** Grava um perfil com nome único (sem `--use`: o perfil ativo global não muda) e oferece salvá-lo como padrão da pasta (`.twinforge/context.json`, sem token).
+5. **Company e projetos.** Roda automaticamente (é o `/twinforge:projects`): lista e mostra os projetos por nome, nunca por uuid. Lista vazia não é sucesso.
+6. **Permissão para editar agentes.** Roda automaticamente: lê seu papel e regrava o `AGENTS.md` de **um** agente (que não esteja em execução) com o **mesmo conteúdo** para testar a escrita. Se falhar por permissão, orienta a pedir no canal do Slack `bizapps-twinforge-forjadores` a mudança do papel para owner ou admin.
+7. **Repositório de configuração dos agentes (opcional).** Pasta com `agents/`, `skills/` e `twinforge/roles.yaml`. Opções: pular, apontar um clone existente, criar a partir do repositório base da organização (você informa a URL) ou puxar o que existe na instância.
+8. **Auditoria.** Só com repositório adaptado: compara por `id` os agentes da instância com `roles.yaml`, sem alterar nada.
+9. **Conferência final e próximo passo.** Mostra o que há no repositório e na instância, a lista de comandos (linguagem natural em destaque) e faz **uma pergunta** de próximo passo com a recomendação.
+10. **Subir o template (opcional).** Só se você escolher e a permissão do passo 6 passou: projeto-alvo, skills pelo `/tfrepo:push` e criação guiada dos agentes, com confirmação antes de cada escrita.
 
 ## Linguagem natural: `twinforge` e `/twinforge:explore`
 
