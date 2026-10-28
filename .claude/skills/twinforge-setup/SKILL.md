@@ -53,14 +53,23 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
 2. Sem URL: se o usuário não a tem, diga o que pedir aos responsáveis pela instância: **a URL** e **o convite ou usuário na instância**. Encerre o passo sem erro.
 3. Com URL: exija `https://`. Valide com `curl -fsS -m 10 "<URL>/api/health"` (público, sem login). Sem https ou sem resposta: explique e peça outra URL; **não** tente o login.
 
-## Passo 3. Login
+## Passo 3. Login (uma vez só, pela CLI)
 
-- Checagem: `twinforgecli auth whoami --api-base "<URL>"`. Se retornar a identidade, pule.
-- Senão, rode **em segundo plano** (Bash com `run_in_background`): `twinforgecli auth login --no-browser --api-base "<URL>" --json > "<arquivo>.out" 2> "<arquivo>.err"` (use arquivos temporários no scratchpad). Ele cria um desafio, imprime a URL de aprovação em **stderr** (o stdout fica vazio até a aprovação, mesmo com `--json`) e **aguarda** até o usuário aprovar no navegador; grava a credencial por endereço no diretório de dados da CLI.
-- Leia a saída do processo, capture a URL de aprovação (um link https) e entregue ao usuário: "Abra este link, entre na instância se pedir e aprove." Se não achar um link na saída, mostre a saída **sem qualquer token** e peça ajuda ao usuário. (Verificado na CLI 0.6.0: a URL tem a forma `<URL>/cli-auth/<uuid>?token=...`; o `token` dessa URL é de aprovação e só vai para o usuário.)
-- **Opcional, com o plugin Claude in Chrome:** abrir a URL e acionar o botão de aprovar. **Nunca** digite senha ou credenciais. Se a página pedir login na instância, **pare** e peça ao usuário que entre e avise.
-- Quando o processo terminar, confirme com `twinforgecli auth whoami --api-base "<URL>"` e informe a identidade. Nunca exiba token.
-- Demora sem aprovação: avise que o desafio expira, ofereça gerar outro.
+A **CLI é a prioridade**: o login do `twinforgecli` é o que importa, e o login no navegador é só um meio dentro do link de aprovação. O usuário deve entrar **uma única vez**: **não** peça para ele entrar na instância antes; gere primeiro o link de aprovação da CLI e deixe que o próprio link leve ao login.
+
+**Regra crítica (verificada na 0.6.0):** nos comandos deste passo use **somente `--api-base "<URL>"`**. **Nunca** passe `--context`, `--profile` nem `-C` de outra instância: a CLI envia a company desse perfil para o servidor novo e ele responde `Internal server error` (500), sem gerar link. Isso vale para o `auth whoami` e para o `auth login`.
+
+1. **Checagem:** `twinforgecli auth whoami --api-base "<URL>"`. Se retornar a identidade, já há login nessa instância: pule o passo.
+2. **Gere o link de aprovação** em segundo plano (Bash com `run_in_background`): `twinforgecli auth login --no-browser --api-base "<URL>" --json > "<arquivo>.out" 2> "<arquivo>.err"` (arquivos temporários no scratchpad). Ele cria um desafio, imprime a URL de aprovação em **stderr** (o stdout fica vazio até a aprovação, mesmo com `--json`) e **aguarda**; ao aprovar, grava a credencial por endereço (a de outras instâncias não é afetada). A URL tem a forma `<URL>/cli-auth/<uuid>?token=...`; o `token` dela é de aprovação e só vai para o usuário.
+3. **Entregue o link e oriente em uma mensagem:**
+   - "Abra este link. Se a página pedir login, **entre ali mesmo**; se você ainda **não tem conta**, crie-a ali mesmo (cadastro) ou use o convite que recebeu. Depois de entrar, aprove o acesso da CLI. É o único login necessário."
+   - Se a página não oferecer cadastro e o usuário não tem conta: diga o que pedir aos responsáveis da instância (um **convite** ou um usuário) e que, quando tiver, ele pode voltar a rodar o setup. O desafio expira: gere outro.
+4. **Opcional, com o plugin Claude in Chrome:** abrir a URL e acionar o botão de aprovar. **Nunca** digite senha ou credenciais; se a página pedir login ou cadastro, **pare** e devolva a vez ao usuário.
+5. Quando o processo terminar (código 0), confirme com `twinforgecli auth whoami --api-base "<URL>"` e informe a identidade. Nunca exiba token.
+6. **Falhas:**
+   - `Internal server error` ao gerar o desafio: confira primeiro se o comando levou `--context`/`--profile`/`-C` (causa conhecida); refaça só com `--api-base`. Se persistir com `--api-base` puro, é problema da instância (considere o horário de funcionamento) e vale avisar os responsáveis; não repita em laço.
+   - Sem aprovação por muito tempo: o desafio expirou; ofereça gerar outro.
+   - Alternativa que exige terminal interativo: o usuário pode rodar `! twinforgecli connect --persona board --api-base "<URL>"`; a skill não o executa.
 
 ## Passo 4. Perfil
 
