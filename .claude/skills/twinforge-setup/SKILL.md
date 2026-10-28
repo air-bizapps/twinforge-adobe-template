@@ -32,6 +32,7 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
 ## Como este fluxo trabalha
 
 - **Estado lido, nunca guardado.** A cada execução, rode a checagem de cada passo, pule o que já está pronto e comece no **primeiro passo pendente**. Não crie arquivo de progresso. Com tudo pronto, mostre só a conferência final (passo 8) e **não execute nenhuma escrita**.
+- **O setup NÃO usa a regra "uma candidata → siga sem perguntar"** da seção "Instância da sessão": essa regra serve às outras skills. Aqui, a **primeira decisão é sempre perguntar qual instância configurar** (Passo 2), mesmo com um único perfil e login válido. Não conclua o setup, não rode os passos 3 a 8 e não mostre company ou projetos de uma instância antes de o usuário responder. Quem roda `/twinforge:setup` pode estar justamente tentando conectar uma instância **nova**.
 - Anuncie o que encontrou antes de agir: "CLI ok, login ok, falta o perfil".
 - A única coisa que o usuário precisa trazer é a **URL da instância**.
 - Se o diretório de dados estiver isolado (`TWINFORGE_HOME` ou `--data-dir`), use-o em todos os comandos e não toque em `~/.twinforge`.
@@ -44,9 +45,11 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
 - `E404` e registry privado configurado no `~/.npmrc`: proponha repetir com `--registry https://registry.npmjs.org`.
 - Versão antiga (confira com `npm view twinforgecli version`): avise e sugira `/twinforge:update`, sem bloquear.
 
-## Passo 2. URL da instância
+## Passo 2. Qual instância configurar? (sempre pergunta)
 
-1. **Contexto já ativo?** Reúna as candidatas (seção "Instância da sessão"). Se já houver perfil com `apiBase` e `whoami` válido (passo 3), diga qual é e **pergunte uma vez**: usar essa instância ou **conectar outra** (nesse caso, peça a URL). Conectar outra **não remove nem altera** as conexões existentes: o login é guardado por endereço, então no final há várias instâncias e dá para alternar entre elas (`/twinforge:instances`). Se o usuário só quer a atual, não peça URL.
+1. **Pergunte primeiro, sempre.** Reúna as candidatas (seção "Instância da sessão") e mostre-as: perfil, URL, company e se o login responde (`auth whoami`). Depois pergunte, em uma única pergunta, com estas opções: **usar uma das existentes** (diga qual) ou **conectar uma instância nova** (peça a URL). Isso vale mesmo com uma só candidata e login válido: **nunca** assuma que a existente é a que o usuário quer configurar.
+   - **Dica de padrão:** se `twinforge/roles.yaml` da pasta tiver `scope.project_id` ou ids em placeholder (`{{...}}`), este repositório ainda não pertence a nenhuma instância: sugira **conectar uma instância nova** como a opção provável, sem decidir pelo usuário.
+   - Conectar outra **não remove nem altera** as conexões existentes: o login é guardado por endereço, então no final há várias instâncias e dá para alternar entre elas (`/twinforge:instances`). Escolhendo uma existente, siga para o Passo 3 só para conferir o login.
 2. Sem URL: se o usuário não a tem, diga o que pedir aos responsáveis pela instância: **a URL** e **o convite ou usuário na instância**. Encerre o passo sem erro.
 3. Com URL: exija `https://`. Valide com `curl -fsS -m 10 "<URL>/api/health"` (público, sem login). Sem https ou sem resposta: explique e peça outra URL; **não** tente o login.
 
@@ -91,9 +94,9 @@ Sem repositório, uma card pode ser criada sem responsável (`assigneeAgentId` �
 
 ## Passo 7. Auditoria (só com repositório)
 
-Compare os agentes da instância (`twinforgecli agent list --json`) com `twinforge/roles.yaml`. No formato do repositório base, `roles:` mapeia uma chave de papel para `{kind, id}` (com `kind: agent`, o `id` é o uuid do agente), e há um bloco `scope` com o `project_id`. Compare por **`id`** e mostre o `name` da instância ao lado. Papéis com `kind` diferente de `agent` não entram na comparação. Se o arquivo não seguir esse formato, **mostre ao usuário como o interpretou** antes de comparar, ou diga que não foi possível, em vez de adivinhar. Um `scope.project_id` que não existe na instância indica um fork ainda não adaptado: avise. Relate agentes que existem de um lado e não do outro. **Somente leitura**: ofereça, mas não execute, uma correção.
+Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...}}`), **não rode a comparação**: diga que o repositório ainda não foi adaptado à instância (e liste o que falta trocar: `scope.project_id`, os ids dos papéis e o repositório do projeto), e ofereça a adaptação como próximo passo. Caso contrário, compare os agentes da instância (`twinforgecli agent list --json`) com `twinforge/roles.yaml`. No formato do repositório base, `roles:` mapeia uma chave de papel para `{kind, id}` (com `kind: agent`, o `id` é o uuid do agente), e há um bloco `scope` com o `project_id`. Compare por **`id`** e mostre o `name` da instância ao lado. Papéis com `kind` diferente de `agent` não entram na comparação. Se o arquivo não seguir esse formato, **mostre ao usuário como o interpretou** antes de comparar, ou diga que não foi possível, em vez de adivinhar. Um `scope.project_id` que não existe na instância indica um fork ainda não adaptado: avise. Relate agentes que existem de um lado e não do outro. **Somente leitura**: ofereça, mas não execute, uma correção.
 
 ## Passo 8. Conferência final
 
-Mostre um resumo: versão do CLI, instância (URL), identidade logada, perfil, company, **projetos encontrados** e situação do repositório de agentes. Sugira os próximos passos: `/twinforge:projects`, `/twinforge:status` ou `/twinforge:explore`.
+**Não diga "setup concluído" se algo ficou pendente.** Se o repositório ainda tem placeholders em `roles.yaml`, diga "instância configurada; repositório ainda não adaptado" e liste a pendência. Mostre um resumo: versão do CLI, instância (URL), identidade logada, perfil, company, **projetos encontrados** e situação do repositório de agentes. Sugira os próximos passos: `/twinforge:projects`, `/twinforge:status` ou `/twinforge:explore`.
 
