@@ -31,8 +31,9 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
 
 ## Como este fluxo trabalha
 
-- **Estado lido, nunca guardado.** A cada execução, rode a checagem de cada passo, pule o que já está pronto e comece no **primeiro passo pendente**. Não crie arquivo de progresso. Com tudo pronto, mostre só a conferência final (passo 8) e **não execute nenhuma escrita**.
-- **O setup NÃO usa a regra "uma candidata → siga sem perguntar"** da seção "Instância da sessão": essa regra serve às outras skills. Aqui, a **primeira decisão é perguntar qual instância configurar** (Passo 2), mesmo com um único perfil e login válido. **Exceção (setup retomado):** se a pasta já tem um padrão salvo (`.twinforge/context.json` com perfil válido) **e** o login dessa instância responde, a instância já foi escolhida: anuncie `Usando <perfil> (<URL>), padrão desta pasta` e **vá direto ao primeiro passo pendente**, sem perguntar de novo. Não conclua o setup, não rode os passos 3 a 8 e não mostre company ou projetos de uma instância antes de o usuário responder. Quem roda `/twinforge:setup` pode estar justamente tentando conectar uma instância **nova**.
+- **Estado lido, nunca guardado.** A cada execução, rode a checagem de cada passo; não crie arquivo de progresso. Quem decide o que fazer com esse estado é o usuário, no menu do Passo 2.
+- **A primeira decisão é SEMPRE o menu do Passo 2, sem exceção:** nem com um único perfil, nem com login válido, nem com um padrão salvo na pasta. O setup **não usa** a regra "uma candidata → siga sem perguntar" da seção "Instância da sessão" (ela serve às outras skills). Antes de o usuário escolher o caminho, **não** execute os passos 3 a 10, **não** conclua o setup e **não** mostre company ou projetos de nenhuma instância (só o estado de leitura do Passo 2).
+- **Três caminhos**, escolhidos pelo usuário: **continuar um setup em andamento**, **revalidar uma instância** (checkup) ou **configurar uma instância nova**.
 - Anuncie o que encontrou antes de agir: "CLI ok, login ok, falta o perfil".
 - A única coisa que o usuário precisa trazer é a **URL da instância**.
 - Se o diretório de dados estiver isolado (`TWINFORGE_HOME` ou `--data-dir`), use-o em todos os comandos e não toque em `~/.twinforge`.
@@ -45,13 +46,21 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
 - `E404` e registry privado configurado no `~/.npmrc`: proponha repetir com `--registry https://registry.npmjs.org`.
 - Versão antiga (confira com `npm view twinforgecli version`): avise e sugira `/twinforge:update`, sem bloquear.
 
-## Passo 2. Qual instância configurar?
+## Passo 2. Como você quer seguir? (sempre pergunta)
 
-1. **Pergunte primeiro**, a menos que seja um setup retomado (padrão da pasta salvo e login válido; veja "Como este fluxo trabalha"). Reúna as candidatas (seção "Instância da sessão") e mostre-as: perfil, URL, company e se o login responde (`auth whoami`). Depois pergunte, em uma única pergunta, com estas opções: **usar uma das existentes** (diga qual) ou **conectar uma instância nova** (peça a URL). Isso vale mesmo com uma só candidata e login válido: **nunca** assuma que a existente é a que o usuário quer configurar.
-   - **Dica de padrão:** se `twinforge/roles.yaml` da pasta tiver `scope.project_id` ou ids em placeholder (`{{...}}`), este repositório ainda não pertence a nenhuma instância: sugira **conectar uma instância nova** como a opção provável, sem decidir pelo usuário.
-   - Conectar outra **não remove nem altera** as conexões existentes: o login é guardado por endereço, então no final há várias instâncias e dá para alternar entre elas (`/twinforge:instances`). Escolhendo uma existente, siga para o Passo 3 só para conferir o login.
-2. Sem URL: se o usuário não a tem, diga o que pedir aos responsáveis pela instância: **a URL** e **o convite ou usuário na instância**. Encerre o passo sem erro.
-3. Com URL: exija `https://`. Valide com `curl -fsS -m 10 "<URL>/api/health"` (público, sem login). Sem https ou sem resposta: explique e peça outra URL; **não** tente o login.
+1. **Levante o estado de cada instância, só com leitura.** Reúna as candidatas (seção "Instância da sessão"; fixe o arquivo de contexto e o perfil de cada uma) e, para cada uma, verifique **sem escrever nada**: login (`auth whoami`), perfil existente, company acessível (`company list` contém a company do perfil) e projetos (`project list`). Para a instância que é o **padrão desta pasta**, verifique também se `twinforge/roles.yaml` está **adaptado** (sem `{{...}}` em `scope.project_id` e nos ids). Falha de rede ("Could not reach the TwinForge API") é "sem resposta", não "sem login". Classifique cada instância como **completa** (tudo acima ok) ou **em andamento** (liste o que falta). A permissão para editar agentes (Passo 6) **não** entra aqui: ela exige o teste do Passo 6.
+2. **Mostre uma tabela**: perfil, URL, company, estado e o que falta; marque a que é o padrão desta pasta.
+3. **Faça UMA pergunta**, com a ferramenta de pergunta com opções (`AskUserQuestion`) quando existir, senão uma lista numerada, **sempre com os três caminhos** (omita só um que seja impossível, por exemplo "continuar" sem nenhuma instância em andamento):
+   - **Continuar um setup em andamento** de `<perfil>`: retoma no **primeiro passo pendente** daquela instância (passos 3 a 10, pulando o que já está pronto).
+   - **Revalidar uma instância** (checkup): percorre **todo** o processo de setup daquela instância **sem alterar nada na instância remota**, a não ser para reparar uma falha. Veja "Revalidar uma instância".
+   - **Configurar uma instância nova:** peça a URL e siga os passos 3 a 10 do começo.
+   **Recomendação** (marque, sem decidir pelo usuário): havendo exatamente uma instância em andamento, "continuar" nela (a do padrão da pasta, se for o caso); sem nenhuma em andamento, "revalidar" o padrão da pasta; sem nenhuma candidata, "configurar nova". Se `roles.yaml` da pasta estiver em placeholder e nenhuma instância o adaptou, "configurar nova" também é uma sugestão razoável a mencionar.
+4. **Qualquer caminho** preserva as outras conexões: o login é guardado por endereço, então configurar uma instância nova **não remove nem altera** as existentes; no final há várias e dá para alternar entre elas (`/twinforge:instances`).
+
+### Caminho: configurar uma instância nova
+
+1. Sem URL: se o usuário não a tem, diga o que pedir aos responsáveis pela instância: **a URL** e **o convite ou usuário na instância**. Encerre o passo sem erro.
+2. Com URL: exija `https://`. Valide com `curl -fsS -m 10 "<URL>/api/health"` (público, sem login). Sem https ou sem resposta: explique e peça outra URL; **não** tente o login.
 
 ## Passo 3. Login (uma vez só, pela CLI)
 
@@ -147,6 +156,23 @@ Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...
    3. **Ver o que há na instância** (`/twinforge:projects` e `/twinforge:status`).
    4. **Terminar por aqui.**
 5. Ao escolher a opção 1, siga o Passo 10. Ao escolher a 2, 3 ou outra coisa, acione a skill ou o comando correspondente.
+
+## Revalidar uma instância (checkup)
+
+É o caminho de **conferência**: percorre todo o processo de setup da instância escolhida e **não muda nada na instância remota**, a não ser para reparar uma falha. Para cada passo, rode só a **checagem** e classifique **OK**, **ATENÇÃO** ou **FALHA**; só **aja** (com as confirmações normais daquele passo) quando houver falha.
+
+| Passo | O que o checkup faz | Se falhar |
+|---|---|---|
+| 1 CLI | `twinforgecli --version`, Node 20+, versão publicada | Passo 1 |
+| 2 Instância | `/api/health` | considerar o horário de funcionamento; nada local a corrigir |
+| 3 Login | `auth whoami` | Passo 3 (novo link de aprovação) |
+| 4 Perfil | perfil existe e bate com a URL e a company | Passo 4 (com cópia de segurança do contexto) |
+| 5 Projetos | `company list` e `project list` | Passo 5 (lista vazia não é sucesso) |
+| 6 Permissão | o teste de regravação idêntica do Passo 6 | orientar o pedido no Slack |
+| 7 Repositório | pasta e `roles.yaml` presentes (só leitura) | apenas relatar |
+| 8 Auditoria | comparação por `id` (só leitura), se o repositório estiver adaptado | apenas relatar |
+
+Não execute o Passo 10 no checkup. Termine com a tabela de resultados e uma conclusão explícita: "tudo certo" ou a lista do que falhou e do que foi reparado. Nada é gravado na instância remota além da regravação idêntica do Passo 6.
 
 ## Passo 10. Subir o template na instância (só se o usuário escolher)
 

@@ -87,14 +87,14 @@ Mesmo com uma única instância, **toda escrita** mostra instância e company e 
 
 ## `/twinforge:setup`: do zero até ver seus projetos
 
-O setup **lê o estado real** (máquina e instância) a cada execução, pula o que já está feito e continua do primeiro passo pendente. Rodar de novo com tudo pronto só mostra a conferência final.
+O setup **lê o estado real** (máquina e instância) a cada execução e **sempre começa perguntando como você quer seguir**: continuar um setup em andamento, revalidar uma instância (checkup) ou configurar uma instância nova.
 
 ```
 1 CLI --> 2 Instância --> 3 Login --> 4 Perfil --> 5 Projetos --> 6 Permissão --> 7 Repo (opcional) --> 8 Auditoria --> 9 Conferência --> 10 Subir template (opcional)
 ```
 
 1. **CLI.** Verifica `twinforgecli --version` e o Node 20+. Se faltar, mostra `npm install -g twinforgecli` e instala só com a sua confirmação.
-2. **Qual instância configurar.** Mostra as instâncias que você já tem e pergunta se usa uma delas ou conecta uma **nova** (aí pede a URL, que precisa ser `https://`). Se a pasta já tem um padrão salvo e o login responde, **não pergunta**: retoma do primeiro passo pendente.
+2. **Como você quer seguir (sempre pergunta).** Mostra as instâncias que você já tem, com o estado de cada uma (**completa** ou **em andamento**, e o que falta), e pergunta, com uma recomendação: **continuar um setup em andamento** (retoma no primeiro passo pendente), **revalidar uma instância** (checkup: percorre todo o setup sem alterar nada na instância remota, só repara falhas) ou **configurar uma instância nova** (pede a URL, que precisa ser `https://`). Nem um padrão salvo na pasta dispensa a pergunta.
 3. **Login (uma vez só).** Se `twinforgecli auth whoami` já responde, pula. Senão, gera o link de aprovação da CLI e você entra (ou cria a conta) pelo próprio link e aprova. Em instância nova, o login usa um contexto vazio, para a CLI não enviar a company de outra instância.
 4. **Perfil.** Grava um perfil com nome único (sem `--use`: o perfil ativo global não muda) e oferece salvá-lo como padrão da pasta (`.twinforge/context.json`, sem token).
 5. **Company e projetos.** Roda automaticamente (é o `/twinforge:projects`): lista e mostra os projetos por nome, nunca por uuid. Lista vazia não é sucesso.
