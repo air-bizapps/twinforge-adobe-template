@@ -15,7 +15,7 @@ tags: ["twinforge", "local", "sync"]
 
 This is about the **local TwinForge server** (the `twinforge` binary, which runs a full stack —
 embedded Postgres, API, UI — at `http://127.0.0.1:3100` on this machine) syncing companies down
-from the cloud, for working offline. **This is a different system from `/tfrepo:pull`/`push`**,
+from the cloud, for working offline. **This is a different system from `/twinforge:repo:pull`/`push`**,
 which sync repo files against the cloud company directly — this command never touches
 `twinforge-repo/`.
 

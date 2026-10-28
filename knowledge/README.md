@@ -17,7 +17,7 @@ devolve o erro exato ajuda muito.
 2. Para cada um, propõe na ordem de preferência: **regra** no `magento-verify` (com caso ruim e bom
    em `tests/fixtures`) > **modelo canônico** apontado na mensagem > linha de skill.
 3. A regra só entra se acusar o commit ruim e não acusar o corrigido (`status: promovido`).
-4. PR neste repo; o Kaio revisa e faz o merge; depois `/tfrepo:push` com confirmação.
+4. PR neste repo; o Kaio revisa e faz o merge; depois `/twinforge:repo:push` com confirmação.
 
 Revisão de um registro: (1) o modelo citado existe e roda no Bunge? (2) a armadilha bate com o que
 você corrige? (3) tem detector que prova? (4) não tem código de outro cliente?

@@ -102,7 +102,7 @@ O setup **lê o estado real** (máquina e instância) a cada execução e **semp
 7. **Repositório de configuração dos agentes (opcional).** Pasta com `agents/`, `skills/` e `twinforge/roles.yaml`. Opções: pular, apontar um clone existente, criar a partir do repositório base da organização (você informa a URL) ou puxar o que existe na instância.
 8. **Auditoria.** Só com repositório adaptado: compara por `id` os agentes da instância com `roles.yaml`, sem alterar nada.
 9. **Conferência final e próximo passo.** Mostra o que há no repositório e na instância, a lista de comandos (linguagem natural em destaque) e faz **uma pergunta** de próximo passo com a recomendação.
-10. **Subir o template (opcional).** Só se você escolher e a permissão do passo 6 passou: projeto-alvo, skills pelo `/tfrepo:push` e criação guiada dos agentes, com confirmação antes de cada escrita.
+10. **Subir o template (opcional).** Só se você escolher e a permissão do passo 6 passou: projeto-alvo, skills pelo `/twinforge:repo:push` e criação guiada dos agentes, com confirmação antes de cada escrita.
 
 ## Linguagem natural: `twinforge` e `/twinforge:explore`
 

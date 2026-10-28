@@ -138,7 +138,7 @@ Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...
    - **Agentes do repositório:** os `agents/*/agent.yaml` (papel e nome). **Fluxo:** as `phases` de `twinforge/workflow.yaml`, em uma frase. **Skills:** quantas há em `skills/` e quais são genéricas (`adobe-*`, `openspec-*`, sem prefixo) e quais são do projeto de origem (`projeto-*`, `bunge-*`; veja `TEMPLATE.md`).
    - **Na instância:** `agent list` e `skill list` da instância fixada (quantos e quais).
    - Diga o que **só existe no repositório** (por exemplo, "o repositório tem 11 agentes e a instância 4").
-3. **Mostre os comandos à mão do usuário**, em uma tabela curta (inclua `/tfrepo:*` só se a pasta tiver `commands/tfrepo/`). Destaque o primeiro:
+3. **Mostre os comandos à mão do usuário**, em uma tabela curta (inclua `/twinforge:repo:*` só se a pasta tiver `commands/twinforge/repo/`). Destaque o primeiro:
 
 | Comando | Para quê |
 |---|---|
@@ -147,11 +147,11 @@ Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...
 | `/twinforge:instances` | Mostra e troca a instância em uso. |
 | `/twinforge:status` · `:fix` · `:update` | Checa o `twinforgecli`, corrige o que falhar e atualiza a CLI. |
 | `/twinforge:apply` | Envia uma mudança do OpenSpec para a instância. |
-| `/tfrepo:status` · `:push` · `:pull` | Compara o repositório com a instância, aplica skills na instância e traz o que foi editado lá. |
-| `/tfrepo:agent` · `:init` · `:local-sync` · `:help` | Operação pontual em um agente, primeira configuração, sincronização local e a lista completa. |
+| `/twinforge:repo:status` · `:push` · `:pull` | Compara o repositório com a instância, aplica skills na instância e traz o que foi editado lá. |
+| `/twinforge:repo:agent` · `:init` · `:local-sync` · `:help` | Operação pontual em um agente, primeira configuração, sincronização local e a lista completa. |
 
 4. **Faça UMA pergunta de próximo passo**, com a ferramenta de pergunta com opções (`AskUserQuestion`) quando existir; senão, uma lista numerada. Opções, nesta ordem:
-   1. **Subir os agentes, skills e fluxo do template nesta instância** (só se a pasta tiver `commands/tfrepo/` **e** a verificação de permissão do Passo 6 passou; se falhou, não ofereça e lembre do pedido no canal do Slack). Descreva em 3 linhas o que será feito e **marque como recomendada** quando `roles.yaml` tiver placeholders ou a instância tiver menos agentes ou skills que o repositório. Seja honesto: o `/tfrepo:push` aplica as **skills** e re-sincroniza o `desiredSkills` de agentes que já existem; **criar os agentes** a partir de `agents/<papel>/agent.yaml` é um passo guiado, sem instalador automático. Tudo com plano e confirmação antes de escrever.
+   1. **Subir os agentes, skills e fluxo do template nesta instância** (só se a pasta tiver `commands/twinforge/repo/` **e** a verificação de permissão do Passo 6 passou; se falhou, não ofereça e lembre do pedido no canal do Slack). Descreva em 3 linhas o que será feito e **marque como recomendada** quando `roles.yaml` tiver placeholders ou a instância tiver menos agentes ou skills que o repositório. Seja honesto: o `/twinforge:repo:push` aplica as **skills** e re-sincroniza o `desiredSkills` de agentes que já existem; **criar os agentes** a partir de `agents/<papel>/agent.yaml` é um passo guiado, sem instalador automático. Tudo com plano e confirmação antes de escrever.
    2. **Pedir algo em linguagem natural agora** (`/twinforge:explore`). Marque como recomendada quando o repositório já estiver adaptado e a instância já tiver o que precisa.
    3. **Ver o que há na instância** (`/twinforge:projects` e `/twinforge:status`).
    4. **Terminar por aqui.**
@@ -180,10 +180,10 @@ Sempre com a instância fixada (`--context`/`--profile`), plano mostrado e confi
 
 1. **Destino.** Liste os projetos da instância e peça a escolha **por nome**; pergunte o repositório de código do projeto (pode ficar em branco). Mostre o diff de `scope.project_id` e `scope.repo` em `twinforge/roles.yaml` e grave só após confirmação.
 2. **Aviso de conteúdo.** Diga que `projeto-*`, `bunge-*` e as instruções dos agentes ainda trazem referências ao projeto de origem (veja `TEMPLATE.md`) e ofereça subir **só o genérico primeiro** (`adobe-*` genéricas, `openspec-*`, skills de processo sem prefixo) e deixar o resto para depois da adaptação.
-3. **Diferença.** Mostre o resultado do `/tfrepo:status` (só no repositório, só na instância, divergentes).
-4. **Skills.** Aplique com o fluxo do `/tfrepo:push` (que tem as suas próprias confirmações).
+3. **Diferença.** Mostre o resultado do `/twinforge:repo:status` (só no repositório, só na instância, divergentes).
+4. **Skills.** Aplique com o fluxo do `/twinforge:repo:push` (que tem as suas próprias confirmações).
 5. **Agentes.** Não há instalador automático: o `agent.yaml` é uma definição **portável**, não o payload do `agent create`. Para cada agente escolhido:
    - Mostre nome, papel, modelo, `adapter_type`, orçamento e `desiredSkills`. **Orçamento nunca 0** (bug conhecido: o agente se lê como "esgotado"). Confira se o `adapter_type` existe na instância (por exemplo, a configuração de um agente já existente via `twinforgecli agent configuration <id>`), e use essa configuração como referência do formato do payload; **não adivinhe os campos**.
    - Resolva `{{company_id}}` e o `reports_to`, que vem por **chave de papel**: crie na ordem em que quem reporta já exista. O **PO nunca é criado**: aponte para o agente equivalente que a instância já tem (pergunte qual, por nome).
-   - Crie com `twinforgecli agent create` **após confirmação** (um a um ou em lote que o usuário aprovar). Depois grave os ids reais em `roles.yaml` (mostrando o diff) e refaça o `/tfrepo:status`.
+   - Crie com `twinforgecli agent create` **após confirmação** (um a um ou em lote que o usuário aprovar). Depois grave os ids reais em `roles.yaml` (mostrando o diff) e refaça o `/twinforge:repo:status`.
 6. Termine com o que foi criado, o que ficou de fora e **que nenhum agente foi acionado**.

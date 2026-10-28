@@ -12,7 +12,7 @@ papel (`twinforge/roles.yaml`), comandos pelos slash commands do repo.
 
 ## 1. Estado
 
-`/tfrepo:status`. Esperado:
+`/twinforge:repo:status`. Esperado:
 
 - só no repo: `adobe-magento-toolbox`;
 - conteúdo diferente: `projeto-subtask-contract`, `projeto-engineering-practices`, `openspec-apply-change`;
@@ -22,7 +22,7 @@ Qualquer outra diferença: parar e entender antes (alguém mudou a instância).
 
 ## 2. Publicar a skill (teste 1h nº 2: arquivo de skill executado com `php <caminho>`)
 
-1. Publicar a `adobe-magento-toolbox` (173 arquivos). Cada `skill file:update`, que o `/tfrepo:push`
+1. Publicar a `adobe-magento-toolbox` (173 arquivos). Cada `skill file:update`, que o `/twinforge:repo:push`
    usa para os arquivos além do `SKILL.md`, grava uma versão com o conteúdo de **todos** os arquivos da
    skill: arquivo a arquivo dariam ~170 versões e ~150 MB no banco da instância. Em ordem de preferência:
    1. import pelo GitHub, como as skills do `agentes-forjados` (uma versão; atualiza com
@@ -30,7 +30,7 @@ Qualquer outra diferença: parar e entender antes (alguém mudou a instância).
       `twinforgecli skill import -C <company> --payload-json '{"source":"https://github.com/<org>/<repo-de-configuracao>/tree/main/skills/adobe-magento-toolbox"}'`.
       Precisa que o token da instância leia este repo, que é privado; se falhar, nada é criado. A skill
       fica `github` (não editável na UI): mudança entra por PR aqui e `install-update` lá.
-   2. sem acesso ao GitHub: `/tfrepo:push` sem a pasta `tests/` (116 arquivos, ~50 MB de versões);
+   2. sem acesso ao GitHub: `/twinforge:repo:push` sem a pasta `tests/` (116 arquivos, ~50 MB de versões);
       o autoteste do passo 2.2 roda no laptop e, na remota, só o `--list`.
 2. Issue de teste para o DevOps com a linha `Atribuição direta: teste da skill` logo no começo. Sem card
    pai e sem essa linha, o agente devolve a issue para curadoria (visto no teste local). O pedido,
@@ -52,9 +52,9 @@ publicado, o WAF aceita o formato. Se falhar, o DevOps verá erro ao comentar: a
 
 1. `desiredSkills` de `backend_dev`, `frontend_dev` e `tech_lead` a partir do `agent.yaml` do repo.
    Atenção: `skills agent sync` substitui a lista inteira; mande a lista completa do arquivo.
-2. `/tfrepo:push` das instruções: `AGENTS.md` dos três e as skills `projeto-subtask-contract`,
+2. `/twinforge:repo:push` das instruções: `AGENTS.md` dos três e as skills `projeto-subtask-contract`,
    `projeto-engineering-practices` e `openspec-apply-change`.
-3. `/tfrepo:status` limpo; conferir `env` e secrets à mão (o status não compara):
+3. `/twinforge:repo:status` limpo; conferir `env` e secrets à mão (o status não compara):
    `twinforgecli agent get <id>` (`adapterConfig.env`) e `twinforgecli secrets usage <id>`.
 
 ## 5. Primeira card com o verify
@@ -109,7 +109,7 @@ Passos, cada um com confirmação:
 1. Criar o agente a partir de `agents/verifier/agent.yaml` (`{{toolbox_dir}}` sai do passo 2.3;
    `{{workspace_dir}}` é o `$WS`), com `VERIFY_MODE=observe`: comenta e aprova sempre.
 2. Trocar `VERIFIER_AGENT_ID` pelo id real em `twinforge/roles.yaml` e no `projeto-subtask-contract`,
-   fazer o commit e `/tfrepo:push` do contrato e dos `AGENTS.md` do Tech Lead e dos devs (PR do
+   fazer o commit e `/twinforge:repo:push` do contrato e dos `AGENTS.md` do Tech Lead e dos devs (PR do
    estágio).
 3. Medir 3 dias: comparar os comentários "Observacao (nao bloqueia)" com o que o Kaio corrigiu. Sem
    falso positivo, passar para `VERIFY_MODE=enforce`.
@@ -137,5 +137,5 @@ Passos, cada um com confirmação:
 
 ## Desfazer
 
-Reverter o PR das instruções e `/tfrepo:push` dos arquivos revertidos. A skill pode ficar: sem
+Reverter o PR das instruções e `/twinforge:repo:push` dos arquivos revertidos. A skill pode ficar: sem
 instrução que a chame, nenhum agente a usa.

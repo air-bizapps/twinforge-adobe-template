@@ -25,10 +25,10 @@ um dado por vez, na ordem da tabela. Nunca imprima, grave em arquivo ou commite 
 | Login ativo | qualquer chamada autenticada | `twinforgecli company list --json` retorna dados | Só o usuário consegue: ele roda `twinforgecli connect --persona board` num terminal próprio (login interativo). Você não consegue fazer isso por ele |
 | Company id | quase todo comando (`-C <id>`) | `twinforge/roles.yaml` do repo, ou `company list --json` | Se houver mais de uma company, perguntar qual é a do projeto |
 | Project id | workspace, tarefas, escopo | `scope.project_id` em `twinforge/roles.yaml`, ou listagem de projetos | Perguntar o nome do projeto e resolver o id pela listagem |
-| Papel → agent id | `/tfrepo:agent`, sync de skills | `twinforge/roles.yaml`, ou `agent list --json` | Se o papel não estiver no `roles.yaml`, dizer isso e pedir o nome do agente; **não adivinhar id** |
-| Clone local deste repo em `twinforge-repo/` | `status`/`pull`/`push` | `test -d twinforge-repo/.git` | Dar o `git clone` do repo `<repo-de-configuracao>` (URL já está em `/tfrepo:status`) na raiz do projeto |
-| Token do GitHub (PAT) | só `/tfrepo:init` (clone de repo privado pela plataforma) | — | O usuário gera no GitHub e informa; nunca ecoar de volta nem salvar em arquivo versionado |
-| Instância local (127.0.0.1) | só `/tfrepo:local-sync` | — | O usuário sobe o servidor local num terminal dele. Nunca rode o binário `twinforge` sem subcomando: ele sobe um servidor completo com Postgres embutido |
+| Papel → agent id | `/twinforge:repo:agent`, sync de skills | `twinforge/roles.yaml`, ou `agent list --json` | Se o papel não estiver no `roles.yaml`, dizer isso e pedir o nome do agente; **não adivinhar id** |
+| Clone local deste repo em `twinforge-repo/` | `status`/`pull`/`push` | `test -d twinforge-repo/.git` | Dar o `git clone` do repo `<repo-de-configuracao>` (URL já está em `/twinforge:repo:status`) na raiz do projeto |
+| Token do GitHub (PAT) | só `/twinforge:repo:init` (clone de repo privado pela plataforma) | — | O usuário gera no GitHub e informa; nunca ecoar de volta nem salvar em arquivo versionado |
+| Instância local (127.0.0.1) | só `/twinforge:repo:local-sync` | — | O usuário sobe o servidor local num terminal dele. Nunca rode o binário `twinforge` sem subcomando: ele sobe um servidor completo com Postgres embutido |
 
 ## Como a plataforma se comporta (gotchas confirmados)
 
@@ -136,6 +136,6 @@ um dado por vez, na ordem da tabela. Nunca imprima, grave em arquivo ou commite 
 ## Segurança e escrita em produção
 
 - `push`, `agent delete`, `skill delete` e qualquer coisa sob `sync` escrevem na instância
-  de verdade: rode `/tfrepo:status` antes e confirme com o usuário.
+  de verdade: rode `/twinforge:repo:status` antes e confirme com o usuário.
 - Explore com `twinforgecli <tópico> --help` antes de chutar uma flag.
 - Nada de segredo em arquivo versionado, em comentário de issue ou na saída pro usuário.

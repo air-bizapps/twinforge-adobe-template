@@ -25,11 +25,11 @@ tags: ["twinforge", "sync", "skills", "agents"]
 
 Apply what's in `twinforge-repo/` to the live TwinForge company — this one **does** write to
 production (new skills, renamed skills, agent `desiredSkills` resynced). Go slower than
-`/tfrepo:pull`; confirm before anything destructive.
+`/twinforge:repo:pull`; confirm before anything destructive.
 
 ## Prerequisite
 
-**Always run `/tfrepo:status` first in this same conversation** and show the user the diff
+**Always run `/twinforge:repo:status` first in this same conversation** and show the user the diff
 before applying anything. Pushing blind — especially a rename — risks exactly the kind of
 disruption a careless rename caused before (ask the user if they want the full story; the short
 version: a live skill got renamed without resyncing the agents that used it, and they briefly
@@ -68,6 +68,6 @@ which twinforgecli || echo "NOT INSTALLED"
       `attachedAgentCount` is now 0 (`skill list`), then `skill delete <old-id>`.
 3. **Agent instruction change** (`.md` content differs from live): `twinforgecli agent
    instructions-file:put <id> --path <file> --content-file twinforge-repo/agents/<role>/<file>`.
-4. After applying, re-run the comparison from `/tfrepo:status` and confirm it now reports
+4. After applying, re-run the comparison from `/twinforge:repo:status` and confirm it now reports
    clean (no remaining diffs) for everything just pushed — don't just trust the apply calls
    returned success; verify the live state actually matches.

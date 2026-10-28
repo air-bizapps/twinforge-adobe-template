@@ -23,7 +23,7 @@ tags: ["twinforge", "agent"]
 > `twinforge-repo/context/twinforge-context.md`: pare, explique qual dado falta e como o
 > usuário o obtém, e espere — não adivinhe.
 
-The argument after `/tfrepo:agent` is a `role_key` (e.g. `tech_lead`, `backend_dev` — the
+The argument after `/twinforge:repo:agent` is a `role_key` (e.g. `tech_lead`, `backend_dev` — the
 same keys used in `twinforge-repo/twinforge/roles.yaml` and `twinforge-repo/agents/*/`) and,
 optionally, a second word naming what to do (`status` is the default if nothing else is given).
 

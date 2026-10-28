@@ -41,7 +41,7 @@ da conversa: **português (pt-BR)**.
 ## Slash commands
 
 `/twinforge "<pedido>"`, `:status`, `:pull`, `:push`, `:agent`, `:local-sync`, `:init`, `:help`
-(ver `/tfrepo:help`). Dentro deste repo, `twinforge-repo/` nos comandos significa a raiz
+(ver `/twinforge:repo:help`). Dentro deste repo, `twinforge-repo/` nos comandos significa a raiz
 deste repo (`./`). Fluxo seguro: `:status` → `:pull` (nuvem vence) ou `:push` (escreve em
 produção; confirmar com o usuário antes).
 
@@ -65,7 +65,7 @@ estão em `twinforge/roles.yaml` e `agents/*/agent.yaml`. Procedimento:
 - **Nunca** rode o binário `twinforge` sem subcomando (sobe servidor local completo com Postgres
   embutido); `agent/skill delete` e tudo sob `sync` exigem confirmação explícita.
 - A instância remota é a fonte de verdade do conteúdo vivo. Antes de editar skill/agente,
-  compare com o estado ao vivo (`/tfrepo:status`).
+  compare com o estado ao vivo (`/twinforge:repo:status`).
 - Regra pros agentes de dev tem que chegar por **skill** ou `AGENTS.md`, nunca só por `CLAUDE.md`
   (adapters `crucible_local`/`pi_local` não leem `CLAUDE.md`).
 - Em rodada de teste de fluxo, corrija **agentes/skills**, não a tarefa em andamento.
@@ -80,7 +80,7 @@ estão em `twinforge/roles.yaml` e `agents/*/agent.yaml`. Procedimento:
 
 O objetivo deste repo é versionar a evolução dos agentes: toda mudança aplicada na
 instância (instruções, skills, `desiredSkills`, `env`, permissões) tem que estar refletida
-aqui no mesmo ciclo — e vice-versa. Depois de aplicar, rode `/tfrepo:status` e confirme
+aqui no mesmo ciclo — e vice-versa. Depois de aplicar, rode `/twinforge:repo:status` e confirme
 que está limpo. Atenção: o status **não compara `env`/ligações de secret**; confira à mão
 com `twinforgecli agent get <id>` (`adapterConfig.env`) e `twinforgecli secrets usage <id>`.
 Secrets nunca entram no repo, só a referência por chave em `agent.yaml` (`env`).

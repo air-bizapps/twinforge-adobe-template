@@ -15,7 +15,7 @@ está em produção, não um catálogo teórico.
 > `context/twinforge-context.md`, "Skills e publicação"). A pasta `reference/Acme`, os mapas e o
 > `patterns.json` ficam só no repo, e o `magento-example` lê o pacote quando ele existe. Mudou o
 > módulo, um mapa ou o `patterns.json`: rode `php scripts/magento-example.php --build-bundle` (o
-> `--self-test` reprova pacote desatualizado) e publique os pedaços. O `/tfrepo:status` mostra a
+> `--self-test` reprova pacote desatualizado) e publique os pedaços. O `/twinforge:repo:status` mostra a
 > pasta como "só no repo", e é esperado.
 
 > **Fusão com magento2-agent-skills (2026-10-21).** As 30 skills de
@@ -83,5 +83,5 @@ API da instância reporta**, nunca inventada.
 
 Os nomes com prefixo (`adobe-create-entity`, etc.) **já existem na
 instância remota** e os 10 agentes já os usam em `desiredSkills`
-(verificado em 2026-10-06 com `/tfrepo:status`: 44 skills e 10 agentes
+(verificado em 2026-10-06 com `/twinforge:repo:status`: 44 skills e 10 agentes
 idênticos ao repo). Isso substitui a pendência que constava aqui antes.

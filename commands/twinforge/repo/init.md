@@ -41,7 +41,7 @@ twinforgecli company list --json
 ```
 
 If this already lists a company the user confirms is for this project, **stop and say so** —
-don't create a duplicate company. Point them at `/tfrepo:pull` instead, to bring down what's
+don't create a duplicate company. Point them at `/twinforge:repo:pull` instead, to bring down what's
 already there.
 
 ## Step 1 — explain what TwinForge is, briefly
@@ -100,9 +100,9 @@ agent itself) before calling `agent create`.
 ## Step 6 — point at this repo's skills
 
 If `twinforge-repo/` already exists (cloned from a template repo like `<repo-de-configuracao>`), offer
-to run `/tfrepo:push` to get its skills and the new agent's config live. If it doesn't exist
+to run `/twinforge:repo:push` to get its skills and the new agent's config live. If it doesn't exist
 yet, that's a separate decision — ask whether they want to start one, and if so just create the
-repo and the directory structure; don't improvise `/tfrepo:push`'s logic here, point at it
+repo and the directory structure; don't improvise `/twinforge:repo:push`'s logic here, point at it
 once there's something to push.
 
 ## Throughout

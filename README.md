@@ -11,7 +11,7 @@ Base para configurar um projeto **TwinForge + Adobe Commerce (Magento 2)**: o pa
    gh repo create <org>/<projeto>-twinforge --template air-bizapps/twinforge-adobe-template --private --clone
    ```
 2. Abra o Claude Code na pasta e rode `/twinforge:setup`: ele instala ou confere o `twinforgecli`, faz o login (aprovação no navegador), cria o perfil da instância e mostra company e projetos. Com mais de uma instância, escolha a do projeto e salve como padrão da pasta.
-3. Adapte o repositório (checklist em `TEMPLATE.md`), rode `/tfrepo:status` e então `/tfrepo:push`. O `push` é barrado enquanto `scope.project_id` em `twinforge/roles.yaml` for um placeholder.
+3. Adapte o repositório (checklist em `TEMPLATE.md`), rode `/twinforge:repo:status` e então `/twinforge:repo:push`. O `push` é barrado enquanto `scope.project_id` em `twinforge/roles.yaml` for um placeholder.
 
 ## O que tem aqui
 
@@ -19,7 +19,7 @@ Base para configurar um projeto **TwinForge + Adobe Commerce (Magento 2)**: o pa
 |---|---|
 | `.claude/skills/` | Pacote de skills `twinforge`: `twinforge`, `twinforge-setup`, `twinforge-instancias`, `twinforge-diagnostico`, `twinforge-apply`. |
 | `commands/twinforge/` | `/twinforge:setup`, `:instances`, `:status`, `:projects`, `:update`, `:fix`, `:explore`, `:apply`. Cada um só aciona a skill. |
-| `commands/tfrepo/` | Repositório de configuração: `/tfrepo:init`, `:status`, `:pull`, `:push`, `:agent`, `:local-sync`, `:help`. Fixam a instância e conferem o projeto antes de escrever. |
+| `commands/twinforge/repo/` | Repositório de configuração: `/twinforge:repo:init`, `:status`, `:pull`, `:push`, `:agent`, `:local-sync`, `:help`. Fixam a instância e conferem o projeto antes de escrever. |
 | `agents/` | 12 agentes (`agent.yaml` portável + `AGENTS.md`/`CONTEXT.md`). |
 | `skills/` | 77 skills da plataforma: `adobe-*` (Magento 2; várias ainda citam o projeto de origem), `openspec-*`, skills de processo sem prefixo, 6 `projeto-*` (fluxo do projeto de origem, a adaptar) e 2 `bunge-*` (camadas de qualidade de código, a adaptar). |
 | `twinforge/` | `workflow.yaml` (fases e aprovações), `roles.yaml` (papel → agente, com placeholders). |

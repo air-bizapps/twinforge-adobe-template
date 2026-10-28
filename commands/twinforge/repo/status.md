@@ -24,8 +24,8 @@ tags: ["twinforge", "sync", "diff"]
 > usuário o obtém, e espere — não adivinhe.
 
 Report what's different between `twinforge-repo/` (the local clone of `<repo-de-configuracao>`) and the
-live TwinForge company — **never apply anything**, this command only reports. `/tfrepo:pull`
-and `/tfrepo:push` should both be run right after this, never blind.
+live TwinForge company — **never apply anything**, this command only reports. `/twinforge:repo:pull`
+and `/twinforge:repo:push` should both be run right after this, never blind.
 
 ## Prerequisite
 
@@ -47,9 +47,9 @@ gitignored on purpose — a clone of a separate repo, not a submodule). Stop her
    repo was built — `sourceType: local_path` and `attachedAgentCount >= 1`.
 3. List what's local: every directory under `twinforge-repo/skills/`.
 4. Report three buckets, by slug:
-   - **Só no repo** (local dir with no matching remote slug) — candidate for `/tfrepo:push`
+   - **Só no repo** (local dir with no matching remote slug) — candidate for `/twinforge:repo:push`
      to create.
-   - **Só remoto** (remote slug with no matching local dir) — candidate for `/tfrepo:pull` to
+   - **Só remoto** (remote slug with no matching local dir) — candidate for `/twinforge:repo:pull` to
      bring down, unless it's intentionally excluded (github/catalog-sourced, or
      attachedAgentCount 0 — see `twinforge-repo/skills/README.md` for the exact scoping rule).
    - **Em ambos, conteúdo diferente** — fetch the remote `SKILL.md` (`twinforgecli skill file

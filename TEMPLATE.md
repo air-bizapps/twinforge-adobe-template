@@ -6,17 +6,17 @@ Este repositório é a **base a adaptar** para projetos TwinForge + Adobe Commer
 | Parte | Onde |
 |---|---|
 | Pacote de skills `twinforge` (setup, instâncias, diagnóstico, linguagem natural, apply) | `.claude/skills/` e `commands/twinforge/` (`/twinforge:*`) |
-| Comandos do repositório de configuração (`init`, `status`, `pull`, `push`, `agent`, `local-sync`, `help`) | `commands/tfrepo/` (`/tfrepo:*`) |
+| Comandos do repositório de configuração (`init`, `status`, `pull`, `push`, `agent`, `local-sync`, `help`) | `commands/twinforge/repo/` (`/twinforge:repo:*`) |
 | Agentes, skills da plataforma, fluxo e papéis | `agents/`, `skills/`, `twinforge/` |
 | Conhecimento operacional | `context/`, `knowledge/` |
 | Integrações | `integrations/` |
 
-Os comandos `/twinforge:*` e `/tfrepo:*` convivem de propósito: há sobreposição entre `/twinforge:setup` e `/tfrepo:init`, a ser resolvida depois.
+Os comandos `/twinforge:*` e `/twinforge:repo:*` convivem de propósito: há sobreposição entre `/twinforge:setup` e `/twinforge:repo:init`, a ser resolvida depois.
 
 ## Como começar um projeto novo
 1. Crie o repositório do projeto: `gh repo create <org>/<projeto>-twinforge --template air-bizapps/twinforge-adobe-template --private --clone`.
 2. Abra o Claude Code na pasta e rode `/twinforge:setup` (instala/conecta o `twinforgecli`, faz o login, escolhe instância, company e projeto). Com mais de uma instância, escolha a do projeto e salve como padrão da pasta.
-3. Adapte (veja o checklist abaixo) e só então rode `/tfrepo:status` e `/tfrepo:push`. O `push` é barrado enquanto `scope.project_id` for um placeholder.
+3. Adapte (veja o checklist abaixo) e só então rode `/twinforge:repo:status` e `/twinforge:repo:push`. O `push` é barrado enquanto `scope.project_id` for um placeholder.
 
 ## O que já foi neutralizado
 - **IDs:** todo UUID virou placeholder (`{uuid}`; em `twinforge/roles.yaml`, `{<papel>_agent_id}` e `{project_id}`).

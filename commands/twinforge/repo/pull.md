@@ -38,14 +38,14 @@ Stop and tell the user if: the clone is missing (give the clone command above), 
 isn't installed, or `twinforge-repo/` has uncommitted local changes (pulling over uncommitted
 work risks losing it — have them commit or stash first, same as any git pull).
 
-**Run `/tfrepo:status` first** if it hasn't been run this session — pulling blind over a repo
+**Run `/twinforge:repo:status` first** if it hasn't been run this session — pulling blind over a repo
 with local edits silently overwrites them with the remote version.
 
 ## Steps
 
 1. `cd twinforge-repo && git pull` — the clone itself needs to be current before pulling skill
    content into it, or you're comparing against a stale base.
-2. Get the company id (same as `/tfrepo:status` step 1).
+2. Get the company id (same as `/twinforge:repo:status` step 1).
 3. `twinforgecli skill list -C <company-id> --json`, filter to `sourceType: local_path` and
    `attachedAgentCount >= 1` — this is the exact scoping rule the repo already follows (see
    `twinforge-repo/skills/README.md`). Don't widen or narrow it without telling the user why.
