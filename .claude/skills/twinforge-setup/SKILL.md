@@ -105,7 +105,42 @@ Sem repositório, uma card pode ser criada sem responsável (`assigneeAgentId` �
 
 Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...}}`), **não rode a comparação**: diga que o repositório ainda não foi adaptado à instância (e liste o que falta trocar: `scope.project_id`, os ids dos papéis e o repositório do projeto), e ofereça a adaptação como próximo passo. Caso contrário, compare os agentes da instância (`twinforgecli agent list --json`) com `twinforge/roles.yaml`. No formato do repositório base, `roles:` mapeia uma chave de papel para `{kind, id}` (com `kind: agent`, o `id` é o uuid do agente), e há um bloco `scope` com o `project_id`. Compare por **`id`** e mostre o `name` da instância ao lado. Papéis com `kind` diferente de `agent` não entram na comparação. Se o arquivo não seguir esse formato, **mostre ao usuário como o interpretou** antes de comparar, ou diga que não foi possível, em vez de adivinhar. Um `scope.project_id` que não existe na instância indica um fork ainda não adaptado: avise. Relate agentes que existem de um lado e não do outro. **Somente leitura**: ofereça, mas não execute, uma correção.
 
-## Passo 8. Conferência final
+## Passo 8. Conferência final e próximo passo
 
-**Não diga "setup concluído" se algo ficou pendente.** Se o repositório ainda tem placeholders em `roles.yaml`, diga "instância configurada; repositório ainda não adaptado" e liste a pendência. Mostre um resumo: versão do CLI, instância (URL), identidade logada, perfil, company, **projetos encontrados** e situação do repositório de agentes. Sugira os próximos passos: `/twinforge:projects`, `/twinforge:status` ou `/twinforge:explore`.
+1. **Resumo.** Versão do CLI, instância (URL), identidade logada, perfil, company, **projetos encontrados** e situação do repositório de agentes. **Não diga "setup concluído" se algo ficou pendente:** com placeholders em `roles.yaml`, diga "instância configurada; repositório ainda não adaptado" e liste a pendência.
+2. **O que existe no repositório e o que a instância já tem** (só se a pasta tiver `agents/`, `skills/` e `twinforge/`). Leia, não suponha:
+   - **Agentes do repositório:** os `agents/*/agent.yaml` (papel e nome). **Fluxo:** as `phases` de `twinforge/workflow.yaml`, em uma frase. **Skills:** quantas há em `skills/` e quais são genéricas (`adobe-*`, `openspec-*`, sem prefixo) e quais são do projeto de origem (`projeto-*`, `bunge-*`; veja `TEMPLATE.md`).
+   - **Na instância:** `agent list` e `skill list` da instância fixada (quantos e quais).
+   - Diga o que **só existe no repositório** (por exemplo, "o repositório tem 11 agentes e a instância 4").
+3. **Mostre os comandos à mão do usuário**, em uma tabela curta (inclua `/tfrepo:*` só se a pasta tiver `commands/tfrepo/`). Destaque o primeiro:
 
+| Comando | Para quê |
+|---|---|
+| **`/twinforge:explore`** | **Pedir qualquer coisa em linguagem natural** ("quais cards estão em andamento?", "cria uma card…", "lista os agentes", "quanto gastamos este mês?"). Leitura roda direto; escrita mostra o rascunho e pede confirmação. |
+| `/twinforge:projects` | Lista os projetos da company. |
+| `/twinforge:instances` | Mostra e troca a instância em uso. |
+| `/twinforge:status` · `:fix` · `:update` | Checa o `twinforgecli`, corrige o que falhar e atualiza a CLI. |
+| `/twinforge:apply` | Envia uma mudança do OpenSpec para a instância. |
+| `/tfrepo:status` · `:push` · `:pull` | Compara o repositório com a instância, aplica skills na instância e traz o que foi editado lá. |
+| `/tfrepo:agent` · `:init` · `:local-sync` · `:help` | Operação pontual em um agente, primeira configuração, sincronização local e a lista completa. |
+
+4. **Faça UMA pergunta de próximo passo**, com a ferramenta de pergunta com opções (`AskUserQuestion`) quando existir; senão, uma lista numerada. Opções, nesta ordem:
+   1. **Subir os agentes, skills e fluxo do template nesta instância** (só se a pasta tiver `commands/tfrepo/`). Descreva em 3 linhas o que será feito e **marque como recomendada** quando `roles.yaml` tiver placeholders ou a instância tiver menos agentes ou skills que o repositório. Seja honesto: o `/tfrepo:push` aplica as **skills** e re-sincroniza o `desiredSkills` de agentes que já existem; **criar os agentes** a partir de `agents/<papel>/agent.yaml` é um passo guiado, sem instalador automático. Tudo com plano e confirmação antes de escrever.
+   2. **Pedir algo em linguagem natural agora** (`/twinforge:explore`). Marque como recomendada quando o repositório já estiver adaptado e a instância já tiver o que precisa.
+   3. **Ver o que há na instância** (`/twinforge:projects` e `/twinforge:status`).
+   4. **Terminar por aqui.**
+5. Ao escolher a opção 1, siga o Passo 9. Ao escolher a 2, 3 ou outra coisa, acione a skill ou o comando correspondente.
+
+## Passo 9. Subir o template na instância (só se o usuário escolher)
+
+Sempre com a instância fixada (`--context`/`--profile`), plano mostrado e confirmação **antes de cada escrita**. Nada é atribuído nem iniciado: agentes só são acionados com confirmação específica.
+
+1. **Destino.** Liste os projetos da instância e peça a escolha **por nome**; pergunte o repositório de código do projeto (pode ficar em branco). Mostre o diff de `scope.project_id` e `scope.repo` em `twinforge/roles.yaml` e grave só após confirmação.
+2. **Aviso de conteúdo.** Diga que `projeto-*`, `bunge-*` e as instruções dos agentes ainda trazem referências ao projeto de origem (veja `TEMPLATE.md`) e ofereça subir **só o genérico primeiro** (`adobe-*` genéricas, `openspec-*`, skills de processo sem prefixo) e deixar o resto para depois da adaptação.
+3. **Diferença.** Mostre o resultado do `/tfrepo:status` (só no repositório, só na instância, divergentes).
+4. **Skills.** Aplique com o fluxo do `/tfrepo:push` (que tem as suas próprias confirmações).
+5. **Agentes.** Não há instalador automático: o `agent.yaml` é uma definição **portável**, não o payload do `agent create`. Para cada agente escolhido:
+   - Mostre nome, papel, modelo, `adapter_type`, orçamento e `desiredSkills`. **Orçamento nunca 0** (bug conhecido: o agente se lê como "esgotado"). Confira se o `adapter_type` existe na instância (por exemplo, a configuração de um agente já existente via `twinforgecli agent configuration <id>`), e use essa configuração como referência do formato do payload; **não adivinhe os campos**.
+   - Resolva `{{company_id}}` e o `reports_to`, que vem por **chave de papel**: crie na ordem em que quem reporta já exista. O **PO nunca é criado**: aponte para o agente equivalente que a instância já tem (pergunte qual, por nome).
+   - Crie com `twinforgecli agent create` **após confirmação** (um a um ou em lote que o usuário aprovar). Depois grave os ids reais em `roles.yaml` (mostrando o diff) e refaça o `/tfrepo:status`.
+6. Termine com o que foi criado, o que ficou de fora e **que nenhum agente foi acionado**.
