@@ -40,7 +40,15 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
 ## 2. Destino
 
 1. Fixe a instância (seção acima) e confira company e perfil.
-2. Liste os projetos com `twinforgecli project list --json -C <companyId> ...` e deixe o usuário escolher **por nome**. Company sem projetos: informe, não crie nada e sugira pedir acesso ou criar o projeto antes.
+2. Se houver **projeto da pasta** válido (seção "Projeto da pasta"), proponha-o como destino padrão. Senão, liste os projetos com `twinforgecli project list --json -C <companyId> ...` e deixe o usuário escolher **por nome**. Company sem projetos: informe, não crie nada e sugira pedir acesso ou criar o projeto antes.
+
+## Projeto da pasta (contexto)
+
+A CLI **não tem campo de projeto** no perfil (e o `context set` apaga chaves que não conhece), então o projeto escolhido fica em **`.twinforge/project.json`**, na raiz do repositório (`git rev-parse --show-toplevel`, ou a pasta atual): `{"apiBase":"<URL>","companyId":"<id>","projectId":"<id>","projectName":"<nome>"}`. Não tem token e fica fora do git (`.twinforge/` está no `.gitignore`). O `projectId` também vai para `scope.project_id` de `twinforge/roles.yaml` (versionado, vale para o time).
+
+- **Ordem de leitura:** (1) `.twinforge/project.json`; (2) `scope.project_id` do `roles.yaml`, se não for placeholder (`{{...}}`); (3) perguntar.
+- **Validação a cada uso:** `apiBase` e `companyId` do arquivo precisam bater com a instância fixada, e o `projectId` precisa existir em `project list`. Se não bater (por exemplo, a pasta foi ligada a outra instância), **não use**: avise e peça a escolha de novo.
+- **Uso:** onde um comando aceitar projeto (`--project-id`), use o do arquivo por padrão, **diga qual** ("Projeto: <nome>") e mostre-o no rascunho de qualquer escrita; nunca o use em silêncio.
 
 ## 3. Mapeamento
 

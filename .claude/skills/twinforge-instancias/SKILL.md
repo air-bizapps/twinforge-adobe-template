@@ -33,7 +33,8 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
 
 1. Reúna as candidatas como descrito acima (global e pasta).
 2. Mostre uma tabela: perfil, URL (`apiBase`), company (`companyId`), origem (global ou pasta) e qual está fixada na sessão.
-3. Para saber se há login em cada URL, rode `twinforgecli auth whoami --context "<arquivo>" --profile "<perfil>"` (somente leitura). Falha de rede ("Could not reach the TwinForge API") significa **sem resposta da instância**, não "sem login"; mostre como indeterminado. Nunca exiba credenciais.
+3. Se a pasta tiver `.twinforge/project.json`, mostre também o **projeto da pasta** (nome e instância a que pertence).
+4. Para saber se há login em cada URL, rode `twinforgecli auth whoami --context "<arquivo>" --profile "<perfil>"` (somente leitura). Falha de rede ("Could not reach the TwinForge API") significa **sem resposta da instância**, não "sem login"; mostre como indeterminado. Nunca exiba credenciais.
 
 ## Trocar de instância
 

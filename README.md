@@ -23,12 +23,22 @@ O setup **sempre começa perguntando como você quer seguir**: continuar um setu
 | **2. Como seguir** | • levanta o estado de cada instância **só com leitura** (login, perfil, company, projetos e, para o padrão da pasta, se o `roles.yaml` está adaptado)<br>• mostra uma tabela: **completa** ou **em andamento**, e o que falta<br>• faz **uma pergunta**, sempre, com recomendação: **continuar** um setup em andamento, **revalidar** uma instância (checkup) ou **configurar uma nova**<br>• para instância nova, pede a URL (`https://`) e valida `/api/health` |
 | **3. Login** | • gera o link de aprovação da CLI com um contexto vazio (evita o erro 500 causado pela company de outra instância)<br>• você entra ou cria a conta pelo próprio link e aprova: **um login só**<br>• confirma com `auth whoami`; a credencial é por endereço e as outras instâncias não são afetadas |
 | **4. Perfil** | • grava o perfil com nome único (`context set`, sem `--use`: o perfil ativo global não muda)<br>• oferece salvar como padrão da pasta (`.twinforge/context.json`, sem token, no `.gitignore`) |
-| **5. Projetos** (automático) | • lista company e projetos por nome (equivale ao `/twinforge:projects`)<br>• lista vazia não é sucesso: explica as causas e os próximos passos |
+| **5. Projetos** (automático) | • lista company e projetos por nome (equivale ao `/twinforge:projects`)<br>• destaca o **projeto da pasta**, se já houver um salvo<br>• lista vazia não é sucesso: explica as causas e os próximos passos |
 | **6. Permissão** (automático) | • lê o seu papel (`auth whoami`)<br>• regrava o `AGENTS.md` de **um** agente parado com o **mesmo conteúdo**, para testar a escrita<br>• se falhar, orienta pedir **owner ou admin** no canal do Slack `bizapps-twinforge-forjadores` e não oferece o passo 10 |
 | **7. Repositório de configuração** (opcional) | • pular (e diz o que se perde)<br>• apontar um clone existente<br>• criar a partir do repositório base da organização (você informa a URL)<br>• puxar o que existe na instância |
 | **8. Auditoria** | • com o `roles.yaml` adaptado, compara agentes da instância × `roles.yaml` por `id`<br>• com placeholders, não roda e lista o que falta trocar<br>• somente leitura |
-| **9. Conferência e próximo passo** | • resumo: CLI, instância, login, perfil, company, projetos, permissão e repositório do projeto<br>• mostra o que existe no repositório × na instância<br>• lista os comandos (tabela abaixo)<br>• faz **uma pergunta** de próximo passo: subir o template, pedir algo em linguagem natural, ver a instância ou terminar |
-| **10. Subir o template** (opcional) | • escolhe o projeto-alvo<br>• **conecta o repositório do projeto** (`/twinforge:workspace`: segredo do PAT sem o token na conversa, vínculo ao env sem apagar variáveis e workspace)<br>• avisa do conteúdo do projeto de origem e oferece subir só o genérico primeiro<br>• mostra a diferença (`/twinforge:repo:status`) e aplica as skills (`/twinforge:repo:push`)<br>• cria os agentes com confirmação, **preservando os existentes** e criando o PO na raiz (papel `general`)<br>• nenhum agente é acionado |
+| **9. Conferência e próximo passo** | • resumo: CLI, instância, login, perfil, company, projetos, **projeto da pasta**, permissão e repositório do projeto<br>• mostra o que existe no repositório × na instância<br>• lista os comandos (tabela abaixo)<br>• faz **uma pergunta** de próximo passo: subir o template, pedir algo em linguagem natural, ver a instância ou terminar |
+| **10. Subir o template** (opcional) | • **define o projeto**: escolhe um existente ou **cria um novo com o nome do projeto (recomendado)** e salva a escolha em `.twinforge/project.json` (contexto da pasta, que direciona as skills para ele) e em `scope.project_id` do `roles.yaml`<br>• **conecta o repositório do projeto** (`/twinforge:workspace`: segredo do PAT sem o token na conversa, vínculo ao env sem apagar variáveis e workspace)<br>• avisa do conteúdo do projeto de origem e oferece subir só o genérico primeiro<br>• mostra a diferença (`/twinforge:repo:status`) e aplica as skills (`/twinforge:repo:push`)<br>• cria os agentes com confirmação, **preservando os existentes** e criando o PO na raiz (papel `general`)<br>• nenhum agente é acionado |
+
+### O projeto da pasta
+No passo 10 (e no `/twinforge:workspace`) você **escolhe um projeto existente ou cria um novo com o nome do projeto** (a recomendação é criar). A escolha é salva no contexto da pasta para as skills saberem em qual projeto atuar:
+
+| Onde | O que guarda | Para quê |
+|---|---|---|
+| `.twinforge/project.json` | `apiBase`, `companyId`, `projectId`, `projectName` (sem token, fora do git) | As skills usam esse projeto por padrão (`--project-id`), dizem qual estão usando e validam que ele pertence à instância fixada |
+| `scope.project_id` em `twinforge/roles.yaml` | o mesmo `projectId` (versionado) | Vale para o time; é o que o `/twinforge:repo:*` confere antes de escrever |
+
+A CLI não tem campo de projeto no perfil, e o `context set` apaga chaves que não conhece; por isso a escolha não fica no `.twinforge/context.json`. O projeto padrão da company (`defaultProjectId`) não é alterado.
 
 **Revalidar (checkup):**
 
@@ -39,7 +49,7 @@ O setup **sempre começa perguntando como você quer seguir**: continuar um setu
 | 3 Login | `auth whoami` | passo 3 (novo link de aprovação) |
 | 4 Perfil | perfil existe e bate com a URL e a company | passo 4, com cópia de segurança do contexto |
 | 5 Projetos | `company list` e `project list` | passo 5 |
-| 5b Repositório do projeto | workspace e `GH_TOKEN` (`twinforge-workspace`) | `/twinforge:workspace` |
+| 5b Projeto e repositório | projeto da pasta válido, workspace e `GH_TOKEN` (`twinforge-workspace`) | `/twinforge:workspace` |
 | 6 Permissão | regravação idêntica do `AGENTS.md` | orienta o pedido no Slack |
 | 7 e 8 | pasta, `roles.yaml` e auditoria | só relata |
 
@@ -55,7 +65,7 @@ O checkup **não altera a instância remota**, exceto para reparar uma falha e n
 | `/twinforge:setup` | Configuração inicial. Sempre pergunta: continuar um setup em andamento, revalidar uma instância ou configurar uma nova. |
 | `/twinforge:projects` | Lista os projetos da company (aceita uma company como argumento). |
 | `/twinforge:instances` | Lista, mostra e troca a instância em uso. |
-| `/twinforge:workspace` | Conecta o repositório GitHub do projeto: workspace e segredo do PAT, com o token fora da conversa. |
+| `/twinforge:workspace` | Define o projeto (escolher um existente ou criar um novo, e salvar no contexto da pasta) e conecta o repositório GitHub: workspace e segredo do PAT, com o token fora da conversa. |
 | `/twinforge:apply` | Envia uma mudança do OpenSpec para a instância (issue pai, documentos e uma filha por grupo de tarefas, em `backlog` e sem responsável). |
 | `/twinforge:status` | Checa os pré-requisitos do `twinforgecli` e diz se está tudo certo (só leitura). |
 | `/twinforge:fix` | Corrige o que o `status` encontrou, com plano, confirmação e cópia de segurança. |

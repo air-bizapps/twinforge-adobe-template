@@ -35,8 +35,12 @@ Em todo comando, `--context "<arquivo>" --profile "<perfil>"` da instância fixa
 
 ### Passo 1. Projeto e repositório
 
-1. Liste os projetos (`twinforgecli project list --json`) e peça a escolha **por nome**; nunca peça uuid.
-2. Peça a URL do repositório: `https://github.com/<org>/<repo>` (exija `https://`, sem credenciais embutidas na URL e sem `.git` no final).
+1. **Projeto: escolher um existente ou criar um novo.** Se já houver um projeto da pasta válido (seção "Projeto da pasta"), mostre-o e pergunte se mantém ou troca. Senão, liste os projetos (`twinforgecli project list --json`) e faça **uma pergunta**, com a ferramenta de pergunta com opções quando existir:
+   - **Criar um projeto novo com o nome do projeto** (**recomendada**): peça o nome (por exemplo, o nome do cliente e da área) e confira que **não existe** outro com o mesmo nome (sem diferenciar maiúsculas; se existir, ofereça selecioná-lo). Após o "sim", `twinforgecli project create -C <companyId> --name "<nome>" --json` e guarde o `id` devolvido. Os projetos que a instância traz de fábrica ficam como estão.
+   - **Usar um projeto existente:** mostre a lista **por nome** (nunca peça uuid).
+   O projeto padrão da company (`defaultProjectId`) **não é alterado**.
+2. **Salve a escolha no contexto da pasta** (seção "Projeto da pasta"): mostre o conteúdo e grave `.twinforge/project.json` após confirmação, garantindo `.twinforge/` no `.gitignore`. O `scope.project_id` do `roles.yaml` é atualizado pelo `setup` (Passo 10), com diff.
+3. Peça a URL do repositório: `https://github.com/<org>/<repo>` (exija `https://`, sem credenciais embutidas na URL e sem `.git` no final).
 
 ### Passo 2. Estado atual (somente leitura)
 
@@ -84,9 +88,17 @@ unset GH_TOKEN
 
 Releia workspace, `env` (só as chaves) e o segredo (pelo nome). Resuma em uma tabela, **sem nenhum token**: "workspace ok", "`GH_TOKEN` vinculado ao segredo <nome>", "segredo existe". Diga o que **não** dá para verificar daqui: se o clone com o token funciona só aparece quando um agente roda nesse projeto. Sugira conferir no primeiro uso.
 
+## Projeto da pasta (contexto)
+
+A CLI **não tem campo de projeto** no perfil (e o `context set` apaga chaves que não conhece), então o projeto escolhido fica em **`.twinforge/project.json`**, na raiz do repositório (`git rev-parse --show-toplevel`, ou a pasta atual): `{"apiBase":"<URL>","companyId":"<id>","projectId":"<id>","projectName":"<nome>"}`. Não tem token e fica fora do git (`.twinforge/` está no `.gitignore`). O `projectId` também vai para `scope.project_id` de `twinforge/roles.yaml` (versionado, vale para o time).
+
+- **Ordem de leitura:** (1) `.twinforge/project.json`; (2) `scope.project_id` do `roles.yaml`, se não for placeholder (`{{...}}`); (3) perguntar.
+- **Validação a cada uso:** `apiBase` e `companyId` do arquivo precisam bater com a instância fixada, e o `projectId` precisa existir em `project list`. Se não bater (por exemplo, a pasta foi ligada a outra instância), **não use**: avise e peça a escolha de novo.
+- **Uso:** onde um comando aceitar projeto (`--project-id`), use o do arquivo por padrão, **diga qual** ("Projeto: <nome>") e mostre-o no rascunho de qualquer escrita; nunca o use em silêncio.
+
 ## Modo checagem (somente leitura)
 
-Chamado pelo `setup` na revalidação: rode só o Passo 2 para o projeto-alvo e relate **OK** (workspace e `GH_TOKEN` presentes), **ATENÇÃO** (workspace sem `GH_TOKEN`, ou `GH_TOKEN` apontando para segredo de outro repositório) ou **FALHA** (sem workspace). Não escreva nada; para reparar, siga os Passos 3 a 6.
+Chamado pelo `setup` na revalidação: rode só o Passo 2 para o projeto da pasta (ou o informado) e relate **OK** (workspace e `GH_TOKEN` presentes), **ATENÇÃO** (workspace sem `GH_TOKEN`, ou `GH_TOKEN` apontando para segredo de outro repositório) ou **FALHA** (sem workspace). Não escreva nada; para reparar, siga os Passos 3 a 6.
 
 ## Erros
 

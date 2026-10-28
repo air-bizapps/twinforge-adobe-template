@@ -38,6 +38,14 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
 - A única coisa que o usuário precisa trazer é a **URL da instância**.
 - Se o diretório de dados estiver isolado (`TWINFORGE_HOME` ou `--data-dir`), use-o em todos os comandos e não toque em `~/.twinforge`.
 
+## Projeto da pasta (contexto)
+
+A CLI **não tem campo de projeto** no perfil (e o `context set` apaga chaves que não conhece), então o projeto escolhido fica em **`.twinforge/project.json`**, na raiz do repositório (`git rev-parse --show-toplevel`, ou a pasta atual): `{"apiBase":"<URL>","companyId":"<id>","projectId":"<id>","projectName":"<nome>"}`. Não tem token e fica fora do git (`.twinforge/` está no `.gitignore`). O `projectId` também vai para `scope.project_id` de `twinforge/roles.yaml` (versionado, vale para o time).
+
+- **Ordem de leitura:** (1) `.twinforge/project.json`; (2) `scope.project_id` do `roles.yaml`, se não for placeholder (`{{...}}`); (3) perguntar.
+- **Validação a cada uso:** `apiBase` e `companyId` do arquivo precisam bater com a instância fixada, e o `projectId` precisa existir em `project list`. Se não bater (por exemplo, a pasta foi ligada a outra instância), **não use**: avise e peça a escolha de novo.
+- **Uso:** onde um comando aceitar projeto (`--project-id`), use o do arquivo por padrão, **diga qual** ("Projeto: <nome>") e mostre-o no rascunho de qualquer escrita; nunca o use em silêncio.
+
 ## Passo 1. CLI
 
 - Checagem: `node --version` (precisa de 20+), `twinforgecli --version`.
@@ -92,7 +100,7 @@ A **CLI é a prioridade**: o login do `twinforgecli` é o que importa, e o login
 
 ## Passo 5. Company e projetos
 
-Executado **automaticamente** logo depois do perfil (Passo 4), sem perguntar: é o mesmo que o `/twinforge:projects`. Antes de o perfil existir, use `--api-base` **e** o `--context` vazio do Passo 3; depois, `--context "<arquivo>" --profile "<perfil>"`.
+Executado **automaticamente** logo depois do perfil (Passo 4), sem perguntar: é o mesmo que o `/twinforge:projects`. Se a pasta já tiver um projeto salvo (`.twinforge/project.json` válido), destaque-o na lista como "projeto da pasta". Antes de o perfil existir, use `--api-base` **e** o `--context` vazio do Passo 3; depois, `--context "<arquivo>" --profile "<perfil>"`.
 
 1. `twinforgecli company list --json --api-base "<URL>"` (ou com o perfil). Mostre as companies **por nome**; o usuário escolhe, você usa o id. Uma única: proponha como padrão e peça confirmação. Na 0.6.0 as chaves são `id` e `name` (company) e `id`, `name` (projeto); mesmo assim inspecione o JSON em vez de supor.
 2. `twinforgecli project list --json -C "<companyId>" --api-base "<URL>"`. Mostre os projetos por nome. **Nunca peça uuid.**
@@ -133,7 +141,7 @@ Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...
 
 ## Passo 9. Conferência final e próximo passo
 
-1. **Resumo.** Versão do CLI, instância (URL), identidade logada, perfil, company, **projetos encontrados** e situação do repositório de agentes, o **resultado da verificação de permissão** do Passo 6 e se o **projeto tem repositório conectado** (workspace e `GH_TOKEN`, só leitura). **Não diga "setup concluído" se algo ficou pendente:** com placeholders em `roles.yaml`, diga "instância configurada; repositório ainda não adaptado" e liste a pendência.
+1. **Resumo.** Versão do CLI, instância (URL), identidade logada, perfil, company, **projetos encontrados** e situação do repositório de agentes, o **resultado da verificação de permissão** do Passo 6 o **projeto da pasta** (de `.twinforge/project.json`) e se ele tem **repositório conectado** (workspace e `GH_TOKEN`, só leitura). **Não diga "setup concluído" se algo ficou pendente:** com placeholders em `roles.yaml`, diga "instância configurada; repositório ainda não adaptado" e liste a pendência.
 2. **O que existe no repositório e o que a instância já tem** (só se a pasta tiver `agents/`, `skills/` e `twinforge/`). Leia, não suponha:
    - **Agentes do repositório:** os `agents/*/agent.yaml` (papel e nome). **Fluxo:** as `phases` de `twinforge/workflow.yaml`, em uma frase. **Skills:** quantas há em `skills/` e quais são genéricas (`adobe-*`, `openspec-*`, sem prefixo) e quais são do projeto de origem (`projeto-*`, `bunge-*`; veja `TEMPLATE.md`).
    - **Na instância:** `agent list` e `skill list` da instância fixada (quantos e quais).
@@ -180,7 +188,7 @@ Não execute o Passo 10 no checkup. Termine com a tabela de resultados e uma con
 
 Sempre com a instância fixada (`--context`/`--profile`), plano mostrado e confirmação **antes de cada escrita**. Nada é atribuído nem iniciado: agentes só são acionados com confirmação específica.
 
-1. **Destino.** Liste os projetos da instância e peça a escolha **por nome**; pergunte o repositório de código do projeto (será conectado no item 2). Mostre o diff de `scope.project_id` e `scope.repo` em `twinforge/roles.yaml` e grave só após confirmação.
+1. **Projeto.** Defina o projeto-alvo com o Passo 1 da skill **`twinforge-workspace`**: **criar um projeto novo com o nome do projeto (recomendado)** ou escolher um existente (**por nome**), e salvar a escolha em `.twinforge/project.json` (contexto da pasta, que direciona as skills para esse projeto). Depois, pergunte o repositório de código do projeto (será conectado no item 2). Mostre o diff de `scope.project_id` e `scope.repo` em `twinforge/roles.yaml` e grave só após confirmação.
 2. **Repositório do projeto (antes de qualquer skill ou agente).** Os agentes precisam do código: verifique o projeto-alvo com o modo checagem da skill **`twinforge-workspace`** (workspace com a `repoUrl` e `GH_TOKEN` vinculado). Se faltar algo, siga o fluxo dela (`/twinforge:workspace`): URL do repositório, **segredo com o PAT criado pelo próprio usuário em outro terminal, sem o token passar pela conversa**, vínculo ao projeto sem apagar o env e criação do workspace. Use a mesma URL em `scope.repo` do `roles.yaml`. Só siga para as skills e os agentes com o workspace pronto, ou se o usuário **optar por pular**, e nesse caso avise que os agentes não conseguirão puxar o código.
 3. **Aviso de conteúdo.** Diga que `projeto-*`, `bunge-*` e as instruções dos agentes ainda trazem referências ao projeto de origem (veja `TEMPLATE.md`) e ofereça subir **só o genérico primeiro** (`adobe-*` genéricas, `openspec-*`, skills de processo sem prefixo) e deixar o resto para depois da adaptação.
 4. **Diferença.** Mostre o resultado do `/twinforge:repo:status` (só no repositório, só na instância, divergentes).

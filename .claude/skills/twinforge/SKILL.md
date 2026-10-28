@@ -36,8 +36,16 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
    `twinforgecli commands | python3 -c "import sys,json; t=sys.argv[1].lower(); f=lambda ns: [x for n in ns for x in ([n] if t in (n['path']+' '+(n.get('description') or '')).lower() else [])+f(n.get('commands') or [])]; [print(n['path'],'-',n.get('description','')) for n in f(json.load(sys.stdin))]" "<termo>"`
    (ou use `grep -i` no texto). Depois leia a ajuda do comando escolhido: `twinforgecli <comando> --help`. Se nada no catálogo atender, diga isso; **não invente comando**.
 3. **Classifique leitura ou escrita.** É leitura só o que a descrição ou a ajuda indicam como consulta (List, Get, Show, Print...). O nome engana: `issue read`, `issue unread` e `issue archive` **alteram estado**. Na dúvida, trate como escrita.
-4. **Monte o comando** com `--json` quando existir, `--context "<arquivo>" --profile "<perfil>"` sempre, e `-C <companyId>` quando o comando pedir company (use a do perfil). Resolva nomes em ids consultando a listagem correspondente; **nunca peça uuid** ao usuário.
+4. **Monte o comando** com `--json` quando existir, `--project-id` do **projeto da pasta** quando o comando aceitar projeto e o usuário não indicar outro (seção "Projeto da pasta"; diga qual projeto está usando), `--context "<arquivo>" --profile "<perfil>"` sempre, e `-C <companyId>` quando o comando pedir company (use a do perfil). Resolva nomes em ids consultando a listagem correspondente; **nunca peça uuid** ao usuário.
 5. **Execute** conforme o tipo.
+
+## Projeto da pasta (contexto)
+
+A CLI **não tem campo de projeto** no perfil (e o `context set` apaga chaves que não conhece), então o projeto escolhido fica em **`.twinforge/project.json`**, na raiz do repositório (`git rev-parse --show-toplevel`, ou a pasta atual): `{"apiBase":"<URL>","companyId":"<id>","projectId":"<id>","projectName":"<nome>"}`. Não tem token e fica fora do git (`.twinforge/` está no `.gitignore`). O `projectId` também vai para `scope.project_id` de `twinforge/roles.yaml` (versionado, vale para o time).
+
+- **Ordem de leitura:** (1) `.twinforge/project.json`; (2) `scope.project_id` do `roles.yaml`, se não for placeholder (`{{...}}`); (3) perguntar.
+- **Validação a cada uso:** `apiBase` e `companyId` do arquivo precisam bater com a instância fixada, e o `projectId` precisa existir em `project list`. Se não bater (por exemplo, a pasta foi ligada a outra instância), **não use**: avise e peça a escolha de novo.
+- **Uso:** onde um comando aceitar projeto (`--project-id`), use o do arquivo por padrão, **diga qual** ("Projeto: <nome>") e mostre-o no rascunho de qualquer escrita; nunca o use em silêncio.
 
 ## Leitura
 
