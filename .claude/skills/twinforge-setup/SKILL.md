@@ -120,7 +120,7 @@ Roda **automaticamente** depois dos projetos (Passo 5), sem perguntar: usuários
    - Confira com um novo `instructions-file:get` que o conteúdo continua idêntico e apague o temporário. **Nunca** altere o conteúdo, nunca teste em mais de um agente e nunca em um agente em execução.
 4. **Resultado:**
    - **Funcionou:** "Você pode editar agentes (papel <papel>)." Siga em frente.
-   - **Falhou por permissão** (403, `forbidden`, "does not have access", "permission"): diga que o usuário **não tem permissão para criar ou editar agentes** nesta instância (informe o papel). Oriente: peça, no canal do Slack **`bizapps-twinforge-forjadores`**, a mudança do seu papel para **owner ou admin**, informando o e-mail, a URL da instância e a company. Ofereça um texto pronto para copiar (a skill **não envia** a mensagem). Quando o papel mudar, é só rodar `/twinforge:setup` de novo: ele retoma neste passo. Enquanto isso, **não ofereça** o Passo 10 (subir o template); o restante do setup segue normalmente.
+   - **Falhou por permissão** (403, `forbidden`, "does not have access", "permission"): diga que o usuário **não tem permissão para criar ou editar agentes** nesta instância (informe o papel). Oriente: peça, no canal do Slack **`bizapps-twinforge-forjadores`**, a mudança do seu papel para **owner ou admin**, informando o e-mail, a URL da instância e a company. Ofereça um texto pronto para copiar (a skill **não envia** a mensagem). Quando o papel mudar, é só rodar `/twinforge:setup` de novo: ele retoma neste passo. Enquanto isso, **não ofereça** o Passo 9 (subir o template); o restante do setup segue normalmente.
    - **Falhou por outro motivo** (500, rede, 401): não é permissão; trate pela tabela de erros da skill `twinforge` e não repita em laço.
 
 ## Passo 7. Repositório de configuração dos agentes (opcional)
@@ -135,16 +135,13 @@ Nunca bloqueia o setup. É uma pasta com `agents/`, `skills/` e `twinforge/roles
 
 Sem repositório, uma card pode ser criada sem responsável (`assigneeAgentId` é opcional): sem responsável ou em `backlog`, ninguém é acordado, e o usuário direciona depois para o agente que quiser.
 
-## Passo 8. Auditoria (só com repositório)
-
-Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...}}`), **não rode a comparação**: diga que o repositório ainda não foi adaptado à instância (e liste o que falta trocar: `scope.project_id`, os ids dos papéis e o repositório do projeto), e ofereça a adaptação como próximo passo. Caso contrário, compare os agentes da instância (`twinforgecli agent list --json`) com `twinforge/roles.yaml`. No formato do repositório base, `roles:` mapeia uma chave de papel para `{kind, id}` (com `kind: agent`, o `id` é o uuid do agente), e há um bloco `scope` com o `project_id`. Compare por **`id`** e mostre o `name` da instância ao lado. Papéis com `kind` diferente de `agent` não entram na comparação. Se o arquivo não seguir esse formato, **mostre ao usuário como o interpretou** antes de comparar, ou diga que não foi possível, em vez de adivinhar. Um `scope.project_id` que não existe na instância indica um fork ainda não adaptado: avise. Relate agentes que existem de um lado e não do outro. **Somente leitura**: ofereça, mas não execute, uma correção.
-
-## Passo 9. Conferência final e próximo passo
+## Passo 8. Conferência final e próximo passo
 
 1. **Resumo.** Versão do CLI, instância (URL), identidade logada, perfil, company, **projetos encontrados** e situação do repositório de agentes, o **resultado da verificação de permissão** do Passo 6 o **projeto da pasta** (de `.twinforge/project.json`) e se ele tem **repositório conectado** (workspace e `GH_TOKEN`, só leitura). **Não diga "setup concluído" se algo ficou pendente:** com placeholders em `roles.yaml`, diga "instância configurada; repositório ainda não adaptado" e liste a pendência.
 2. **O que existe no repositório e o que a instância já tem** (só se a pasta tiver `agents/`, `skills/` e `twinforge/`). Leia, não suponha:
    - **Agentes do repositório:** os `agents/*/agent.yaml` (papel e nome). **Fluxo:** as `phases` de `twinforge/workflow.yaml`, em uma frase. **Skills:** quantas há em `skills/` e quais são genéricas (`adobe-*`, `openspec-*`, sem prefixo) e quais são do projeto de origem (`projeto-*`, `bunge-*`; veja `TEMPLATE.md`).
    - **Na instância:** `agent list` e `skill list` da instância fixada (quantos e quais).
+   - Se o `roles.yaml` **já estiver adaptado**, rode a auditoria (Passo 10) em modo de leitura e mostre o resultado. Com placeholders, não rode: a auditoria só tem o que comparar **depois** da subida (Passo 9).
    - Diga o que **só existe no repositório** (por exemplo, "o repositório tem 11 agentes e a instância 4").
 3. **Mostre os comandos à mão do usuário**, em uma tabela curta (inclua `/twinforge:repo:*` só se a pasta tiver `commands/twinforge/repo/`). Destaque o primeiro:
 
@@ -164,7 +161,7 @@ Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...
    2. **Pedir algo em linguagem natural agora** (`/twinforge:explore`). Marque como recomendada quando o repositório já estiver adaptado e a instância já tiver o que precisa.
    3. **Ver o que há na instância** (`/twinforge:projects` e `/twinforge:status`).
    4. **Terminar por aqui.**
-5. Ao escolher a opção 1, siga o Passo 10. Ao escolher a 2, 3 ou outra coisa, acione a skill ou o comando correspondente.
+5. Ao escolher a opção 1, siga o Passo 9. Ao escolher a 2, 3 ou outra coisa, acione a skill ou o comando correspondente.
 
 ## Revalidar uma instância (checkup)
 
@@ -180,11 +177,11 @@ Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...
 | 5b Repositório do projeto | modo checagem da skill `twinforge-workspace` (workspace e `GH_TOKEN`, só leitura) | skill `twinforge-workspace` |
 | 6 Permissão | o teste de regravação idêntica do Passo 6 | orientar o pedido no Slack |
 | 7 Repositório | pasta e `roles.yaml` presentes (só leitura) | apenas relatar |
-| 8 Auditoria | comparação por `id` (só leitura), se o repositório estiver adaptado | apenas relatar |
+| 10 Auditoria | comparação por `id` (só leitura), se o repositório estiver adaptado | apenas relatar |
 
-Não execute o Passo 10 no checkup. Termine com a tabela de resultados e uma conclusão explícita: "tudo certo" ou a lista do que falhou e do que foi reparado. Nada é gravado na instância remota além da regravação idêntica do Passo 6.
+Não execute o Passo 9 no checkup. Termine com a tabela de resultados e uma conclusão explícita: "tudo certo" ou a lista do que falhou e do que foi reparado. Nada é gravado na instância remota além da regravação idêntica do Passo 6.
 
-## Passo 10. Subir o template na instância (só se o usuário escolher)
+## Passo 9. Subir o template na instância (só se o usuário escolher)
 
 Sempre com a instância fixada (`--context`/`--profile`), plano mostrado e confirmação **antes de cada escrita**. Nada é atribuído nem iniciado: agentes só são acionados com confirmação específica.
 
@@ -202,4 +199,12 @@ Sempre com a instância fixada (`--context`/`--profile`), plano mostrado e confi
    - **Antes de criar:** mostre nome, papel, modelo, `adapter_type`, orçamento e `desiredSkills`. **Orçamento nunca 0** (bug conhecido: o agente se lê como "esgotado"). Confira se o `adapter_type` existe na instância (por exemplo, a configuração de um agente já existente via `twinforgecli agent configuration <id>`) e use essa configuração como referência do formato do payload; **não adivinhe os campos**.
    - **Ordem e `reports_to`:** resolva `{{company_id}}` e o `reports_to` (que vem por **chave de papel**) criando primeiro o PO e depois quem reporta a ele. Agentes do repositório que a instância já tem (mesmo nome ou papel, como Reflection Coach e Summarizer) **não são recriados**: pergunte se devem ser reaproveitados no `roles.yaml` ou deixados de fora.
    - Crie com `twinforgecli agent create` **após confirmação** (um a um ou em lote que o usuário aprovar). Depois grave os ids reais em `roles.yaml` (inclusive o do PO novo, mostrando o diff) e refaça o `/twinforge:repo:status`.
-7. Termine com o que foi criado, o que ficou de fora e **que nenhum agente foi acionado**.
+7. Termine rodando a **auditoria** (Passo 10) e relate o que foi criado, o que ficou de fora e **que nenhum agente foi acionado**.
+
+## Passo 10. Auditoria (verificação final)
+
+Só faz sentido com o repositório **já adaptado**: ela compara o que o `roles.yaml` diz com o que a instância tem, e o `roles.yaml` só é adaptado (e os agentes só são criados) no Passo 9. Por isso vem **depois** da subida. Roda: (a) **ao final do Passo 9**; (b) no **checkup** (revalidação); e (c) a qualquer momento em que o `roles.yaml` já esteja adaptado, quando o Passo 8 pode mostrar o resultado em leitura.
+
+Se `scope.project_id` ou os ids de `roles.yaml` ainda forem placeholders (`{{...}}`), **não rode a comparação** (isso é esperado antes do Passo 9): diga que o repositório ainda não foi adaptado à instância (e liste o que falta trocar: `scope.project_id`, os ids dos papéis e o repositório do projeto), e ofereça a adaptação como próximo passo. Caso contrário, compare os agentes da instância (`twinforgecli agent list --json`) com `twinforge/roles.yaml`. No formato do repositório base, `roles:` mapeia uma chave de papel para `{kind, id}` (com `kind: agent`, o `id` é o uuid do agente), e há um bloco `scope` com o `project_id`. Compare por **`id`** e mostre o `name` da instância ao lado. Papéis com `kind` diferente de `agent` não entram na comparação. Se o arquivo não seguir esse formato, **mostre ao usuário como o interpretou** antes de comparar, ou diga que não foi possível, em vez de adivinhar. Um `scope.project_id` que não existe na instância indica um fork ainda não adaptado: avise. Relate agentes que existem de um lado e não do outro. **Somente leitura**: ofereça, mas não execute, uma correção.
+
+Depois da subida, o resultado esperado é **nenhuma divergência** entre os papéis do `roles.yaml` e a instância. Os agentes que a instância já tinha e que não estão no `roles.yaml` (por exemplo, os agentes padrão preservados) aparecem como "só na instância": é esperado, não é erro.

@@ -112,14 +112,14 @@ O setup **lê o estado real** (máquina e instância) a cada execução e **semp
 | **3. Login** | • gera o link de aprovação da CLI com um contexto vazio (evita o erro 500 causado pela company de outra instância)<br>• você entra ou cria a conta pelo próprio link e aprova: **um login só**<br>• confirma com `auth whoami`; a credencial é por endereço e as outras instâncias não são afetadas |
 | **4. Perfil** | • grava o perfil com nome único (`context set`, sem `--use`: o perfil ativo global não muda)<br>• oferece salvar como padrão da pasta (`.twinforge/context.json`, sem token, no `.gitignore`) |
 | **5. Projetos** (automático) | • lista company e projetos por nome (equivale ao `/twinforge:projects`)<br>• destaca o **projeto da pasta**, se já houver um salvo<br>• lista vazia não é sucesso: explica as causas e os próximos passos |
-| **6. Permissão** (automático) | • lê o seu papel (`auth whoami`)<br>• regrava o `AGENTS.md` de **um** agente parado com o **mesmo conteúdo**, para testar a escrita<br>• se falhar, orienta pedir **owner ou admin** no canal do Slack `bizapps-twinforge-forjadores` e não oferece o passo 10 |
+| **6. Permissão** (automático) | • lê o seu papel (`auth whoami`)<br>• regrava o `AGENTS.md` de **um** agente parado com o **mesmo conteúdo**, para testar a escrita<br>• se falhar, orienta pedir **owner ou admin** no canal do Slack `bizapps-twinforge-forjadores` e não oferece o passo 9 |
 | **7. Repositório de configuração** (opcional) | • pular (e diz o que se perde)<br>• apontar um clone existente<br>• criar a partir do repositório base da organização (você informa a URL)<br>• puxar o que existe na instância |
-| **8. Auditoria** | • com o `roles.yaml` adaptado, compara agentes da instância × `roles.yaml` por `id`<br>• com placeholders, não roda e lista o que falta trocar<br>• somente leitura |
-| **9. Conferência e próximo passo** | • resumo: CLI, instância, login, perfil, company, projetos, **projeto da pasta**, permissão e repositório do projeto<br>• mostra o que existe no repositório × na instância<br>• lista os comandos (tabela abaixo)<br>• faz **uma pergunta** de próximo passo: subir o template, pedir algo em linguagem natural, ver a instância ou terminar |
-| **10. Subir o template** (opcional) | • **define o projeto**: escolhe um existente ou **cria um novo com o nome do projeto (recomendado)** e salva a escolha em `.twinforge/project.json` (contexto da pasta, que direciona as skills para ele) e em `scope.project_id` do `roles.yaml`<br>• **conecta o repositório do projeto** (`/twinforge:workspace`: segredo do PAT sem o token na conversa, vínculo ao env sem apagar variáveis e workspace)<br>• avisa do conteúdo do projeto de origem e oferece subir só o genérico primeiro<br>• mostra a diferença (`/twinforge:repo:status`) e aplica as skills (`/twinforge:repo:push`)<br>• cria os agentes com confirmação, **preservando os existentes** e criando o PO na raiz (papel `general`)<br>• nenhum agente é acionado |
+| **8. Conferência e próximo passo** | • resumo: CLI, instância, login, perfil, company, projetos, **projeto da pasta**, permissão e repositório do projeto<br>• mostra o que existe no repositório × na instância<br>• lista os comandos (tabela abaixo)<br>• faz **uma pergunta** de próximo passo: subir o template, pedir algo em linguagem natural, ver a instância ou terminar |
+| **9. Subir o template** (opcional) | • **define o projeto**: escolhe um existente ou **cria um novo com o nome do projeto (recomendado)** e salva a escolha em `.twinforge/project.json` (contexto da pasta, que direciona as skills para ele) e em `scope.project_id` do `roles.yaml`<br>• **conecta o repositório do projeto** (`/twinforge:workspace`: segredo do PAT sem o token na conversa, vínculo ao env sem apagar variáveis e workspace)<br>• avisa do conteúdo do projeto de origem e oferece subir só o genérico primeiro<br>• mostra a diferença (`/twinforge:repo:status`) e aplica as skills (`/twinforge:repo:push`)<br>• cria os agentes com confirmação, **preservando os existentes** e criando o PO na raiz (papel `general`)<br>• termina rodando a auditoria (passo 10)<br>• nenhum agente é acionado |
+| **10. Auditoria** (verificação final) | • roda **depois da subida** (e no checkup), porque só então o `roles.yaml` está adaptado e os agentes existem<br>• com o `roles.yaml` adaptado, compara agentes da instância × `roles.yaml` por `id`<br>• com placeholders, não roda e lista o que falta trocar (esperado antes do passo 9)<br>• somente leitura; os agentes padrão preservados aparecem como "só na instância" (esperado) |
 
 ### O projeto da pasta
-No passo 10 (e no `/twinforge:workspace`) você **escolhe um projeto existente ou cria um novo com o nome do projeto** (a recomendação é criar). A escolha é salva no contexto da pasta para as skills saberem em qual projeto atuar:
+No passo 9 (e no `/twinforge:workspace`) você **escolhe um projeto existente ou cria um novo com o nome do projeto** (a recomendação é criar). A escolha é salva no contexto da pasta para as skills saberem em qual projeto atuar:
 
 | Onde | O que guarda | Para quê |
 |---|---|---|
@@ -139,9 +139,9 @@ A CLI não tem campo de projeto no perfil, e o `context set` apaga chaves que n�
 | 5 Projetos | `company list` e `project list` | passo 5 |
 | 5b Projeto e repositório | projeto da pasta válido, workspace e `GH_TOKEN` (`twinforge-workspace`) | `/twinforge:workspace` |
 | 6 Permissão | regravação idêntica do `AGENTS.md` | orienta o pedido no Slack |
-| 7 e 8 | pasta, `roles.yaml` e auditoria | só relata |
+| 7 e 10 | pasta, `roles.yaml` e auditoria | só relata |
 
-O checkup **não altera a instância remota**, exceto para reparar uma falha e na regravação idêntica do passo 6. Não executa o passo 10.
+O checkup **não altera a instância remota**, exceto para reparar uma falha e na regravação idêntica do passo 6. Não executa o passo 9.
 
 ## Linguagem natural: `twinforge` e `/twinforge:explore`
 
@@ -246,7 +246,7 @@ Se o token for colado na conversa por engano, a skill avisa que ele foi exposto 
 Registradas em `openspec/changes/twinforge-adobe-skills-v1/design.md`:
 
 - **Fluxo do `/twinforge:workspace` de ponta a ponta:** criar o segredo pelo terminal do usuário, vincular ao projeto e criar o workspace só foi validado na leitura; falta testar a escrita e o prompt oculto no `zsh`.
-- **Criação dos agentes** no passo 10 do setup: o `agent.yaml` não é o payload do `agent create` e não há instalador; o passo é guiado e ainda não foi exercitado.
+- **Criação dos agentes** no passo 9 do setup: o `agent.yaml` não é o payload do `agent create` e não há instalador; o passo é guiado e ainda não foi exercitado.
 - **Verificação de permissão** (passo 6): a mensagem exata de erro de um usuário operador não foi observada.
 - **Restrições da chave** de `issue document:put`: o limite vem de `attachmentMaxBytes` da company (10 MiB na instância testada); as regras da chave não foram verificadas.
 - **Envio repetido do `apply`:** a busca pelo marcador usa `issue list --match` (filtro local, sem paginação); o reenvio sem duplicar só será validado numa instância de teste.

@@ -39,7 +39,7 @@ Em todo comando, `--context "<arquivo>" --profile "<perfil>"` da instância fixa
    - **Criar um projeto novo com o nome do projeto** (**recomendada**): peça o nome (por exemplo, o nome do cliente e da área) e confira que **não existe** outro com o mesmo nome (sem diferenciar maiúsculas; se existir, ofereça selecioná-lo). Após o "sim", `twinforgecli project create -C <companyId> --name "<nome>" --json` e guarde o `id` devolvido. Os projetos que a instância traz de fábrica ficam como estão.
    - **Usar um projeto existente:** mostre a lista **por nome** (nunca peça uuid).
    O projeto padrão da company (`defaultProjectId`) **não é alterado**.
-2. **Salve a escolha no contexto da pasta** (seção "Projeto da pasta"): mostre o conteúdo e grave `.twinforge/project.json` após confirmação, garantindo `.twinforge/` no `.gitignore`. O `scope.project_id` do `roles.yaml` é atualizado pelo `setup` (Passo 10), com diff.
+2. **Salve a escolha no contexto da pasta** (seção "Projeto da pasta"): mostre o conteúdo e grave `.twinforge/project.json` após confirmação, garantindo `.twinforge/` no `.gitignore`. O `scope.project_id` do `roles.yaml` é atualizado pelo `setup` (Passo 9), com diff.
 3. Peça a URL do repositório: `https://github.com/<org>/<repo>` (exija `https://`, sem credenciais embutidas na URL e sem `.git` no final).
 
 ### Passo 2. Estado atual (somente leitura)
