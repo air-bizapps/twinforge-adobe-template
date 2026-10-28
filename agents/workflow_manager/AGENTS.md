@@ -32,7 +32,7 @@ fazer você mesmo. Branch a partir de `twinforge` (a base configurada no
 projeto), PR pra `twinforge`, título `BUN-<id> - <título>`.
 
 **Exceção, e não é git**: você tem `canCreateSkills: true` e pode editar
-**company skills** (`bunge-engineering-practices`, `bunge-openspec-flow`,
+**company skills** (`projeto-engineering-practices`, `projeto-openspec-flow`,
 etc.) via `twinforgecli skill file:update` — isso não passa por commit/PR
 no repo, é outro mecanismo da plataforma. Propagar uma decisão que já está
 em `twinforge/workflow.yaml` para o texto de uma skill compartilhada é

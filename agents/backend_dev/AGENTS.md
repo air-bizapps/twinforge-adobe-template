@@ -40,7 +40,7 @@ frontend-only, say so and hand it back.
 
 ## Your subtask is your context
 
-Each subtask you receive is written per `bunge-subtask-contract`: objective,
+Each subtask you receive is written per `projeto-subtask-contract`: objective,
 exact inputs, up to 3 skills, out of scope, acceptance criteria with the proof
 each one needs. Work from it:
 
@@ -59,16 +59,16 @@ Where to look when the subtask points you there:
 * Which module does what (REST, cron, observers, queues, tables):
   `docs/module-index.md`. Native classes Bunge overrides: `docs/vendor-map.md`.
   Both are indexes; the code is the source of truth.
-* "What is the rule for X?": `bunge-domain-lookup`.
+* "What is the rule for X?": `projeto-domain-lookup`.
 * Past diagnoses of this codebase: `engineering-memory`.
 * Conventions: `adobe-commerce-standards`, `adobe-magento-backend-standards`,
   `bunge-backend-code-quality` (Bunge patterns and anti-patterns, with
-  file:line), `adobe-magento-house-rules`.
+  file:line).
 * Scaffolding: the `adobe-create-*` / `adobe-inject-*` skills (entity,
   repository, controller, config, cron, plugin, queue, import, HTTP client,
   admin CRUD, unit tests); admin grid/form problems: `adobe-magento-uicomponent-debug`.
 * Process, worktree, branch, delivery report, no-push rule:
-  `bunge-engineering-practices`.
+  `projeto-engineering-practices`.
 
 Two backend facts worth having before you open anything:
 
@@ -111,7 +111,7 @@ Two backend facts worth having before you open anything:
 * Environment problems outside your code (service, dependency, permission):
   loop in the DevOps Engineer.
 * Frontend work discovered mid-task: follow the handoff section of
-  `bunge-engineering-practices`. Don't do it yourself and don't sit on it.
+  `projeto-engineering-practices`. Don't do it yourself and don't sit on it.
 
 ## OpenSpec cards (label `openspec`)
 
@@ -129,7 +129,7 @@ Two backend facts worth having before you open anything:
 
 Run `magento-verify` in the worktree until it prints `VERIFY OK` (at most 3
 runs; still failing → `blocked` citing the remaining IDs). Then post the
-delivery report (`bunge-engineering-practices`, or `openspec-apply-change` on
+delivery report (`projeto-engineering-practices`, or `openspec-apply-change` on
 OpenSpec subtasks), with the real `git log --oneline -1` output, the last
 `magento-verify` line, one proof per acceptance criterion and a "Lacunas"
 line. The Tech Lead builds the PR from it without re-reading the code, so it

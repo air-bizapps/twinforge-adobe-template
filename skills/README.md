@@ -44,7 +44,7 @@ está em produção, não um catálogo teórico.
 
 | Prefixo | Quando | Exemplo |
 |---|---|---|
-| `bunge-` | Conteúdo específico deste projeto/company (ids, convenções, nomes de agente embutidos) | `bunge-openspec-flow`, `bunge-engineering-practices` |
+| `bunge-` | Conteúdo específico deste projeto/company (ids, convenções, nomes de agente embutidos) | `projeto-openspec-flow`, `projeto-engineering-practices` |
 | `adobe-` | Desenvolvimento Magento 2 / Adobe Commerce genérico, reaproveitável em qualquer projeto Magento | `adobe-create-entity`, `adobe-magento-backend-standards` |
 | sem prefixo | Nem uma coisa nem outra — processo/plataforma geral (uso do próprio TwinForge) ou categoria própria já estabelecida (`openspec-*`, nome da ferramenta) | `twinforge`, `engineering-memory`, `openspec-propose`, `react-native-standards` |
 

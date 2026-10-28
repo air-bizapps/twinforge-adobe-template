@@ -68,7 +68,7 @@ Working examples: `magento-example rest` and `magento-example graphql` (skill
   same request, so customer-specific data (customer price, cart) declares
   `@cache(cacheable: false)`.
 - When a frontend need turns out to require a new/changed API field, that's
-  exactly the cross-domain case in `bunge-engineering-practices` — confirm
+  exactly the cross-domain case in `projeto-engineering-practices` — confirm
   the exact shape needed with the Frontend Developer before finalizing the
   schema, not after.
 
@@ -78,7 +78,7 @@ Working examples: `magento-example rest` and `magento-example graphql` (skill
   and partial (`mview`-based) — most storefront-facing data (catalog,
   price) uses `mview` for near-real-time updates; changing indexer mode or
   forcing full reindexes on a live store is a production-risk action, flag
-  it per `bunge-engineering-practices` safety rules.
+  it per `projeto-engineering-practices` safety rules.
 - Modes (`bin/magento indexer:show-mode`): Update on Save reindexes in the
   request that saves the model; Update by Schedule has MySQL triggers fill
   `<view>_cl` changelog tables, applied every minute by the

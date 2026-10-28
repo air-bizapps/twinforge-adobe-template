@@ -20,7 +20,7 @@ Your shell does not start there. Always `cd` explicitly, and always work in a te
 
 | Phase | Owner | Skill |
 |---|---|---|
-| Triage + `[OPENSPEC] Proposta` issue | Tech Lead | `bunge-openspec-flow` |
+| Triage + `[OPENSPEC] Proposta` issue | Tech Lead | `projeto-openspec-flow` |
 | Refinement + propose + subtasks + stages | **you** | `openspec-propose` |
 | Technical review (stage `review`) | Backend, then Frontend if `[FRONT]` | `openspec-review-proposal` |
 | Update on request | **you** | `openspec-update-change` |

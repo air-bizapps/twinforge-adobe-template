@@ -15,7 +15,7 @@ papel (`twinforge/roles.yaml`), comandos pelos slash commands do repo.
 `/tfrepo:status`. Esperado:
 
 - só no repo: `adobe-magento-toolbox`;
-- conteúdo diferente: `bunge-subtask-contract`, `bunge-engineering-practices`, `openspec-apply-change`;
+- conteúdo diferente: `projeto-subtask-contract`, `projeto-engineering-practices`, `openspec-apply-change`;
 - `desiredSkills` diferente em `backend_dev`, `frontend_dev` e `tech_lead` (só a skill nova a mais).
 
 Qualquer outra diferença: parar e entender antes (alguém mudou a instância).
@@ -27,7 +27,7 @@ Qualquer outra diferença: parar e entender antes (alguém mudou a instância).
    skill: arquivo a arquivo dariam ~170 versões e ~150 MB no banco da instância. Em ordem de preferência:
    1. import pelo GitHub, como as skills do `agentes-forjados` (uma versão; atualiza com
       `skill install-update`):
-      `twinforgecli skill import -C <company> --payload-json '{"source":"https://github.com/air-bizapps/twinforge-adobe-template/tree/main/skills/adobe-magento-toolbox"}'`.
+      `twinforgecli skill import -C <company> --payload-json '{"source":"https://github.com/<org>/<repo-de-configuracao>/tree/main/skills/adobe-magento-toolbox"}'`.
       Precisa que o token da instância leia este repo, que é privado; se falhar, nada é criado. A skill
       fica `github` (não editável na UI): mudança entra por PR aqui e `install-update` lá.
    2. sem acesso ao GitHub: `/tfrepo:push` sem a pasta `tests/` (116 arquivos, ~50 MB de versões);
@@ -52,8 +52,8 @@ publicado, o WAF aceita o formato. Se falhar, o DevOps verá erro ao comentar: a
 
 1. `desiredSkills` de `backend_dev`, `frontend_dev` e `tech_lead` a partir do `agent.yaml` do repo.
    Atenção: `skills agent sync` substitui a lista inteira; mande a lista completa do arquivo.
-2. `/tfrepo:push` das instruções: `AGENTS.md` dos três e as skills `bunge-subtask-contract`,
-   `bunge-engineering-practices` e `openspec-apply-change`.
+2. `/tfrepo:push` das instruções: `AGENTS.md` dos três e as skills `projeto-subtask-contract`,
+   `projeto-engineering-practices` e `openspec-apply-change`.
 3. `/tfrepo:status` limpo; conferir `env` e secrets à mão (o status não compara):
    `twinforgecli agent get <id>` (`adapterConfig.env`) e `twinforgecli secrets usage <id>`.
 
@@ -108,7 +108,7 @@ Passos, cada um com confirmação:
 
 1. Criar o agente a partir de `agents/verifier/agent.yaml` (`{{toolbox_dir}}` sai do passo 2.3;
    `{{workspace_dir}}` é o `$WS`), com `VERIFY_MODE=observe`: comenta e aprova sempre.
-2. Trocar `VERIFIER_AGENT_ID` pelo id real em `twinforge/roles.yaml` e no `bunge-subtask-contract`,
+2. Trocar `VERIFIER_AGENT_ID` pelo id real em `twinforge/roles.yaml` e no `projeto-subtask-contract`,
    fazer o commit e `/tfrepo:push` do contrato e dos `AGENTS.md` do Tech Lead e dos devs (PR do
    estágio).
 3. Medir 3 dias: comparar os comentários "Observacao (nao bloqueia)" com o que o Kaio corrigiu. Sem

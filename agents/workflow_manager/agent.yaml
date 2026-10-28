@@ -31,8 +31,8 @@ permissions:
   can_create_skills: true
 
 desired_skills:
-  - company/{{company_id}}/bunge-openspec-flow
-  - company/{{company_id}}/bunge-engineering-practices
+  - company/{{company_id}}/projeto-openspec-flow
+  - company/{{company_id}}/projeto-engineering-practices
   - air-bizapps/agentes-forjados/blocked-exige-blocker-declarado
 
 instructions:

@@ -1,14 +1,14 @@
 ---
-name: bunge-mobile-flow
+name: projeto-mobile-flow
 description: "Contrato do fluxo de trabalho mobile do Bunge na TwinForge (Tech Lead Mobile + Mobile Developer): fluxo leve sem OpenSpec, IDs fixos, convenção de git/branch/push, workspace, relatório de entrega, convenção de status in_review vs blocked. Leia sempre antes de trabalhar numa card do Project Bunge Mobile."
 ---
 
-# bunge-mobile-flow
+# projeto-mobile-flow
 
 Contrato do fluxo de trabalho mobile do Bunge na TwinForge. Fluxo **leve**
 (sem OpenSpec) — a POC/MVP está em fase de exploração, não precisa do
 aparato completo de proposta/specs/review formal que o time de e-commerce
-usa (`bunge-openspec-flow`). Se este projeto amadurecer pra produto real,
+usa (`projeto-openspec-flow`). Se este projeto amadurecer pra produto real,
 revisitar essa decisão.
 
 ## IDs fixos
@@ -34,7 +34,7 @@ nem vice-versa. `project_id` dedicado, board próprio.
 
 | # | Fase | Dono | Termina quando |
 |---|---|---|---|
-| 1 | Triagem + refinamento | Tech Lead Mobile | Card entendido, critério de aceite escrito (pela Tech Lead Mobile, se a demanda não trouxer um — mesmo princípio de `bunge-vague-demand-triage`), decomposto em subtarefas |
+| 1 | Triagem + refinamento | Tech Lead Mobile | Card entendido, critério de aceite escrito (pela Tech Lead Mobile, se a demanda não trouxer um — mesmo princípio de `projeto-vague-demand-triage`), decomposto em subtarefas |
 | 2 | Decisões técnicas sensíveis | Tech Lead Mobile, escalando pro Kaio/PO quando for o caso | Decisão registrada na issue antes de decompor (ex.: Expo vs bare, estrutura de navegação) |
 | 3 | Implementação | Mobile Developer, uma subtarefa por vez | Subtarefa `done` com relatório de entrega (arquivo:linha do que foi feito, como testar manualmente) |
 | 4 | Push e fechamento | Tech Lead Mobile | Código no `origin`, PR aberto pra `main`, card `done` |
@@ -46,7 +46,7 @@ fechar a subtarefa, lendo o diff e, quando possível, rodando o app
 
 ## Ambiguidade — pergunte antes de implementar, não depois
 
-Mesmo mecanismo de `bunge-vague-demand-triage`: card vago, decisão técnica
+Mesmo mecanismo de `projeto-vague-demand-triage`: card vago, decisão técnica
 com mais de um caminho razoável (ex. "qual URL a WebView aponta em cada
 ambiente?", "o app precisa funcionar offline de alguma forma?") vira uma
 interaction `ask_user_questions` na card, antes de decompor em subtarefas —
@@ -76,7 +76,7 @@ toa, repetidamente, sem resolver nada — exatamente o que aconteceu aqui.
 - Branch por card: `feature/<ID-externo ou nome curto>`, a partir de `main`.
 - Um PR por card, para `main`, título `<ID> - <Título>`.
 - **Mobile Developer**: commita no checkout compartilhado, **nunca dá push**
-  — mesma regra do time de e-commerce (`bunge-engineering-practices`).
+  — mesma regra do time de e-commerce (`projeto-engineering-practices`).
 - **Tech Lead Mobile**: dá push quando a(s) subtarefa(s) do card estão
   `done` com relatório de entrega, abre o PR, fecha o card.
 
@@ -107,7 +107,7 @@ que cada versão tinha, sem precisar ler o diff bruto).
 
 ## Relatório de entrega (Mobile Developer)
 
-Mesmo princípio de `bunge-engineering-practices`: todo `done` vem com um
+Mesmo princípio de `projeto-engineering-practices`: todo `done` vem com um
 relatório dizendo o que mudou (arquivo:linha), e — específico de mobile —
 **como testar manualmente** (ex. "rode `npx expo start`, abra no Expo Go ou
 num simulador, navegue até X, confira Y"), já que não há um ambiente de

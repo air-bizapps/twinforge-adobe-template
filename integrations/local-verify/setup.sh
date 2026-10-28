@@ -86,7 +86,7 @@ cat <<EOF
 Pronto. Próximos passos (no clone $VERIFY_DIR):
   servidor:  php -d memory_limit=2G -d opcache.enable_cli=0 -S 127.0.0.1:$VERIFY_PORT -t pub phpserver/router.php
   admin:     php bin/magento admin:user:create  (só no banco $VERIFY_DB)
-  módulo:    rsync -a --delete <twinforge-adobe-template>/skills/adobe-magento-toolbox/reference/Acme/ app/code/Acme/
+  módulo:    rsync -a --delete <<repo-de-configuracao>>/skills/adobe-magento-toolbox/reference/Acme/ app/code/Acme/
              php bin/magento module:enable Acme_Reference && php bin/magento setup:upgrade
   remover:   DROP DATABASE $VERIFY_DB; e apagar $VERIFY_DIR
 EOF

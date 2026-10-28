@@ -1,5 +1,5 @@
 ---
-name: bunge-openspec-flow
+name: projeto-openspec-flow
 description: "Contrato comum do fluxo OpenSpec com os agentes TwinForge da Bunge: quem faz cada fase (Tech Lead, OpenSpec Manager, Backend, Frontend), formato das issues, stages de review/approval, regras de git/branch/push. Leia sempre que uma issue tiver a label openspec ou mencionar uma OpenSpec change."
 ---
 
@@ -7,7 +7,7 @@ description: "Contrato comum do fluxo OpenSpec com os agentes TwinForge da Bunge
 
 **Escopo: só Magento/e-commerce** (repo `Bunge-Magento2`, projeto "Onboarding").
 O pod de Mobile (`bunge-mobile`, agentes Mobile Tech Lead/Mobile Developer)
-tem seu próprio fluxo, mais leve, sem OpenSpec — `bunge-mobile-flow`. As duas
+tem seu próprio fluxo, mais leve, sem OpenSpec — `projeto-mobile-flow`. As duas
 coisas não se misturam: `twinforge/workflow.yaml` e esta skill nunca se
 aplicam a uma issue do projeto Mobile, e vice-versa.
 
@@ -50,7 +50,7 @@ cd "$REPO"
 
 | # | Fase | Dono | Skill | Termina quando |
 |---|---|---|---|---|
-| 1 | Triagem, achados de domínio + issue de proposta | Tech Lead | esta + `bunge-vague-demand-triage` | Domínio identificado, `bunge-domain-lookup` rodado, critério de aceite escrito (redigido pelo Tech Lead se a card não trouxer um), pontos genuinamente em aberto esclarecidos com o cliente via `ask_user_questions`; issue `[OPENSPEC] Proposta` criada com os achados na descrição e atribuída ao OpenSpec Manager; card pai `blocked` por ela |
+| 1 | Triagem, achados de domínio + issue de proposta | Tech Lead | esta + `projeto-vague-demand-triage` | Domínio identificado, `projeto-domain-lookup` rodado, critério de aceite escrito (redigido pelo Tech Lead se a card não trouxer um), pontos genuinamente em aberto esclarecidos com o cliente via `ask_user_questions`; issue `[OPENSPEC] Proposta` criada com os achados na descrição e atribuída ao OpenSpec Manager; card pai `blocked` por ela |
 | 2 | Refinamento + proposta + subtarefas | OpenSpec Manager | `openspec-propose` | `validate --strict` ok, PR draft aberto, subtarefas criadas sem assignee, stages de review configurados; se a complexidade exigir aprovação, pergunta ao Kaio via `ask_user_questions` antes de liberar; issue `in_review` |
 | 3 | Review técnico | Backend, depois Frontend (se houver `[FRONT]`) | `openspec-review-proposal` | Stage aprovado (`done`) ou mudanças pedidas (`in_progress`) |
 | 3b | Update | OpenSpec Manager | `openspec-update-change` | Artefatos revisados, validados, enviados; issue de volta a `in_review` |
@@ -104,7 +104,7 @@ Branch: feature/BUN-<ID-externo> · Worktree: $WS/worktrees/<ID-externo>
 Artefatos: openspec/changes/<nome-da-change>/
 ```
 
-Depois do cabeçalho, o corpo segue `bunge-subtask-contract` (Objetivo,
+Depois do cabeçalho, o corpo segue `projeto-subtask-contract` (Objetivo,
 Entradas, Skills, Fora de escopo, tarefas, `Cenários a provar`): o dev executa
 num contexto limpo e só sabe o que está na subtarefa.
 
@@ -146,7 +146,7 @@ archive, lendo o código.
 Testes unitários: os devs **escrevem**, mas **não rodam** PHPUnit, `grumphp` nem
 cobertura (não há meta de cobertura). O Tech Lead **não reverifica** as
 tarefas no fim: o relatório de entrega de cada subtarefa é a base do PR. Entre
-uma subtarefa e a próxima ele só roda o gate de `bunge-subtask-contract` §4
+uma subtarefa e a próxima ele só roda o gate de `projeto-subtask-contract` §4
 (o commit existe, branch certa, sem push, uma prova por critério).
 
 ## Git, branch e push

@@ -23,98 +23,91 @@ Os comandos `/twinforge:*` e `/tfrepo:*` convivem de propósito: há sobreposiç
 - **Repositório do projeto:** `<org>/<repo-do-projeto>`.
 - **`docs/`:** a documentação de domínio do cliente de origem não foi trazida.
 
+## Skills do projeto de origem: o que já foi feito
+- **Renomeadas para `projeto-*`** (fluxo e prática do projeto; adapte o conteúdo ao seu): `projeto-openspec-flow`, `projeto-subtask-contract`, `projeto-vague-demand-triage`, `projeto-engineering-practices`, `projeto-domain-lookup`, `projeto-mobile-flow`.
+- **Genéricas, sem prefixo** (processo TwinForge, reescritas sem fatos do projeto): `link-verification`, `figma-layout-decomposition`, `backlog-item`, `card-curation`, `po-issue-recovery`.
+- **Ainda `bunge-*`**: `bunge-backend-code-quality` e `bunge-frontend-code-quality`. São camadas locais sobre `adobe-*-standards`: comparar com `adobe-commerce-standards`, mover só o que faltar e renomear o resto.
+- **Removida do template:** `adobe-magento-house-rules` (notas pessoais de ajuste de um agente, não são base).
+- **Atenção:** o prefixo `adobe-*` não garante neutralidade; **35 das 52** skills `adobe-*` ainda citam o projeto de origem.
+
 ## Checklist de adaptação (o que AINDA é específico do projeto de origem)
-O nome do cliente de origem aparece **582 vezes** nos arquivos abaixo. Isso não foi trocado em massa porque está em nomes de skills (`bunge-*`), variáveis (`BUNGE_*`), exemplos de código e instruções dos agentes, onde um renomeio cego quebraria referências cruzadas. Revise cada área:
+O nome do cliente de origem aparece **358 vezes** (em 92 arquivos) nos arquivos abaixo. Isso não foi trocado em massa porque está em nomes de skills (`bunge-*`), variáveis (`BUNGE_*`), exemplos de código e instruções dos agentes, onde um renomeio cego quebraria referências cruzadas. Revise cada área:
 
 | Área | Menções |
 |---|---|
-| `agents/tech_lead` | 34 |
-| `agents/openspec_manager` | 27 |
-| `agents/frontend_dev` | 24 |
-| `skills/bunge-engineering-practices` | 24 |
 | `integrations/local-verify` | 24 |
-| `skills/bunge-subtask-contract` | 21 |
 | `skills/adobe-magento-ui-component-developer` | 20 |
-| `context/engenharia-de-contexto-e-prompt.md` | 20 |
-| `agents/backend_dev` | 19 |
-| `skills/bunge-backend-code-quality` | 17 |
-| `twinforge/workflow.yaml` | 14 |
-| `skills/bunge-mobile-flow` | 13 |
+| `skills/projeto-engineering-practices` | 18 |
+| `skills/projeto-subtask-contract` | 16 |
+| `skills/bunge-backend-code-quality` | 16 |
+| `agents/frontend_dev` | 13 |
 | `skills/adobe-magento-toolbox` | 13 |
-| `agents/mobile_tech_lead` | 12 |
-| `skills/openspec-propose` | 12 |
-| `skills/bunge-openspec-flow` | 12 |
-| `twinforge/README.md` | 12 |
-| `skills/openspec-apply-change` | 11 |
-| `skills/bunge-vague-demand-triage` | 11 |
-| `README.md` | 10 |
+| `twinforge/workflow.yaml` | 12 |
+| `agents/openspec_manager` | 10 |
+| `agents/tech_lead` | 9 |
 | `skills/adobe-magento-css-specialist` | 9 |
-| `skills/bunge-figma-layout-decomposition` | 9 |
-| `agents/mobile_developer` | 8 |
+| `agents/backend_dev` | 8 |
 | `skills/adobe-magento-luma-specialist` | 8 |
 | `skills/adobe-magento-theme-developer` | 8 |
-| `skills/bunge-po-issue-recovery` | 8 |
+| `agents/mobile_tech_lead` | 7 |
+| `skills/openspec-apply-change` | 7 |
 | `skills/adobe-magento-frontend-standards` | 7 |
 | `skills/adobe-create-unit-tests` | 7 |
-| `skills/bunge-link-verification` | 7 |
-| `skills/bunge-domain-lookup` | 7 |
-| `context/conector-delegacao-twinforge.md` | 7 |
-| `agents/po` | 6 |
-| `agents/workflow_manager` | 6 |
+| `skills/projeto-openspec-flow` | 7 |
+| `agents/mobile_developer` | 6 |
 | `skills/adobe-magento-requirejs-specialist` | 6 |
-| `context/engenharia-de-prompt-aplicada.md` | 6 |
+| `skills/projeto-mobile-flow` | 6 |
+| `twinforge/README.md` | 6 |
 | `skills/README.md` | 5 |
 | `skills/adobe-magento-frontend-developer` | 5 |
+| `skills/projeto-domain-lookup` | 5 |
 | `skills/bunge-frontend-code-quality` | 5 |
-| `context/roteiro-ativacao-verificador.md` | 5 |
+| `context/conector-delegacao-twinforge.md` | 5 |
 | `skills/adobe-create-http-client` | 4 |
-| `skills/openspec-update-change` | 4 |
 | `skills/adobe-inject-custom-logger` | 4 |
-| `skills/bunge-backlog-item` | 4 |
-| `skills/adobe-magento-backend-standards` | 4 |
+| `TEMPLATE.md` | 4 |
 | `CLAUDE.md` | 4 |
-| `context/licoes-fluxo-openspec.md` | 4 |
-| `skills/adobe-magento-house-rules` | 3 |
+| `agents/po` | 3 |
+| `agents/workflow_manager` | 3 |
 | `skills/adobe-inject-validator` | 3 |
-| `skills/react-native-standards` | 3 |
-| `skills/adobe-srs` | 3 |
 | `skills/adobe-create-import-entity` | 3 |
-| `skills/bunge-card-curation` | 3 |
 | `skills/adobe-inject-debug-logger` | 3 |
-| `skills/adobe-run-unit-tests` | 3 |
 | `skills/adobe-create-repository` | 3 |
 | `skills/adobe-create-controller` | 3 |
 | `integrations/slack-bridge` | 3 |
 | `agents/README.md` | 2 |
 | `skills/adobe-create-plugin` | 2 |
 | `skills/adobe-create-queue` | 2 |
-| `skills/adobe-magento-catalog-specialist` | 2 |
+| `skills/react-native-standards` | 2 |
+| `skills/adobe-srs` | 2 |
+| `skills/openspec-propose` | 2 |
+| `skills/openspec-update-change` | 2 |
 | `skills/openspec-explore` | 2 |
 | `skills/adobe-magento-hyva-specialist` | 2 |
-| `skills/openspec-archive-change` | 2 |
 | `skills/adobe-commerce-standards` | 2 |
+| `skills/adobe-run-unit-tests` | 2 |
 | `skills/adobe-create-cronjob` | 2 |
-| `skills/adobe-magento-code-reviewer` | 2 |
+| `skills/projeto-vague-demand-triage` | 2 |
 | `skills/adobe-create-config` | 2 |
 | `skills/openspec-review-proposal` | 2 |
-| `skills/adobe-magento-feature-developer` | 2 |
+| `skills/adobe-magento-backend-standards` | 2 |
+| `README.md` | 2 |
+| `context/engenharia-de-contexto-e-prompt.md` | 2 |
 | `knowledge/defects` | 2 |
 | `agents/verifier` | 1 |
-| `agents/concierge` | 1 |
 | `skills/openspec-sync-specs` | 1 |
-| `skills/engineering-memory` | 1 |
 | `skills/adobe-magento-php-specialist` | 1 |
 | `skills/adobe-magento-module-developer` | 1 |
-| `skills/adobe-magento-order-specialist` | 1 |
+| `skills/openspec-archive-change` | 1 |
 | `skills/adobe-create-entity` | 1 |
-| `skills/adobe-magento-api-developer` | 1 |
-| `skills/adobe-magento-index-analyst` | 1 |
-| `twinforge/roles.yaml` | 1 |
-| `context/twinforge-context.md` | 1 |
+| `skills/adobe-magento-code-reviewer` | 1 |
+| `skills/adobe-magento-feature-developer` | 1 |
+| `context/licoes-fluxo-openspec.md` | 1 |
+| `context/roteiro-ativacao-verificador.md` | 1 |
 | `knowledge/eval` | 1 |
 | `knowledge/README.md` | 1 |
 
-Ordem sugerida: (1) `twinforge/roles.yaml` e `workflow.yaml`; (2) `agents/*/agent.yaml` e `AGENTS.md`; (3) skills `bunge-*` (renomeie slug e referências juntos); (4) variáveis de ambiente `BUNGE_*`; (5) `context/` e `knowledge/`; (6) escreva o seu `docs/`.
+Ordem sugerida: (1) `twinforge/roles.yaml` e `workflow.yaml`; (2) `agents/*/agent.yaml` e `AGENTS.md`; (3) skills `projeto-*` e as duas `bunge-*` restantes (renomeie slug e referências juntos); (4) variáveis de ambiente `BUNGE_*`; (5) `context/` e `knowledge/`; (6) escreva o seu `docs/`.
 
 ## Manter a base atualizada
 Melhorias da base chegam ao projeto por `git merge`/cherry-pick manual (um repositório criado de template não guarda vínculo com a origem). Mudanças genéricas devem voltar para este repositório por PR.

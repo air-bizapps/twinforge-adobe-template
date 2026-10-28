@@ -1,14 +1,14 @@
 ---
-name: bunge-link-verification
-description: "Verify any external link a card depends on (design links, spec docs, external references) is actually reachable and its real content retrievable before refinement or implementation starts. If it isn't, block the card and ask a human to intervene instead of guessing at content nobody could open. Bunge-specific — pairs with bunge-figma-layout-decomposition for figma.com links specifically."
+name: link-verification
+description: "Verify any external link a card depends on (design links, spec docs, external references) is actually reachable and its real content retrievable before refinement or implementation starts. If it isn't, block the card and ask a human to intervene instead of guessing at content nobody could open. Pairs with figma-layout-decomposition for figma.com links specifically."
 ---
 
-# Bunge — Link Verification Before Work Starts
+# Link Verification Before Work Starts
 
 ## Why this exists
 
-On 2026-09-11, a real (not test) Bunge demand arrived referencing a Figma
-layout link before the card had been refined. Before that pattern repeats
+A real demand can arrive referencing a Figma
+layout link before the card has been refined. To keep that pattern from repeating
 silently — an agent starting refinement or implementation on a card whose
 key reference link turns out to be broken, private, or behind a login wall
 — verify the link first and block for a human if it fails, rather than
@@ -42,12 +42,11 @@ Applies to:
    original `curl` check against the now-superseded URL and re-block
    without even looking at what was attached.
 
-   **This failed for real on 2026-09-11 (card `14136`, BUN-51, second
-   pass):** Kaio attached the Figma Make prototype's actual `index-*.js`
+   **This has failed in practice (second pass of a real card):** a human attached the Figma Make prototype's actual `index-*.js`
    and `index-*.css` bundle files (downloaded from the site directly) plus
    an image asset, and commented asking for confirmation the content was
    readable. The next run re-blocked the card with no new comment at all —
-   it never looked at the attachments, so from Kaio's side it looked like
+   it never looked at the attachments, so from the requester's side it looked like
    nothing happened. If attachments exist that weren't there on a prior
    pass, read them before deciding anything, and always leave a comment
    explaining what you found either way (readable and used, or still not
@@ -77,9 +76,9 @@ Applies to:
       - `401`, `403`, `404`, `5xx`, a timeout, or a redirect chain that
         lands on a login/signin page → **not reachable**.
    c. Some platforms return `200` with no real content at all — not just a
-      login wall. Two known cases at Bunge:
+      login wall. Two known cases:
       - A `figma.com/design/` or `figma.com/file/` link — see
-        `bunge-figma-layout-decomposition` for the correct check (verify
+        `figma-layout-decomposition` for the correct check (verify
         via the Figma REST API + `$FIGMA_TOKEN`, never a bare `curl`
         status).
       - A client-side-rendered app or prototype (e.g. a `*.figma.site`
@@ -89,7 +88,7 @@ Applies to:
         response body itself, not just the status: strip tags and see if
         any real text remains beyond a page title. If it's essentially
         empty, this is **not verified** even at `200` — there is no
-        browser-rendering tool available to any Bunge dev agent to
+        browser-rendering tool available to any dev agent to
         execute that JS and see the real result. Escalate this as its own
         case in the comment (see step 2) rather than treating the `200`
         as proof of access.
@@ -105,7 +104,7 @@ Applies to:
      any subtask that depends on it.
    - **Create a real interaction** (`ask_user_questions` or
      `request_confirmation`, per the missing-context rule already in your
-     own `CONTEXT.md`) naming Kaio as the person who needs to act, in
+     own `CONTEXT.md`) naming the person who needs to act, in
      addition to the explanatory comment — the comment is for the human
      reading the thread, the interaction is what makes the ask visible to
      the platform's own notification/health-check surfaces.
@@ -116,14 +115,14 @@ Applies to:
    - Stop there for that link — do not proceed on the assumption the
      content will show up later.
 
-   **This failed for real on 2026-09-11 (card `14136`, BUN-51):** the
+   **This has failed in practice:** the
    diagnosis itself was correct (a Figma Make prototype link, `curl`
    returning an empty SPA shell, correctly identified as not verifiable
    without a real Figma file link + `$FIGMA_TOKEN`) and the comment
-   correctly explained the problem and asked Kaio to act — but the issue
+   correctly explained the problem and asked the requester to act — but the issue
    was left `in_progress` with no interaction created, so the card looked
-   like active work rather than a blocker waiting on a human. Kaio caught
-   it by inspection, not because anything surfaced it. Both bullets above
+   like active work rather than a blocker waiting on a human. A human caught
+it by inspection, not because anything surfaced it. Both bullets above
    are how this is prevented going forward.
 3. If all content-bearing links verify OK, proceed with refinement or
    implementation normally. No need to narrate that the check passed

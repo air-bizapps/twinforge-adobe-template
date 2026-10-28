@@ -1,13 +1,13 @@
 ---
-name: bunge-backlog-item
-description: "Transforma contexto já existente (SRS, discovery, ata, descrição do ticket externo, decisão técnica, post-mortem) em um card TwinForge pronto para refinamento — classificado como PBI, Débito Técnico ou tech task, com H1 prefixado [BACK]/[FRONT], Critérios de Aceite em Gherkin pt-BR e uma seção final de Casos de teste sempre presente e reprodutível, sem citar classe/módulo/arquivo/comando em nenhuma seção. Use sempre que pedirem para criar um card novo — 'cria a PBI dessa demanda', 'abre uma tech task pra esse refactor', 'documenta essa dívida técnica'. Complementa requirements-refinement-fundamentals (o processo de refinar) com o formato concreto do artefato. Adaptado da skill create-backlog-item de um time irmão (FTD B2C)."
+name: backlog-item
+description: "Transforma contexto já existente (SRS, discovery, ata, descrição do ticket externo, decisão técnica, post-mortem) em um card TwinForge pronto para refinamento — classificado como PBI, Débito Técnico ou tech task, com H1 prefixado [BACK]/[FRONT], Critérios de Aceite em Gherkin pt-BR e uma seção final de Casos de teste sempre presente e reprodutível, sem citar classe/módulo/arquivo/comando em nenhuma seção. Use sempre que pedirem para criar um card novo — 'cria a PBI dessa demanda', 'abre uma tech task pra esse refactor', 'documenta essa dívida técnica'. Complementa requirements-refinement-fundamentals (o processo de refinar) com o formato concreto do artefato. Adaptado da skill `create-backlog-item` de outro time."
 ---
 
-# Bunge Backlog Item
+# Backlog Item
 
-Adaptado em 2026-09-11 de `air-bizapps/ftd-b2c-agent-skills`'s `create-backlog-item`.
+Adaptado da `create-backlog-item` de outro time.
 **Uma mudança deliberada de mecanismo**: a skill original grava um arquivo `.md` em
-`tasks/` na raiz do repositório (pasta não versionada). O Bunge já tem um board real — o
+`tasks/` na raiz do repositório (pasta não versionada). O projeto já tem um board real — o
 próprio TwinForge — então o destino aqui é **o card TwinForge** (título = H1 com o
 prefixo, descrição = o resto do template), não um segundo arquivo competindo como fonte
 de verdade. Isso preserva a regra já existente (id externo obrigatório, card nasce
@@ -29,7 +29,7 @@ a seção `### Casos de teste:` sempre presente com pelo menos um cenário.
 
 **Fora de escopo:** implementar/refatorar qualquer código citado no card; estimar,
 priorizar ou planejar sprint; produzir uma SRS completa (skill `srs`) ou uma change
-OpenSpec (isso é do OpenSpec Manager, via `openspec-propose` — ver `bunge-openspec-flow`).
+OpenSpec (isso é do OpenSpec Manager, via `openspec-propose` — ver `projeto-openspec-flow`).
 
 ## 2. Regras de ouro
 

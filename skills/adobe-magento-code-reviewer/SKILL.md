@@ -6,7 +6,7 @@ description: "Checklist for reviewing a Magento 2.4.8 diff or PR after magento-v
 # Magento code review
 
 Review by evidence: `magento-verify` first, then this checklist for what it cannot see. Not for
-the Tech Lead gate between subtasks (`bunge-subtask-contract` §4), which does not re-review code.
+the Tech Lead gate between subtasks (`projeto-subtask-contract` §4), which does not re-review code.
 
 Commands use `$T`, the scripts folder of `adobe-magento-toolbox` (the `T=` line in that skill).
 

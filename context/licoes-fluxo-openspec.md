@@ -61,7 +61,7 @@ skill ou de `AGENTS.md`, nunca só um conserto pontual do resultado.
   plano e bagunça o fluxo → checagem de origem no início do `AGENTS.md` de quem executa;
   sem card pai, sem criador agente e sem `Atribuição direta:`, volta ao Tech Lead.
 - Card escrita à mão mistura pedido, histórico e opinião, e o refinamento herda a confusão →
-  curadoria antes do refinamento (`bunge-card-curation`), original preservado em documento.
+  curadoria antes do refinamento (`card-curation`), original preservado em documento.
 - Card `blocked` "esperando as subtarefas" sem `blockedByIssueIds` nunca acorda o Tech Lead;
   subtarefa atribuída mas deixada em `backlog` nunca roda. Atribuir = assignee + `todo`; a
   card fica bloqueada pela subtarefa atribuída no momento.
@@ -149,7 +149,7 @@ Branch `feature/BUN-<n>` (n = id da issue TwinForge) **com checagem de colisão*
 criar (se já existir no remoto e não for desta issue, parar e escalar); título de PR e de
 tarefa `BUN-<n> - <título>` (sem colchetes); descrição com 7 seções (macro, funcional,
 solução técnica, pontos de atenção, critérios de aceite, como testar, riscos e rollback).
-A cópia autoritativa fica na skill `bunge-engineering-practices`. Ao criar subtarefa que
+A cópia autoritativa fica na skill `projeto-engineering-practices`. Ao criar subtarefa que
 precisa ser renomeada, renomeie no mesmo instante: outro agente pode dar checkout antes.
 
 ## PO e recuperação de issues (limites rígidos)
@@ -158,4 +158,4 @@ O PO pode destravar issues paradas, mas **só** mexe em metadados (status, assig
 comentário), nunca em código/git, escopo, critérios de aceite, quebra de tarefas ou
 prioridade (isso é do Tech Lead), nunca reatribui entre especialidades, só promove trabalho
 órfão se **nenhum** dev estiver `in_progress`, e só resolve recovery como `restored` depois
-de verificar concretamente o ambiente. Detalhes: skill `bunge-po-issue-recovery`.
+de verificar concretamente o ambiente. Detalhes: skill `po-issue-recovery`.

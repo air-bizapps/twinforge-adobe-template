@@ -180,4 +180,4 @@ instead of staying stuck or silently shipping a still-red test.
   "tests: no new failures vs. baseline" or the specific new failures named.
   This does not reinstate a hard merge gate or a coverage threshold — it's
   a visibility step, the same spirit as the delivery-report contract
-  (`bunge-engineering-practices`) already asks of devs for everything else.
+  (`projeto-engineering-practices`) already asks of devs for everything else.

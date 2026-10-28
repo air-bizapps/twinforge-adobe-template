@@ -17,7 +17,7 @@ triggers, `reindexList()`, the custom indexer contract and the OpenSearch engine
   schedule mode, `idle (N in backlog)` for the changelog not yet applied.
 - `invalid` is not passive: cron job `indexer_reindex_all_invalid` (group `index`, every minute)
   runs a full reindex of it. `indexer:reset` therefore schedules a full rebuild on a live store;
-  treat it as the production-risk action in `bunge-engineering-practices`.
+  treat it as the production-risk action in `projeto-engineering-practices`.
 - Invalidating an indexer also invalidates the ones declared to run after it (`<dependencies>` in
   `indexer.xml`), so one reset can rebuild several.
 - `working` with no reindex process alive means a killed run: `indexer:reset <id>` and reindex that

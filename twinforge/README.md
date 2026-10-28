@@ -11,7 +11,7 @@ responsabilidade do OpenSpec.
 **Escopo: só o pod de Magento/e-commerce.** A Bunge também tem um pod de
 Mobile (`bunge-mobile`, projeto TwinForge separado, Mobile Tech
 Lead/Mobile Developer) com seu próprio fluxo mais leve, sem OpenSpec
-(`bunge-mobile-flow`) — isso aqui nunca se aplica a ele. Ambos os arquivos
+(`projeto-mobile-flow`) — isso aqui nunca se aplica a ele. Ambos os arquivos
 declaram isso explicitamente num bloco `scope:` no topo.
 
 ## Pré-requisitos
@@ -108,7 +108,7 @@ existir pela primeira vez). Passo a passo:
    aprovação humana — isso sempre significa uma interaction
    `ask_user_questions` real pro `approver` + `status: in_review`, nunca um
    `status: blocked` (ver a convenção de status na skill
-   `bunge-openspec-flow` — `blocked` é só pra dependência entre issues).
+   `projeto-openspec-flow` — `blocked` é só pra dependência entre issues).
    Todo `id` de fase referenciado em algum `next` precisa existir — um
    `next` apontando pra um `id` inexistente quebra o fluxo silenciosamente,
    já que não há validador automático rodando sobre este arquivo hoje.
@@ -167,7 +167,7 @@ precisar saber exatamente o que o agente vai fazer num caso específico.
      não mais no diretório compartilhado — por isso dá pra subir esse
      número com segurança. Ajuste pra cima/baixo conforme custo e
      capacidade real observados.
-3. **A skill `bunge-openspec-flow` e o `AGENTS.md` do Tech Lead já apontam
+3. **A skill `projeto-openspec-flow` e o `AGENTS.md` do Tech Lead já apontam
    pra cá** (seção "twinforge/workflow.yaml governa as decisões de gate") em
    vez de repetir a regra de aprovação com palavras próprias — isso resolve
    a duplicação que existia antes (ver "Enforcement" abaixo).
@@ -192,13 +192,13 @@ BUN-127). Duas coisas tornam isso mais do que boa vontade:
    `blocked`, porque esse status aciona a notificação de demora do
    TwinForge pro PO, pensada pra dependência travada, não pra uma espera
    normal de aprovação (ver a convenção de status na skill
-   `bunge-openspec-flow`). Complexidade baixa segue automática, sem
+   `projeto-openspec-flow`). Complexidade baixa segue automática, sem
    pergunta nenhuma. Se um agente pular essa leitura, o sintoma aparece na
    própria issue (sem interaction nem `in_review` onde deveria ter),
    visível pra qualquer auditoria, não só se o agente admitir.
 2. **Uma regra só é dita uma vez.** Antes desta rodada, a política de
    aprovação estava escrita com palavras próprias em três lugares
-   (`bunge-openspec-flow`, `openspec-propose`, `AGENTS.md` do Tech Lead) —
+   (`projeto-openspec-flow`, `openspec-propose`, `AGENTS.md` do Tech Lead) —
    foi assim que a contradição sobre a aprovação do Kaio apareceu: um lugar
    dizia uma coisa, os outros diziam outra, sem ninguém ter mudado os três
    de propósito. Os três agora apontam pra `twinforge/workflow.yaml` em vez
@@ -222,7 +222,7 @@ autorizada age direto do card. As regras estão em `workflow.yaml › policies.n
 - **Sincronia garantida por teste:** `cd integrations/slack-bridge && npm test` falha se `covers` /
   `not_covered` divergirem das `phases`. Ao criar uma fase com gate ou owner `external`/`human`,
   atualize o bloco no mesmo PR.
-- O PO ainda notifica diretamente os bloqueios que trata (Step 5 de `bunge-po-issue-recovery`);
+- O PO ainda notifica diretamente os bloqueios que trata (Step 5 de `po-issue-recovery`);
   essa regra espelha `events.blocked*` e sai quando o bridge for o único emissor (fase 3 do plano).
 
 ## Como ler `workflow.yaml`

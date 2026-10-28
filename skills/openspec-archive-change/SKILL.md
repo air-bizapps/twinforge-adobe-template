@@ -5,7 +5,7 @@ description: "OpenSpec Manager only. Arquiva uma change OpenSpec concluída (mov
 
 # openspec-archive-change (OpenSpec Manager)
 
-Se você **não** é o OpenSpec Manager, pare (ver `bunge-openspec-flow`).
+Se você **não** é o OpenSpec Manager, pare (ver `projeto-openspec-flow`).
 
 O Tech Lead só cria esta issue depois de ter dado push do código. Você trabalha
 sobre `origin/feature/BUN-<EXT>`, que já tem o código e os `[x]` dos devs.

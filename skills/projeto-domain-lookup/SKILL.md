@@ -1,9 +1,9 @@
 ---
-name: bunge-domain-lookup
+name: projeto-domain-lookup
 description: "Responde \"qual e a regra de X no Bunge?\" com evidencia (codigo + docs/module-index.md + docs/vendor-map.md + specs OpenSpec arquivadas), lendo o minimo necessario. O codigo e a fonte de verdade; divergencia com a doc e reportada. Use para qualquer pergunta de regra de negocio do projeto."
 ---
 
-# bunge-domain-lookup
+# projeto-domain-lookup
 
 Objetivo: responder "qual é a regra de X no Bunge?" com evidência, lendo o mínimo.
 **O código é a fonte de verdade.** A doc diz onde olhar e o porquê. Se doc e

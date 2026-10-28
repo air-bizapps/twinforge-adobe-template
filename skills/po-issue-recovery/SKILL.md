@@ -1,15 +1,15 @@
 ---
-name: bunge-po-issue-recovery
-description: "PO-only playbook for diagnosing and unblocking stuck/blocked/SLA-watchdog issues on the Bunge board via twinforgecli — distinguishes legitimate blocking from stranded runs and orphaned ready work, and hard-stops before anything that would touch dev-process rules or specialty routing owned by the Tech Lead. Company-specific — use only on this Bunge company."
+name: po-issue-recovery
+description: "PO-only playbook for diagnosing and unblocking stuck/blocked/SLA-watchdog issues on the project board via twinforgecli — distinguishes legitimate blocking from stranded runs and orphaned ready work, and hard-stops before anything that would touch dev-process rules or specialty routing owned by the Tech Lead."
 ---
 
-# Bunge — PO Issue Recovery
+# PO Issue Recovery
 
 Scope: this skill covers *board mechanics* (status, assignee, recovery
 actions) on issues that are stuck, `blocked`, or the subject of a
 platform-generated SLA/stranded-issue watchdog issue. It does **not** cover
 Magento development itself, branch/PR policy, or task decomposition — those
-belong to `bunge-engineering-practices` and the Tech Lead respectively. If a
+belong to `projeto-engineering-practices` and the Tech Lead respectively. If a
 diagnosis leads you anywhere near those, stop and escalate (see "Hard stops"
 below) instead of acting.
 
@@ -103,7 +103,7 @@ up), the fix is mechanical: move it forward to the **exact assignee the
 Tech Lead already intended for it**, never a different specialty.
 
 **Before touching assignment, run the exclusivity check — this is
-non-negotiable, see `bunge-engineering-practices`, "Exclusividade de
+non-negotiable, see `projeto-engineering-practices`, "Exclusividade de
 execução": only one dev subtask (Backend, Frontend, or DevOps) may be
 active company-wide at a time, because they share one Magento
 installation/branch. A second one starting concurrently can corrupt the
@@ -137,7 +137,7 @@ Developer, matching the sibling subtasks on the same parent — check
 
 ## Step 4 — Close the loop
 
-- If a platform SLA/watchdog issue (e.g. "Unblock BUN-X: stuck in blocked
+- If a platform SLA/watchdog issue (e.g. "Unblock <PREFIXO>-X: stuck in blocked
   for Nh") triggered this pass, comment on it with the root cause and the
   concrete fix applied, then mark it `done`.
 - Always leave a comment on the issue you actually fixed explaining what
@@ -162,7 +162,7 @@ One notification per issue per pass; do not repeat if you are woken again
 on the same unchanged state.
 
 **Slack** — Web API (`chat.postMessage`) with the company's bot token, to
-the channel `#twinforge-adobe-template`. The token is the company secret
+the channel `#<canal-slack-do-projeto>`. The token is the company secret
 `slack_bot_token`, injected into your environment as `SLACK_BOT_TOKEN`. If
 that variable is empty, fetch the granted secret on demand instead (see
 "Reading Granted Secrets" in the `twinforge` skill). Then post:
@@ -171,7 +171,7 @@ that variable is empty, fetch the granted secret on demand instead (see
 curl -s -X POST https://slack.com/api/chat.postMessage \
   -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
   -H 'Content-type: application/json; charset=utf-8' \
-  --data '{"channel":"#twinforge-adobe-template","text":"<ALERTA|RESUMO> BUN-X — <titulo>\n<motivo ou fix, 1-3 linhas>\n<link da issue>"}'
+  --data '{"channel":"#<canal-slack-do-projeto>","text":"<ALERTA|RESUMO> <PREFIXO>-X — <titulo>\n<motivo ou fix, 1-3 linhas>\n<link da issue>"}'
 ```
 
 Slack always answers HTTP 200; success is `"ok":true` in the body. Only
@@ -200,7 +200,7 @@ diffs, logs) in the message — issue id, status, cause, fix and link only.
 Do not decide any of the following yourself; comment on the issue
 `@`-explaining the situation is fine, but the decision belongs to the Tech
 Lead (owns planning/decomposition and all dev-process rules — see
-`bunge-engineering-practices` and the requirements-refinement skill chain):
+`projeto-engineering-practices` and the requirements-refinement skill chain):
 
 - Reassigning across specialties (backend ↔ frontend ↔ devops), or to
   anyone other than the id the card's own pattern already implies.
@@ -213,7 +213,7 @@ Lead (owns planning/decomposition and all dev-process rules — see
 - Anything that would require running `git` commands, touching code, or
   pushing — this skill only ever moves issue metadata (status, assignee,
   comments), never the codebase. That boundary belongs entirely to
-  `bunge-engineering-practices` and the developers/Tech Lead.
+  `projeto-engineering-practices` and the developers/Tech Lead.
 - Skipping or shortcutting the Tech Lead's refinement process
   (`/opsx:propose` → review → `/opsx:apply`) for a *new* piece of work —
   this skill is about restoring already-approved work, not creating or
@@ -231,4 +231,4 @@ Lead (owns planning/decomposition and all dev-process rules — see
 - Do not close a platform SLA/watchdog issue without a comment naming the
   concrete root cause and fix — "resolved" alone is not enough evidence for
   this board's own standard (mirrors the verification-before-done rule in
-  `bunge-engineering-practices`).
+  `projeto-engineering-practices`).

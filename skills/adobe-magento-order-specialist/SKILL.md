@@ -5,7 +5,7 @@ description: "Native Magento 2.4.8 / Adobe Commerce quote-to-order model: cart t
 
 # Magento quote and order
 
-Native Magento behavior from cart to refund. Product, price and stock rules: `adobe-magento-catalog-specialist`. What the project decided on top (credit, approval, ERP flows): `bunge-domain-lookup`.
+Native Magento behavior from cart to refund. Product, price and stock rules: `adobe-magento-catalog-specialist`. What the project decided on top (credit, approval, ERP flows): `projeto-domain-lookup`.
 
 ## Rules: quote
 

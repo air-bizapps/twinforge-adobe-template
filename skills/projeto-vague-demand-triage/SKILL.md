@@ -1,13 +1,13 @@
 ---
-name: bunge-vague-demand-triage
-description: "Tech Lead's triage step before creating the [OPENSPEC] Proposta issue (bunge-openspec-flow phase 1): decide what's defensible from docs/module-index.md + bunge-domain-lookup, and only escalate what's genuinely unresolvable, in a fixed format. Use on every openspec-labeled card, right after deciding it follows the OpenSpec flow and before delegating to the OpenSpec Manager."
+name: projeto-vague-demand-triage
+description: "Tech Lead's triage step before creating the [OPENSPEC] Proposta issue (projeto-openspec-flow phase 1): decide what's defensible from docs/module-index.md + projeto-domain-lookup, and only escalate what's genuinely unresolvable, in a fixed format. Use on every openspec-labeled card, right after deciding it follows the OpenSpec flow and before delegating to the OpenSpec Manager."
 ---
 
-# bunge-vague-demand-triage (Tech Lead)
+# projeto-vague-demand-triage (Tech Lead)
 
 Se você **não** é o Tech Lead, pare — isso é o passo de triagem que acontece
 **antes** de criar a issue `[OPENSPEC] Proposta`, na fase 1 de
-`bunge-openspec-flow`. O OpenSpec Manager continua dono do refinamento
+`projeto-openspec-flow`. O OpenSpec Manager continua dono do refinamento
 detalhado e da escrita dos artefatos (`openspec-propose`); esta skill não
 substitui aquilo, ela evita que uma demanda vaga chegue lá sem o mínimo de
 chão — igual aconteceria numa reunião de kickoff com o cliente antes de
@@ -23,7 +23,7 @@ fixo pra perguntar quando não achar.
 ## Quando usar
 
 Toda card com label `openspec`, assim que você decide que ela segue o fluxo
-OpenSpec (passo 1 "Triagem" de `bunge-openspec-flow`) e **antes** de criar a
+OpenSpec (passo 1 "Triagem" de `projeto-openspec-flow`) e **antes** de criar a
 issue `[OPENSPEC] Proposta` (passo 2 "Delegate"). Se a card não tem a label
 mas você decidiu usar OpenSpec mesmo assim, use também.
 
@@ -35,7 +35,7 @@ tabela ou módulo, confirme direto em `docs/module-index.md`. Isso te dá a doc
 de domínio certa (ex.: cadastro B2B → `docs/cadastro-de-cliente.md`) e a lista
 de módulos Webjump envolvidos.
 
-**2. Rode `bunge-domain-lookup` para cada regra que a demanda plausivelmente
+**2. Rode `projeto-domain-lookup` para cada regra que a demanda plausivelmente
 toca.** Não é uma pergunta genérica — é uma por regra concreta que a mudança
 pode afetar (ex.: "como o cadastro B2B é validado e enviado pro SAP hoje?",
 "que campos o payload da integração já carrega?", "existe algum campo
@@ -51,7 +51,7 @@ boca), redija você mesmo, usando o que o passo 2 encontrou + os padrões de
 `requirements-refinement-fundamentals` (INVEST, Definition of Ready —
 objetivo + critério de aceite observável + restrições conhecidas). Marque
 cada critério que você redigiu com `[inferido: <motivo>]`, a mesma marca da
-curadoria (`bunge-card-curation`), e acrescente-o à seção Critérios de aceite
+curadoria (`card-curation`), e acrescente-o à seção Critérios de aceite
 da descrição da card — isso importa pro OpenSpec Manager e pros devs saberem
 o que é fato dado pelo cliente e o que é sua inferência, caso precisem
 questionar depois.
@@ -79,7 +79,7 @@ padrão claro) **não** vira pergunta — vira decisão documentada no passo 3,
 citando o precedente (arquivo:linha). Só pergunta o que sobrou.
 
 **5. Nada em aberto → siga direto para o passo "Delegate" de
-`bunge-openspec-flow`,** com o critério de aceite (passo 3) e as regras
+`projeto-openspec-flow`,** com o critério de aceite (passo 3) e as regras
 consultadas (passo 2) escritos na descrição da issue `[OPENSPEC] Proposta`
 que você vai criar, numa seção `## Achados da triagem (Tech Lead)`.
 
@@ -141,7 +141,7 @@ de insistir. Depois, siga para o passo "Delegate" normalmente.
 ## O que isso muda no handoff pro OpenSpec Manager
 
 A issue `[OPENSPEC] Proposta` que você cria no passo "Delegate" de
-`bunge-openspec-flow` agora sempre carrega, além do que já carregava:
+`projeto-openspec-flow` agora sempre carrega, além do que já carregava:
 
 ```
 ## Achados da triagem (Tech Lead)

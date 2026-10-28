@@ -20,7 +20,7 @@ Pré-requisitos do CLI (instalado, URL da API, login) e gotchas da plataforma:
 - O conector **entrega a card e observa**. Quem decompõe, atribui, revisa e dá push são os
   agentes. O conector nunca escreve código nem mexe em git do repo Bunge-Magento2.
 
-## 2. Fluxo (resumo de `twinforge/workflow.yaml` e da skill `bunge-openspec-flow`)
+## 2. Fluxo (resumo de `twinforge/workflow.yaml` e da skill `projeto-openspec-flow`)
 
 Escopo: **só o pod Magento/e-commerce** (repo `Bunge-Magento2`). O pod Mobile tem fluxo
 próprio, sem OpenSpec; card Mobile nunca entra por aqui.
@@ -86,7 +86,7 @@ geram colisão de branch/PR.
 
 ### 3.2 Corpo da card (o que o Tech Lead precisa para não começar frio)
 
-Toda card de topo passa pela **curadoria** do Tech Lead (`skills/bunge-card-curation`): ele
+Toda card de topo passa pela **curadoria** do Tech Lead (`skills/card-curation`): ele
 copia o texto que chegou para o documento `original` da issue e reescreve a descrição como
 prompt, marcando a origem de cada item. O conector não precisa (nem deve) pular isso, mas
 pode encurtar o trabalho mandando a card já no formato curado, com tudo marcado `[card]`:

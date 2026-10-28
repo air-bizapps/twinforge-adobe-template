@@ -1,11 +1,11 @@
 ---
 name: adobe-magento-catalog-specialist
-description: "Native Magento 2.4.8 / Adobe Commerce catalog model a developer must respect: product types, EAV and row_id, attribute sets and scopes, prices, categories and URL rewrites, product links, search attributes, stock (MSI), and B2B company and shared catalog. Use when code reads or writes products, prices, categories or stock, or when inspecting catalog data. Quote, order and documents: adobe-magento-order-specialist. Project business rules: bunge-domain-lookup."
+description: "Native Magento 2.4.8 / Adobe Commerce catalog model a developer must respect: product types, EAV and row_id, attribute sets and scopes, prices, categories and URL rewrites, product links, search attributes, stock (MSI), and B2B company and shared catalog. Use when code reads or writes products, prices, categories or stock, or when inspecting catalog data. Quote, order and documents: adobe-magento-order-specialist. Project business rules: projeto-domain-lookup."
 ---
 
 # Magento catalog (products, prices, stock, shared catalog)
 
-Native Magento behavior only. What the project decided on top of it (pricing, credit, approval flows) comes from `bunge-domain-lookup`. Carts, orders, invoices and negotiable quotes: `adobe-magento-order-specialist`.
+Native Magento behavior only. What the project decided on top of it (pricing, credit, approval flows) comes from `projeto-domain-lookup`. Carts, orders, invoices and negotiable quotes: `adobe-magento-order-specialist`.
 
 ## Rules: catalog
 

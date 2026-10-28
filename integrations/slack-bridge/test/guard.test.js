@@ -55,7 +55,7 @@ test('saída: cliente fixado só fala com o canal permitido e só expõe chat.po
   await s.chat.postMessage({ channel: CH, text: 'ok' });
   await s.chat.update({ channel: CH, ts: '1' });
   await s.chat.postEphemeral({ channel: CH, user: ME, text: 'x' });
-  for (const bad of ['C0OUTROCANAL', ME, 'D0DIRECTMSG', '#twinforge-adobe-template', undefined]) {
+  for (const bad of ['C0OUTROCANAL', ME, 'D0DIRECTMSG', '#<canal-slack-do-projeto>', undefined]) {
     await assert.rejects(async () => s.chat.postMessage({ channel: bad, text: 'x' }), /bloqueado/);
     await assert.rejects(async () => s.chat.update({ channel: bad, ts: '1' }), /bloqueado/);
     await assert.rejects(async () => s.chat.postEphemeral({ channel: bad, user: ME, text: 'x' }), /bloqueado/);
@@ -76,7 +76,7 @@ test('saída: state adulterado apontando pra outro canal não consegue atualizar
 
 test('config: exige ID de canal (não nome) e ids de usuário válidos; avisa allowlist vazia', () => {
   assert.deepEqual(validateConfig(cfg), []);
-  assert.match(validateConfig(loadConfig({ SLACK_CHANNEL: '#twinforge-adobe-template', SLACK_ALLOWED_USER_IDS: ME })).join(), /ID do canal/);
+  assert.match(validateConfig(loadConfig({ SLACK_CHANNEL: '#<canal-slack-do-projeto>', SLACK_ALLOWED_USER_IDS: ME })).join(), /ID do canal/);
   assert.match(validateConfig(loadConfig({ SLACK_CHANNEL: CH, SLACK_ALLOWED_USER_IDS: 'kaio' })).join(), /inválido/);
   assert.match(validateConfig(loadConfig({ SLACK_CHANNEL: CH })).join(), /vazio/);
 });

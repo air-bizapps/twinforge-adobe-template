@@ -4,7 +4,7 @@ Registro do que foi aplicado nos agentes do fluxo Tech Lead → Backend/Frontend
 OpenSpec Manager, que também escreve subtarefas), do que já foi validado na instância e
 do que foi considerado e deixado de fora. A visão prática (que texto vira prompt, quem
 escreve, onde ver na UI) está em `context/engenharia-de-prompt-aplicada.md`. Leia antes de mudar `AGENTS.md`, a skill
-`bunge-subtask-contract` ou qualquer skill do caminho entre esses agentes.
+`projeto-subtask-contract` ou qualquer skill do caminho entre esses agentes.
 
 Sem dados de instância (ids, URLs, caminhos de servidor). Os comportamentos da plataforma
 citados aqui estão detalhados em `context/twinforge-context.md`; os padrões de falha, em
@@ -56,24 +56,24 @@ instruções/skills, ainda sem evidência de uso real; **parcial** = validado em
 | C2 | **Uma fonte por regra.** Nada de procedimento repetido em dois arquivos (as cópias já tinham divergido: `blocked` × `in_review`, workspace × worktree). O `CONTEXT.md` do pacote virou ponteiro | `agents/*/CONTEXT.md` | aplicado |
 | C3 | **Altitude certa.** Regra + uma frase de motivo; sem narrativa de incidente com data e id. O porquê fica, a história sai | `agents/tech_lead/AGENTS.md` (guardrails) | aplicado |
 | C4 | **Só comportamento atual.** Removido o que estava desatualizado (número de runs simultâneos, ponteiros para seções que não existem, nomes de skill inexistentes) | AGENTS dos três | aplicado |
-| C5 | **Referenciar, não copiar.** O contexto do projeto mora no `CONTEXT.md` da raiz do repo de código; detalhe de módulo em `docs/module-index.md`; regra de negócio via `docs/README.md` → um arquivo | AGENTS dos devs, `bunge-subtask-contract` | aplicado |
-| C6 | **Just-in-time.** O dev abre só as Entradas e as Skills listadas; o resto entra quando o código ou uma Entrada aponta | `bunge-subtask-contract` §2, AGENTS dos devs | parcial: carregamento sob demanda validado; disciplina do dev não observada em card real |
-| C7 | **Isolamento por subtarefa.** O dev não lê a card pai nem as irmãs; precisou delas = lacuna da descrição | `bunge-subtask-contract` §2 | parcial: isolamento da plataforma validado; comportamento do dev não observado |
-| C8 | **Resumo curto de volta.** Relatório de entrega ≤ 40 linhas, com uma prova por critério e linha de Lacunas | `bunge-engineering-practices`, `openspec-apply-change` | aplicado |
-| C9 | **Prova por comando, não por relato.** Relatório cola a saída real do `git log`; o Tech Lead confere a existência do commit antes de liberar a próxima subtarefa (gate) | `bunge-subtask-contract` §3-4 | aplicado; a necessidade foi validada (relatório de agente citou errado o próprio AGENTS.md no teste) |
-| C10 | **Nota estruturada fora da janela.** Documento `estado` na card (≤ 25 linhas), lido antes do histórico de comentários | `bunge-subtask-contract` §5, AGENTS do Tech Lead | aplicado |
-| C11 | **A escolha de skills por tarefa é a linha "Skills" da subtarefa** (até 3), já que o índice é compartilhado | `bunge-subtask-contract` §1 | aplicado |
-| C12 | **Curar a entrada.** A descrição da card é reescrita como prompt antes do refinamento; o texto bruto vai para o documento `original` (cópia por comando), fora do prompt | `bunge-card-curation`, AGENTS do Tech Lead | parcial: cópia e reescrita validadas no teste de 2026-10-15; fidelidade com falhas (ver P11-P12) |
+| C5 | **Referenciar, não copiar.** O contexto do projeto mora no `CONTEXT.md` da raiz do repo de código; detalhe de módulo em `docs/module-index.md`; regra de negócio via `docs/README.md` → um arquivo | AGENTS dos devs, `projeto-subtask-contract` | aplicado |
+| C6 | **Just-in-time.** O dev abre só as Entradas e as Skills listadas; o resto entra quando o código ou uma Entrada aponta | `projeto-subtask-contract` §2, AGENTS dos devs | parcial: carregamento sob demanda validado; disciplina do dev não observada em card real |
+| C7 | **Isolamento por subtarefa.** O dev não lê a card pai nem as irmãs; precisou delas = lacuna da descrição | `projeto-subtask-contract` §2 | parcial: isolamento da plataforma validado; comportamento do dev não observado |
+| C8 | **Resumo curto de volta.** Relatório de entrega ≤ 40 linhas, com uma prova por critério e linha de Lacunas | `projeto-engineering-practices`, `openspec-apply-change` | aplicado |
+| C9 | **Prova por comando, não por relato.** Relatório cola a saída real do `git log`; o Tech Lead confere a existência do commit antes de liberar a próxima subtarefa (gate) | `projeto-subtask-contract` §3-4 | aplicado; a necessidade foi validada (relatório de agente citou errado o próprio AGENTS.md no teste) |
+| C10 | **Nota estruturada fora da janela.** Documento `estado` na card (≤ 25 linhas), lido antes do histórico de comentários | `projeto-subtask-contract` §5, AGENTS do Tech Lead | aplicado |
+| C11 | **A escolha de skills por tarefa é a linha "Skills" da subtarefa** (até 3), já que o índice é compartilhado | `projeto-subtask-contract` §1 | aplicado |
+| C12 | **Curar a entrada.** A descrição da card é reescrita como prompt antes do refinamento; o texto bruto vai para o documento `original` (cópia por comando), fora do prompt | `card-curation`, AGENTS do Tech Lead | parcial: cópia e reescrita validadas no teste de 2026-10-15; fidelidade com falhas (ver P11-P12) |
 | C13 | **Porta de entrada única.** Tarefa que chega a dev, OpenSpec Manager ou DevOps sem card pai, sem ter sido criada por agente e sem `Atribuição direta:` volta ao Tech Lead sem ser executada | "First check" nos AGENTS de Backend, Frontend, OpenSpec Manager, DevOps | aplicado |
-| C15 | **Prova por comando, não por prosa.** Como os testes não rodam na subtarefa, o `magento-verify` (skill `adobe-magento-toolbox`, só leitura) confere os arquivos alterados contra o vendor e os XSD instalados: classe inexistente com "você quis dizer", PHP que não carrega, XML fora do XSD, as causas do spinner infinito em UI Component, RequireJS e Web API. A saída é curta (ID, arquivo:linha, o que fazer, modelo a copiar); o dev roda até `VERIFY OK` (teto de 3 por run) e o Tech Lead repete no gate. Antes de escrever, `magento-example` (módulo de referência provado) e `magento-api` dão o padrão e a assinatura reais, sob demanda | `adobe-magento-toolbox`, `bunge-engineering-practices`, `openspec-apply-change`, `bunge-subtask-contract` §3-4, AGENTS dos devs e do Tech Lead | validado no oráculo: 9/9 fixes humanos da BUN-14079 acusados no commit do agente e 0 erro fora de teste no corrigido; BUN-889 idem. Uso pelos agentes ainda não observado |
-| C16 | **Cobertura da card.** Todo item de Escopo/Critérios da card curada tem destino numa subtarefa (critério ou Fora de escopo), registrado no `plan` | `bunge-subtask-contract` §1 | aplicado |
+| C15 | **Prova por comando, não por prosa.** Como os testes não rodam na subtarefa, o `magento-verify` (skill `adobe-magento-toolbox`, só leitura) confere os arquivos alterados contra o vendor e os XSD instalados: classe inexistente com "você quis dizer", PHP que não carrega, XML fora do XSD, as causas do spinner infinito em UI Component, RequireJS e Web API. A saída é curta (ID, arquivo:linha, o que fazer, modelo a copiar); o dev roda até `VERIFY OK` (teto de 3 por run) e o Tech Lead repete no gate. Antes de escrever, `magento-example` (módulo de referência provado) e `magento-api` dão o padrão e a assinatura reais, sob demanda | `adobe-magento-toolbox`, `projeto-engineering-practices`, `openspec-apply-change`, `projeto-subtask-contract` §3-4, AGENTS dos devs e do Tech Lead | validado no oráculo: 9/9 fixes humanos da BUN-14079 acusados no commit do agente e 0 erro fora de teste no corrigido; BUN-889 idem. Uso pelos agentes ainda não observado |
+| C16 | **Cobertura da card.** Todo item de Escopo/Critérios da card curada tem destino numa subtarefa (critério ou Fora de escopo), registrado no `plan` | `projeto-subtask-contract` §1 | aplicado |
 | C17 | **Releitura antes do irreversível.** Antes de push, PR, rebase ou cancelamento, o Tech Lead relê os comentários desde o início do run e confere que os commits da branch são só os do `estado` | AGENTS do Tech Lead §4 | aplicado depois de falha |
 | C14 | **Instrução só onde o agente lê.** `HEARTBEAT.md`/`SOUL.md`/`TOOLS.md` viraram ponteiros; o que valia foi para o `AGENTS.md` (havia regra contraditória: escalar ao "CEO", "deixar o código melhor") | `agents/{backend_dev,devops_engineer}/` | aplicado |
 
 ## Princípios de prompt aplicados (descrição da subtarefa)
 
 Quem escreve: Tech Lead (card comum) e OpenSpec Manager (card `openspec`). Fonte única:
-`bunge-subtask-contract` §1, que tem o template, um exemplo preenchido e o checklist.
+`projeto-subtask-contract` §1, que tem o template, um exemplo preenchido e o checklist.
 
 | # | Princípio | Como aparece | Status |
 |---|---|---|---|
@@ -90,7 +90,7 @@ Quem escreve: Tech Lead (card comum) e OpenSpec Manager (card `openspec`). Fonte
 
 ## Princípios de prompt aplicados (descrição da card)
 
-Quem escreve: Tech Lead, na curadoria. Fonte única: `bunge-card-curation`, com template,
+Quem escreve: Tech Lead, na curadoria. Fonte única: `card-curation`, com template,
 exemplo antes/depois e gate de Definition of Ready. Valem também P2, P3, P4, P5, P8 e P9.
 
 | # | Princípio | Como aparece | Status |
@@ -133,7 +133,7 @@ exemplo antes/depois e gate de Definition of Ready. Valem também P2, P3, P4, P5
 | Desvio determinístico (bridge ou rotina reatribui ao criar a issue, sem gastar run do agente errado) | Começamos pela instrução para medir a frequência; precisa de gatilho de criação de issue na API | Se os desvios forem frequentes ou o run curto do agente errado pesar no custo |
 | Reescrever a card no Azure DevOps | É o registro do cliente; agente editando o texto muda escopo sem rastro do lado dele e exige escrita no sistema do cliente | Se o cliente pedir a versão curada lá; mesmo assim, como comentário |
 | Limpar `HEARTBEAT.md`/`SOUL.md` do PO | O PO está fora do caminho Tech Lead → devs; o template genérico (CEO) não chega ao prompt, então é inofensivo | Na próxima revisão do PO |
-| Acordar o dono ao destravar (PO comenta e o Tech Lead não acorda) | Comentário de agente não acordou o responsável; o CLI tem `--resume`, mas o campo da API para um agente não foi confirmado | Ao confirmar na API como o comentário pede retomada; então uma linha na `bunge-po-issue-recovery` |
+| Acordar o dono ao destravar (PO comenta e o Tech Lead não acorda) | Comentário de agente não acordou o responsável; o CLI tem `--resume`, mas o campo da API para um agente não foi confirmado | Ao confirmar na API como o comentário pede retomada; então uma linha na `po-issue-recovery` |
 | Permissão para o Tech Lead cancelar subtarefa atribuída a dev | Ele não conseguiu cancelar a BUN-222; não verificado se a plataforma tem permissão de gestor | Ao verificar a permissão; senão, pedir ao dev que cancele |
 | `reset-session` periódico para runs sem issue | Afeta Concierge e wakes avulsos, fora do fluxo de subtarefas | Se o custo de entrada desses agentes subir |
 
@@ -143,11 +143,11 @@ exemplo antes/depois e gate de Definition of Ready. Valem também P2, P3, P4, P5
 |---|---|---|
 | `AGENTS.md` do Tech Lead | ~14 KB (era ~12; +2 KB de regras que corrigem falhas observadas: gatilhos de OpenSpec, releitura antes do irreversível, tipo de pergunta, origem da branch) | `agents/tech_lead/AGENTS.md` |
 | `AGENTS.md` dos devs | ~6 KB | `agents/{backend,frontend}_dev/AGENTS.md` |
-| Descrição da card curada | ≤ 80 linhas | `bunge-card-curation` |
-| Descrição da subtarefa | ≤ 60 linhas | `bunge-subtask-contract` §1 |
+| Descrição da card curada | ≤ 80 linhas | `card-curation` |
+| Descrição da subtarefa | ≤ 60 linhas | `projeto-subtask-contract` §1 |
 | Skills por subtarefa | ≤ 3 | idem |
-| Relatório de entrega | ≤ 40 linhas | `bunge-engineering-practices`, `openspec-apply-change` |
-| Nota `estado` | ≤ 25 linhas | `bunge-subtask-contract` §5 |
+| Relatório de entrega | ≤ 40 linhas | `projeto-engineering-practices`, `openspec-apply-change` |
+| Nota `estado` | ≤ 25 linhas | `projeto-subtask-contract` §5 |
 
 ## Como evoluir
 

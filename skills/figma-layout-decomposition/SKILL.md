@@ -1,14 +1,14 @@
 ---
-name: bunge-figma-layout-decomposition
-description: "How the Tech Lead turns a Figma design link into refined dev subtasks without relying on visual/image interpretation — Bunge's dev agents have no vision/multimodal input pipeline, so this uses Figma's REST API for a figma.com/design or /file link, or direct extraction from the published JS bundle for a figma.site (Figma Make prototype) link. Use whenever a card references any figma.com or figma.site link that needs to become implementation work. Bunge-specific."
+name: figma-layout-decomposition
+description: "How the Tech Lead turns a Figma design link into refined dev subtasks without relying on visual/image interpretation — dev agents on an adapter without a vision/multimodal input pipeline (such as `crucible_local`), so this uses Figma's REST API for a figma.com/design or /file link, or direct extraction from the published JS bundle for a figma.site (Figma Make prototype) link. Use whenever a card references any figma.com or figma.site link that needs to become implementation work."
 ---
 
-# Bunge — Figma Layout → Dev Subtasks (structured data, not images)
+# Figma Layout → Dev Subtasks (structured data, not images)
 
 ## Why this isn't image-based
 
-As of 2026-09-11, Bunge's dev agents (Tech Lead, Backend Developer,
-Frontend Developer) all run on the `crucible_local` adapter. That adapter
+This skill applies when the dev agents (Tech Lead, Backend Developer,
+Frontend Developer) run on an adapter such as `crucible_local`, which
 has no MCP integration and no image/vision content pipeline — TwinForge
 does not feed image attachments into the model as visual input for this
 adapter. Treating a Figma link as "open the screenshot and figure out the
@@ -19,11 +19,11 @@ Figma's own recommended integration for AI coding agents is exactly the
 alternative used here: structured access to the design (component tree,
 layout rules, text content, style tokens) via API, instead of interpreting
 rendered pixels — this is what Figma's own Dev Mode MCP Server provides to
-tools that support MCP. Bunge's agents don't have MCP wired up, so this
+tools that support MCP. When the agents don't have MCP wired up, so this
 skill uses the equivalent raw REST API calls via `curl`, which every dev
 agent here already has through normal shell access.
 
-## Precondition: run `bunge-link-verification` first
+## Precondition: run `link-verification` first
 
 For a `figma.com` link specifically, "verified" means more than an HTTP
 200 — Figma returns a login wall for unauthenticated requests, which can
@@ -60,8 +60,7 @@ wrong tool for this URL shape.
 
 **This is not a dead end.** `curl`-ing the page itself returns an empty
 SPA shell (`<div id="root"></div>` with all real content injected by a
-bundled JS file at runtime) — confirmed for real on 2026-09-11 (card
-`14136`). But the app's own JS bundle is a normal static file referenced
+bundled JS file at runtime) — confirmed on a real prototype. But the app's own JS bundle is a normal static file referenced
 from the HTML's `<script src="...">` tag, downloadable the same as any
 other asset, and — at least for this real prototype — it was **not**
 heavily obfuscated: real UI copy, mock data, and design tokens were still
@@ -90,14 +89,14 @@ than a Figma Files API response.
    guarantee.** If the bundle is too obfuscated to find readable strings,
    or the real content clearly comes from a live API call at runtime
    rather than embedded literals, say so explicitly and fall back to
-   asking a human (per `bunge-link-verification`): either a static export
+   asking a human (per `link-verification`): either a static export
    (PNG/PDF) attached to the card, or a written description. Don't spend
    excessive effort reverse-engineering a bundle that isn't cooperating —
    a few minutes of grep/read is worth it, a deep static-analysis effort
    is not.
 5. If a human has already attached files instead of a link (an exported
    image, or the site's own downloaded JS/CSS/assets) — see
-   `bunge-link-verification`'s step 0 — use those directly instead of
+   `link-verification`'s step 0 — use those directly instead of
    re-fetching from the URL.
 
 ## Decomposition procedure (once verified)
@@ -143,7 +142,7 @@ or a description of what the design "looks like."
 look at a Figma frame, screenshot, or exported image and infer layout,
 spacing, or copy from it.
 
-**Why:** Bunge's dev agents run on `crucible_local`, which has no
+**Why:** dev agents on an adapter like `crucible_local` have no
 vision/multimodal input. An agent "looking at" an image has no actual way
 to do so — it would either hallucinate a plausible-sounding but wrong
 interpretation, or silently fail to act on the instruction at all.

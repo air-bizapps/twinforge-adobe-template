@@ -1,5 +1,5 @@
 ---
-name: bunge-engineering-practices
+name: projeto-engineering-practices
 description: "Bunge-specific engineering process for the Magento 2 storefront: workspace and codebase connection state, collaboration/handoff routing, deploy and production-safety rules. Use for any Bunge Magento 2 task to know who to route to and what is off-limits. Company-specific — do not reuse verbatim for a different client's Magento project."
 ---
 
@@ -137,16 +137,16 @@ desenvolvimento daquele card. Se essa subtarefa for sua:
    verdade naquele worktree.
 
    `docs/` (regras de negócio) também é symlink, de um repo à parte —
-   `twinforge-repo` (clone de `air-bizapps/twinforge-adobe-template`), não faz
+   `twinforge-repo` (clone de `<org>/<repo-de-configuracao>`), não faz
    parte deste repositório. Garanta que ele existe e está atualizado, e
    crie o link **dentro do worktree que você acabou de criar**:
    ```bash
-   [ -d "$WS/twinforge-repo/.git" ] || git clone git@github.com:air-bizapps/twinforge-adobe-template.git "$WS/twinforge-repo"
+   [ -d "$WS/twinforge-repo/.git" ] || git clone git@github.com:<org>/<repo-de-configuracao>.git "$WS/twinforge-repo"
    (cd "$WS/twinforge-repo" && git pull --quiet)
    ln -sfn "$WS/twinforge-repo/docs" "$WS/worktrees/<ID-externo>/docs"
    ```
    Sem isso, qualquer referência a `docs/...` dentro do worktree (ex.
-   `bunge-domain-lookup`) não acha nada — `docs/` não existe mais neste
+   `projeto-domain-lookup`) não acha nada — `docs/` não existe mais neste
    repositório de propósito, pra não ter duas cópias desatualizando uma
    da outra.
 
@@ -172,7 +172,7 @@ cabeçalho; entre nele e atualize:
 cd "$WS/worktrees/<ID-externo>"
 git merge --ff-only origin/$(git branch --show-current)
 ```
-Ver `bunge-openspec-flow`.
+Ver `projeto-openspec-flow`.
 
 Se a subtarefa que você recebeu **não** for a de preparar ambiente, ela vai
 te dizer qual worktree usar. Confirme que está nele antes de escrever
@@ -184,7 +184,7 @@ tente corrigir sozinho** — bloqueie a subtarefa e escale ao Tech Lead.
 Depois de entender a subtarefa e antes de escrever código:
 
 - Trabalhe a partir da descrição da subtarefa, escrita conforme
-  `bunge-subtask-contract`: abra só as Entradas e as Skills que ela lista
+  `projeto-subtask-contract`: abra só as Entradas e as Skills que ela lista
   e não leia a card pai nem as subtarefas irmãs. O que faltar é lacuna da
   descrição, e você reporta em vez de adivinhar.
 - Monte um plano e valide se as skills que você tem hoje bastam para
@@ -311,7 +311,7 @@ under `openspec/`; the target is `feature/BUN-<ID-externo>`; and it works from
 a temporary `git worktree`, never switching the shared checkout's branch. It
 also opens the card's PR as a **draft** at proposal time, so Kaio can review
 the planning artifacts before any code exists. Pushing code and taking the PR
-out of draft remain the Tech Lead's job. Details in `bunge-openspec-flow`.
+out of draft remain the Tech Lead's job. Details in `projeto-openspec-flow`.
 
 - Create your `feature/BUN-<ID-externo>` branch and commit normally, exactly
   as the rest of this policy describes. Never push it yourself, and run
@@ -355,7 +355,7 @@ out of draft remain the Tech Lead's job. Details in `bunge-openspec-flow`.
   don't assume who or how until that changes.
 - **Task/PR description template**: applies to the card's description and
   the PR description (the Tech Lead's PR inherits it from the card). Dev
-  subtasks use the shorter format in `bunge-subtask-contract` instead, and
+  subtasks use the shorter format in `projeto-subtask-contract` instead, and
   the delivery reports feed sections 3-5 below. Seven sections, each
   one short paragraph or a short list —
   the goal is to remove ambiguity, not to produce a separate document. The

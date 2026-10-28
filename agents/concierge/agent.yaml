@@ -29,7 +29,7 @@ permissions:
   built_in_mutation_policy: {'requiresdisplayeddiff': true, 'applyinseparatefollowuprun': false, 'requiresacceptedtaskinteraction': true}
 
 desired_skills:
-  - company/{{company_id}}/bunge-domain-lookup
+  - company/{{company_id}}/projeto-domain-lookup
 
 instructions:
   entry_file: null  # nenhum arquivo próprio hoje — roda só com as skills anexadas

@@ -1,6 +1,6 @@
 ---
-name: bunge-card-curation
-description: "Tech Lead only. Curadoria da card no Bunge: guarda o texto original da card no documento `original` e reescreve a descrição como prompt (Objetivo, Contexto, Escopo, Fora de escopo, Critérios, Referências, Perguntas), marcando a origem de cada item. Use ao pegar uma card de topo (sem parentId) que ainda não tem o documento `original`, venha ela de pessoa, do conector, do Azure DevOps ou desviada por outro agente. Vem antes do refinamento e da triagem OpenSpec."
+name: card-curation
+description: "Tech Lead only. Curadoria da card: guarda o texto original da card no documento `original` e reescreve a descrição como prompt (Objetivo, Contexto, Escopo, Fora de escopo, Critérios, Referências, Perguntas), marcando a origem de cada item. Use ao pegar uma card de topo (sem parentId) que ainda não tem o documento `original`, venha ela de pessoa, do conector, do Azure DevOps ou desviada por outro agente. Vem antes do refinamento e da triagem OpenSpec."
 ---
 
 # Curadoria da card (Tech Lead)
@@ -67,7 +67,7 @@ Marque a origem de cada item:
   mesmo dentro de um item que veio da card: separe ou marque `[inferido]`.
 - `[comentário: <autor>]`: veio de um comentário de pessoa na card.
 - `[inferido: <motivo>]`: você deduziu do próprio texto da card. O motivo é
-  uma frase ("a card pede o campo no cadastro B2B, então vale só para B2B").
+  uma frase ("a card pede o campo no cadastro de cliente, então vale só para B2B").
 - `[pergunta]`: só quem pediu sabe, e a resposta muda escopo, comportamento
   ou critério. Diga quem responde.
 
@@ -77,7 +77,7 @@ critério, mesmo que você ache que não exige código. Quem decide que não exi
 é o refinamento, por escrito no `plan`.
 
 ID externo é o id da card no board do cliente. Ele vem do original ou de uma
-pessoa, nunca do número `BUN-<n>` da TwinForge (que é só de exibição). Não
+pessoa, nunca do número `<PREFIXO>-<n>` da TwinForge (que é só de exibição). Não
 está no original → `Card: pendente` e uma `[pergunta]` pedindo o id, sem
 sugerir valor.
 
@@ -88,7 +88,7 @@ OpenSpec. Se você estiver escrevendo "como fazer", pare: isso não é desta eta
 ## 3. Reescreva a descrição
 
 Atualize a descrição da card (sua ferramenta TwinForge) com este corpo, nesta
-ordem. Título: `BUN-<ID-externo> - <título>` só quando o ID externo for
+ordem. Título: `<PREFIXO>-<ID-externo> - <título>` só quando o ID externo for
 conhecido; até lá, mantenha o título original. Escreva em português com
 acentos, como o original: texto sem acento é cópia infiel (`pré-cadastro`,
 não `pre-cadastro`).
@@ -162,7 +162,7 @@ siga. A cópia do passo 1 vale do mesmo jeito, para a trilha ficar completa.
 Depois de reescrever, a card está pronta para o refinamento quando tem:
 ID externo, Objetivo, ao menos um critério verificável e nenhuma `[pergunta]`
 que mude escopo. Faltou algo: crie uma interaction `ask_user_questions` na
-card com as perguntas abertas (formato em `bunge-vague-demand-triage`, passo
+card com as perguntas abertas (formato em `projeto-vague-demand-triage`, passo
 6), mova para `in_review` e **termine o heartbeat**. Não escreva `plan`, não
 crie subtarefas e não adote uma resposta "default" enquanto essa pergunta
 estiver aberta: trabalho feito sobre um palpite que a pessoa depois
@@ -184,7 +184,7 @@ Original (como chegou):
 
 ```markdown
 Oi pessoal, conforme alinhado na call de ontem com o time comercial, precisamos
-colocar o vendedor no cadastro de cliente B2B, porque hoje o SAP recebe o
+colocar o vendedor no cadastro de cliente, porque hoje o ERP recebe o
 cadastro sem vendedor e o pessoal tem que preencher na mão depois. Acho que
 dava pra ser um select. Importante não quebrar o cadastro atual!! Figma:
 https://www.figma.com/design/abc/Cadastro?node-id=12-34. Depois a gente vê o
@@ -197,22 +197,22 @@ Curado:
 Card: pendente · Origem: manual · Original: documento `original`
 
 ## Objetivo
-O cadastro de cliente B2B passa a enviar ao SAP o vendedor responsável. [card]
+O cadastro de cliente passa a enviar ao ERP o vendedor responsável. [card]
 
 ## Contexto
-- Hoje o SAP recebe o cadastro sem vendedor e o time comercial completa à mão depois. [card]
+- Hoje o ERP recebe o cadastro sem vendedor e o time comercial completa à mão depois. [card]
 - Alinhado em call com o time comercial. [card]
 
 ## Escopo
-- Vendedor no cadastro de cliente B2B. [card]
-- Campo no formulário de cadastro B2B. [inferido: a card diz "colocar o vendedor no cadastro"; o desenho exato está no Figma]
-- Vendedor incluído no envio do cadastro ao SAP. [inferido: o problema descrito é o SAP receber sem vendedor]
+- Vendedor no cadastro de cliente. [card]
+- Campo no formulário de cadastro de cliente. [inferido: a card diz "colocar o vendedor no cadastro"; o desenho exato está no Figma]
+- Vendedor incluído no envio do cadastro ao ERP. [inferido: o problema descrito é o ERP receber sem vendedor]
 
 ## Fora de escopo
 - Relatório de vendas por vendedor: card própria, ainda não criada. [card]
 
 ## Critérios de aceite
-- Cadastro B2B com vendedor chega ao SAP com o vendedor preenchido. [inferido: objetivo da card]
+- Cadastro B2B com vendedor chega ao ERP com o vendedor preenchido. [inferido: objetivo da card]
 - Cadastro B2B continua funcionando como hoje para quem não informa vendedor. [inferido: "não quebrar o cadastro atual"; ver pergunta 3]
 
 ## Referências
@@ -221,7 +221,7 @@ O cadastro de cliente B2B passa a enviar ao SAP o vendedor responsável. [card]
 ## Perguntas abertas
 - [pergunta] Qual é o id desta card no board do cliente? O texto não traz. → quem criou a card
 - [pergunta] O vendedor é escolhido de uma lista (de onde vem a lista) ou digitado? A card sugere select, sem dizer a fonte. → time comercial
-- [pergunta] O vendedor é obrigatório no cadastro B2B? → time comercial
+- [pergunta] O vendedor é obrigatório no cadastro de cliente? → time comercial
 
 Não usado do original: saudação e "acho que" (a sugestão de select virou a pergunta 2).
 ```

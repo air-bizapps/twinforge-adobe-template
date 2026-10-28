@@ -26,7 +26,7 @@ um dado por vez, na ordem da tabela. Nunca imprima, grave em arquivo ou commite 
 | Company id | quase todo comando (`-C <id>`) | `twinforge/roles.yaml` do repo, ou `company list --json` | Se houver mais de uma company, perguntar qual é a do projeto |
 | Project id | workspace, tarefas, escopo | `scope.project_id` em `twinforge/roles.yaml`, ou listagem de projetos | Perguntar o nome do projeto e resolver o id pela listagem |
 | Papel → agent id | `/tfrepo:agent`, sync de skills | `twinforge/roles.yaml`, ou `agent list --json` | Se o papel não estiver no `roles.yaml`, dizer isso e pedir o nome do agente; **não adivinhar id** |
-| Clone local deste repo em `twinforge-repo/` | `status`/`pull`/`push` | `test -d twinforge-repo/.git` | Dar o `git clone` do repo `twinforge-adobe-template` (URL já está em `/tfrepo:status`) na raiz do projeto |
+| Clone local deste repo em `twinforge-repo/` | `status`/`pull`/`push` | `test -d twinforge-repo/.git` | Dar o `git clone` do repo `<repo-de-configuracao>` (URL já está em `/tfrepo:status`) na raiz do projeto |
 | Token do GitHub (PAT) | só `/tfrepo:init` (clone de repo privado pela plataforma) | — | O usuário gera no GitHub e informa; nunca ecoar de volta nem salvar em arquivo versionado |
 | Instância local (127.0.0.1) | só `/tfrepo:local-sync` | — | O usuário sobe o servidor local num terminal dele. Nunca rode o binário `twinforge` sem subcomando: ele sobe um servidor completo com Postgres embutido |
 
@@ -89,7 +89,7 @@ um dado por vez, na ordem da tabela. Nunca imprima, grave em arquivo ou commite 
   outros papéis). `desiredSkills` decide o que a plataforma liga, não o que cada agente enxerga.
   O corpo do `SKILL.md` só entra quando o agente abre o arquivo (sob demanda). Consequência: a
   descrição de cada skill precisa dizer de quem ela é, e a escolha por tarefa vem da linha
-  "Skills" da subtarefa (`bunge-subtask-contract`). Só o `AGENTS.md` é anexado ao system prompt;
+  "Skills" da subtarefa (`projeto-subtask-contract`). Só o `AGENTS.md` é anexado ao system prompt;
   o resto do pacote de instruções não.
 - **Sessão do agente é por issue e, na prática, renovada a cada heartbeat** (verificado em
   2026-10-15 nos últimos 200 runs + teste). A plataforma guarda uma sessão por issue e tentaria

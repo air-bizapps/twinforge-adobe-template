@@ -58,7 +58,7 @@ This skill does not repeat them.
 ## Steps
 
 1. Write the request and response JSON (or GraphQL query) first and agree it with the consumer
-   (frontend, SAP, middleware) before coding (`bunge-engineering-practices`).
+   (frontend, SAP, middleware) before coding (`projeto-engineering-practices`).
 2. Define or reuse the service contract; implement through the repository/service.
 3. Declare the route or schema with its ACL or resolver authorization.
 4. Decide store scope, page limit, sync or async, and batch resolution; write each in the report.

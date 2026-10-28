@@ -1,5 +1,5 @@
 ---
-name: bunge-subtask-contract
+name: projeto-subtask-contract
 description: "Contrato de contexto entre Tech Lead, OpenSpec Manager e devs (Backend/Frontend) no Bunge: como escrever a descrição de uma subtarefa de dev, o que o dev lê ao recebê-la, o formato do relatório de volta, o gate do Tech Lead entre subtarefas e a nota de estado da card. Use ao criar, receber, entregar ou fechar qualquer subtarefa de dev, com ou sem OpenSpec."
 ---
 
@@ -29,7 +29,7 @@ descrição não está pronta.
 
 ### Corpo da descrição, nesta ordem
 
-Em card `openspec`, as 4 linhas de cabeçalho de `bunge-openspec-flow` vêm
+Em card `openspec`, as 4 linhas de cabeçalho de `projeto-openspec-flow` vêm
 antes de tudo, intactas.
 
 ```markdown
@@ -92,8 +92,8 @@ e mova para `blocked` com o Tech Lead como dono, conforme
   curl -s -H "Authorization: Bearer $TWINFORGE_API_KEY" "$B/api/agents/<id do dev>/skills" \
     | python3 -c 'import json,sys;print("\n".join(s.split("/")[-1] for s in json.load(sys.stdin)["desiredSkills"]))'
   ```
-  Não liste as que ele já abre por padrão (`bunge-engineering-practices`,
-  `bunge-subtask-contract` e a `bunge-*-code-quality` da especialidade).
+  Não liste as que ele já abre por padrão (`projeto-engineering-practices`,
+  `projeto-subtask-contract` e a `bunge-*-code-quality` da especialidade).
 - **Critério verificável, com a prova pedida.** "Funciona" ou "código
   revisado" não servem. Diga o que o relatório precisa mostrar.
 - **Permita o "não sei".** A seção "Se faltar algo" existe para que o dev
@@ -183,7 +183,7 @@ requisito perdido. Registre a correspondência no `plan` (item → BUN-n).
 1. Leia a descrição inteira antes de qualquer comando.
 2. Faltou `Branch`, `Objetivo` ou `Critérios`? Não adivinhe: lacuna →
    `blocked` (seção "Se faltar algo"). Pare.
-3. Entre no worktree indicado (`bunge-engineering-practices`) e confirme
+3. Entre no worktree indicado (`projeto-engineering-practices`) e confirme
    `git branch --show-current`.
 4. Abra **só** as Entradas e as Skills listadas. Outro arquivo ou skill entra
    quando uma Entrada aponta para ele ou quando o código que você está lendo
@@ -195,7 +195,7 @@ requisito perdido. Registre a correspondência no `plan` (item → BUN-n).
 
 ## 3. Relatório de entrega (dev → Tech Lead)
 
-Use o template de `bunge-engineering-practices` (card comum) ou de
+Use o template de `projeto-engineering-practices` (card comum) ou de
 `openspec-apply-change` (card `openspec`). Os dois exigem:
 
 - **Prova de commit:** cole a saída real de

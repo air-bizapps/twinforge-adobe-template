@@ -1,13 +1,13 @@
 ---
 name: react-native-standards
-description: "Framework-level React Native / Expo conventions: WebView integration patterns, native basics (icon/splash via Expo config), testing layers, build/release via EAS, and common anti-patterns. Use for any React Native code change or review. Client-agnostic — applies to any React Native project, not just Bunge Mobile; company-specific process (git, review routing, workspace) lives in bunge-mobile-flow instead."
+description: "Framework-level React Native / Expo conventions: WebView integration patterns, native basics (icon/splash via Expo config), testing layers, build/release via EAS, and common anti-patterns. Use for any React Native code change or review. Client-agnostic — applies to any React Native project, not just Bunge Mobile; company-specific process (git, review routing, workspace) lives in projeto-mobile-flow instead."
 ---
 
 # react-native-standards
 
 Framework-level conventions for React Native work. Client-agnostic — applies
 to any React Native project, not just Bunge Mobile. Company-specific process
-(git, review routing, workspace) lives in `bunge-mobile-flow`.
+(git, review routing, workspace) lives in `projeto-mobile-flow`.
 
 ## Project setup
 

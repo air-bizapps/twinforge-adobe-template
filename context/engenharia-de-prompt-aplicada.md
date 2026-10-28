@@ -19,11 +19,11 @@ textos é a engenharia de prompt; o resto é contexto que o agente busca sob dem
 
 | Texto | Quem escreve | Quem lê como prompt | Regra | Onde ver na UI |
 |---|---|---|---|---|
-| Descrição da card (curada) | Tech Lead | Tech Lead, OpenSpec Manager | `bunge-card-curation` | Descrição da card; texto bruto no documento `original` |
-| Descrição da subtarefa | Tech Lead; OpenSpec Manager em card `openspec` | Backend / Frontend | `bunge-subtask-contract` §1 | Descrição da subtarefa |
-| Relatório de entrega | Backend / Frontend | Tech Lead (gate e PR) | `bunge-subtask-contract` §3 | Último comentário da subtarefa |
-| Nota de estado | Tech Lead | Tech Lead no próximo heartbeat | `bunge-subtask-contract` §5 | Documento `estado` da card |
-| Perguntas a pessoas | Tech Lead, OpenSpec Manager | Pessoa que responde | `bunge-vague-demand-triage` passo 6 | Interaction na card, card em `in_review` |
+| Descrição da card (curada) | Tech Lead | Tech Lead, OpenSpec Manager | `card-curation` | Descrição da card; texto bruto no documento `original` |
+| Descrição da subtarefa | Tech Lead; OpenSpec Manager em card `openspec` | Backend / Frontend | `projeto-subtask-contract` §1 | Descrição da subtarefa |
+| Relatório de entrega | Backend / Frontend | Tech Lead (gate e PR) | `projeto-subtask-contract` §3 | Último comentário da subtarefa |
+| Nota de estado | Tech Lead | Tech Lead no próximo heartbeat | `projeto-subtask-contract` §5 | Documento `estado` da card |
+| Perguntas a pessoas | Tech Lead, OpenSpec Manager | Pessoa que responde | `projeto-vague-demand-triage` passo 6 | Interaction na card, card em `in_review` |
 | Aviso de desvio | Devs, OpenSpec Manager, DevOps | Tech Lead | "First check" no `AGENTS.md` de cada um | Comentário na issue desviada |
 
 ## Técnicas e onde cada uma aparece
@@ -76,7 +76,7 @@ deve aparecer numa seção ou na linha `Não usado`. Um `[inferido]` que você n
 corrige com um comentário na card, e o Tech Lead atualiza só aquela seção.
 
 Exemplo completo, de uma card escrita à mão até a versão curada: seção "Exemplo" de
-`skills/bunge-card-curation/SKILL.md`.
+`skills/card-curation/SKILL.md`.
 
 ## Desvio na porta de entrada
 

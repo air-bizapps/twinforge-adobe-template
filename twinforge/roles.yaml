@@ -46,7 +46,7 @@ roles:
   verifier:
     kind: agent
     id: "{{verifier_agent_id}}" # Verificador (process, sem LLM)
-    # Participante do estágio de revisão de toda subtarefa de dev (bunge-subtask-contract §4).
+    # Participante do estágio de revisão de toda subtarefa de dev (projeto-subtask-contract §4).
     # Criado em 2026-10-21 (passo 7 do roteiro); o mesmo id está no contrato.
 
   client_approver:

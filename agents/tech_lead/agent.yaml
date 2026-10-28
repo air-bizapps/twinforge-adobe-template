@@ -37,19 +37,19 @@ desired_skills:
   - company/{{company_id}}/adobe-magento-frontend-standards
   - company/{{company_id}}/bunge-backend-code-quality
   - company/{{company_id}}/bunge-frontend-code-quality
-  - company/{{company_id}}/bunge-engineering-practices
+  - company/{{company_id}}/projeto-engineering-practices
   - company/{{company_id}}/adobe-magento-toolbox
-  - company/{{company_id}}/bunge-backlog-item
+  - company/{{company_id}}/backlog-item
   - company/{{company_id}}/adobe-srs
-  - company/{{company_id}}/bunge-link-verification
-  - company/{{company_id}}/bunge-figma-layout-decomposition
-  - company/{{company_id}}/bunge-openspec-flow
-  - company/{{company_id}}/bunge-card-curation
-  - company/{{company_id}}/bunge-subtask-contract
+  - company/{{company_id}}/link-verification
+  - company/{{company_id}}/figma-layout-decomposition
+  - company/{{company_id}}/projeto-openspec-flow
+  - company/{{company_id}}/card-curation
+  - company/{{company_id}}/projeto-subtask-contract
   - company/{{company_id}}/openspec-explore
-  - company/{{company_id}}/bunge-domain-lookup
+  - company/{{company_id}}/projeto-domain-lookup
   - company/{{company_id}}/adobe-run-unit-tests
-  - company/{{company_id}}/bunge-vague-demand-triage
+  - company/{{company_id}}/projeto-vague-demand-triage
   - air-bizapps/agentes-forjados/blocked-exige-blocker-declarado
   - company/{{company_id}}/adobe-magento-code-reviewer
   - company/{{company_id}}/adobe-magento-catalog-specialist

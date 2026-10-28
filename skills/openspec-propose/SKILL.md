@@ -6,7 +6,7 @@ description: "OpenSpec Manager only. Refina a card, cria a change OpenSpec (prop
 # openspec-propose (OpenSpec Manager)
 
 Se você **não** é o OpenSpec Manager (agent `1d0bf9cb-…`), pare: siga "Se você
-recebeu algo que não é seu" em `bunge-openspec-flow`.
+recebeu algo que não é seu" em `projeto-openspec-flow`.
 
 Esta skill só produz **planejamento**. Nunca edite código de produto. Termine
 sempre com a issue em `in_review` ou `blocked`, nunca emende para implementação.
@@ -14,7 +14,7 @@ sempre com a issue em `in_review` ou `blocked`, nunca emende para implementaçã
 ## Entrada
 
 A issue `[OPENSPEC] Proposta — <título>`, filha da card. Leia a descrição da
-card pai: ela já foi curada pelo Tech Lead (`bunge-card-curation`), com a
+card pai: ela já foi curada pelo Tech Lead (`card-curation`), com a
 origem de cada item (`[card]`, `[comentário]`, `[inferido]`, `[pergunta]`).
 Item `[inferido]` é decisão do Tech Lead, que você pode contestar com o código;
 `[pergunta]` ainda aberta não é requisito. Leia também os comentários e o
@@ -26,19 +26,19 @@ quando um item da descrição parecer ambíguo ou incompleto.
 **1. Pré-condições (pare se falhar).**
 - A card tem o ID externo do cliente. Sem ele: `blocked` + comentário pedindo
   o ID ao Tech Lead. Pare.
-- Rode a skill `bunge-link-verification` em todos os links da card. Link
+- Rode a skill `link-verification` em todos os links da card. Link
   inacessível: siga o que a skill manda (bloquear). Pare.
 
 **2. Regras de negócio (antes de decidir qualquer coisa).** A card pai pode já
 trazer uma seção `## Achados da triagem (Tech Lead)` (skill
-`bunge-vague-demand-triage`, rodada antes de você receber a issue) com
+`projeto-vague-demand-triage`, rodada antes de você receber a issue) com
 critério de aceite, regras de negócio já levantadas e pontos que já foram
 esclarecidos com o cliente. Se ela existir, use como ponto de partida — não
 refaça a busca do zero. Ainda assim **confirme contra o código** antes de
 escrever `design.md` (código é sempre a fonte de verdade; se algo mudou desde
 a triagem, ou se você achar algo que contradiz o que está lá, isso vale mais
 que o achado do Tech Lead — registre a divergência). Se a seção não existir
-(card sem a triagem, ou fora do fluxo OpenSpec padrão), rode `bunge-domain-lookup`
+(card sem a triagem, ou fora do fluxo OpenSpec padrão), rode `projeto-domain-lookup`
 você mesmo, do zero, para cada regra que a card toca. De qualquer forma,
 separe o resultado em três listas, que vão para o `design.md` (passo 7):
 - **Documentada e confirmada no código**: doc em `docs/` + arquivo:linha no código.
@@ -48,7 +48,7 @@ Regra "não encontrada" que muda escopo ou critério de aceite vira pergunta no 
 nunca suposição.
 
 **3. Refinamento.** Siga `requirements-refinement-fundamentals` ("decida quando
-consegue defender, pergunte quando não consegue"). Figma → `bunge-figma-layout-decomposition`.
+consegue defender, pergunte quando não consegue"). Figma → `figma-layout-decomposition`.
 Demanda grande ou ambígua → use `srs` como apoio para organizar requisitos.
 Se falta algo que só o cliente/Kaio sabe e isso muda escopo, comportamento ou
 critério de aceite: crie uma interaction `ask_user_questions` na **card pai**,
@@ -69,7 +69,7 @@ WT=$(mktemp -d /tmp/openspec-wt-XXXX)/repo
 git worktree add --detach "$WT" origin/twinforge
 # branch já existe no origin (retomada): use origin/feature/BUN-$EXT no lugar de origin/twinforge
 cd "$WT"
-[ -d "$WS/twinforge-repo/.git" ] || git clone git@github.com:air-bizapps/twinforge-adobe-template.git "$WS/twinforge-repo"
+[ -d "$WS/twinforge-repo/.git" ] || git clone git@github.com:<org>/<repo-de-configuracao>.git "$WS/twinforge-repo"
 (cd "$WS/twinforge-repo" && git pull --quiet)
 ln -sfn "$WS/twinforge-repo/docs" "$WT/docs"
 ```
@@ -77,7 +77,7 @@ Se a branch já existe e **não** é desta card (o PR dela fala de outra coisa):
 `blocked`, comente para o Kaio, pare.
 
 `docs/` não é mais um diretório deste repositório — é symlink pro
-`twinforge-repo` (clone de `twinforge-adobe-template`), criado acima. Se alguma
+`twinforge-repo` (clone de `<repo-de-configuracao>`), criado acima. Se alguma
 etapa de refinamento precisar consultar regra de negócio, é lá que está.
 
 **6. Contexto do projeto.**
@@ -122,7 +122,7 @@ Regras obrigatórias do Bunge para os artefatos:
   toda classe nova (Command/Plugin/ViewModel) tem tarefa de **escrever** o teste
   unitário (sem rodar, sem meta de cobertura); nenhuma tarefa manda rodar
   PHPUnit, `grumphp`, cobertura ou validar render; o último grupo termina com a
-  tarefa "postar o relatório de entrega" (ver `bunge-engineering-practices`).
+  tarefa "postar o relatório de entrega" (ver `projeto-engineering-practices`).
 
 **9. Gate de máquina (pare se falhar).**
 ```bash
@@ -173,7 +173,7 @@ fi
 git push origin "HEAD:refs/heads/feature/BUN-$EXT" \
   || git -c "http.extraheader=AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" push origin "HEAD:refs/heads/feature/BUN-$EXT"
 gh pr list --head "feature/BUN-$EXT" --state open --json number,url   # já existe? reutilize
-gh pr create --draft --base twinforge --head "feature/BUN-$EXT" --title "$EXT - <Título da card>" --body-file <arquivo com o template de 7 seções de bunge-engineering-practices, seção 3 dizendo "Planejamento OpenSpec: openspec/changes/$CH/">
+gh pr create --draft --base twinforge --head "feature/BUN-$EXT" --title "$EXT - <Título da card>" --body-file <arquivo com o template de 7 seções de projeto-engineering-practices, seção 3 dizendo "Planejamento OpenSpec: openspec/changes/$CH/">
 ```
 Nunca imprima nem comente o token. Push recusado ou `gh` ausente: `blocked`
 com a mensagem de erro (sem o token). Pare.
@@ -188,10 +188,10 @@ CARD=$(curl -s -H "Authorization: Bearer $TWINFORGE_API_KEY" "$B/api/issues/$TWI
   | python3 -c 'import json,sys;print(json.load(sys.stdin)["parentId"])')
 ```
 Crie cada subtarefa com `parentId` = `$CARD`, o título e as 4 linhas de
-cabeçalho de `bunge-openspec-flow`, label `openspec` + `backend`/`frontend`.
+cabeçalho de `projeto-openspec-flow`, label `openspec` + `backend`/`frontend`.
 Depois de criar, leia a subtarefa de volta e confira que o `parentId` é
 `$CARD`; se não for, corrija com `PATCH` antes de seguir. Depois do cabeçalho, o corpo segue
-`bunge-subtask-contract` §1 (a subtarefa roda num contexto limpo e o dev só
+`projeto-subtask-contract` §1 (a subtarefa roda num contexto limpo e o dev só
 sabe o que está nela):
 - **Objetivo** do grupo em 1-3 frases;
 - **Contexto**: por que o grupo existe e as decisões do `design.md` que valem

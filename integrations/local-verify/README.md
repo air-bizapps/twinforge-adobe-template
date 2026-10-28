@@ -34,7 +34,7 @@ Módulo copiado, nunca com link simbólico: o Magento recusa template de fora da
 
 ```bash
 cd ~/workspace/.verify/bunge
-rsync -a --delete ~/workspace/twinforge-adobe-template/skills/adobe-magento-toolbox/reference/Acme/ app/code/Acme/
+rsync -a --delete ~/workspace/<repo-de-configuracao>/skills/adobe-magento-toolbox/reference/Acme/ app/code/Acme/
 php bin/magento module:enable Acme_Reference && php bin/magento setup:upgrade
 php <skill>/scripts/magento-verify.php --path app/code/Acme/Reference
 php vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist app/code/Acme/Reference/Test/Unit

@@ -1,7 +1,7 @@
 # Plano — notificações e ações via Slack para todos os agentes
 
 Objetivo: **todo bloqueio e toda intervenção humana de qualquer agente** aparece no Slack
-(`#twinforge-adobe-template`), e o humano consegue **agir direto do Slack** (orientar, aceitar,
+(`#<canal-slack-do-projeto>`), e o humano consegue **agir direto do Slack** (orientar, aceitar,
 rejeitar, responder, aprovar). O que é notificado e quais ações existem deve poder evoluir
 sem mexer nos agentes.
 

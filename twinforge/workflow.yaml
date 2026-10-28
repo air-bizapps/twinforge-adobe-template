@@ -33,7 +33,7 @@ meta:
 # Escopo: este arquivo só vale para o pod de e-commerce (Tech Lead,
 # OpenSpec Manager, Backend/Frontend Magento). Não se aplica ao pod de
 # Mobile, que tem repo, projeto e fluxo próprios (sem OpenSpec):
-# `bunge-mobile-flow`. Um agente que encontrar este arquivo referenciado
+# `projeto-mobile-flow`. Um agente que encontrar este arquivo referenciado
 # numa issue de outro projeto deve tratar isso como um erro de roteamento,
 # não seguir o fluxo mesmo assim.
 scope:
@@ -42,7 +42,7 @@ scope:
   excludes:
     - project: "Bunge Mobile"
       project_id: "{{uuid}}"
-      reason: "Fluxo próprio, mais leve, sem OpenSpec — ver bunge-mobile-flow"
+      reason: "Fluxo próprio, mais leve, sem OpenSpec — ver projeto-mobile-flow"
 
 # ---------------------------------------------------------------------------
 # Vocabulário (vale para todo o arquivo)

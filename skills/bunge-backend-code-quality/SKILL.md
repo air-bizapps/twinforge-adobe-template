@@ -192,6 +192,6 @@ Since 2026-09-24 the developer **writes** the unit tests (skill
 includes the full PHPUnit suite), nor any coverage check, inside the subtask —
 running them was putting agents in retry loops. There is no coverage target.
 Report the tests as "escritos, não executados" in the delivery report (see
-`bunge-engineering-practices`). Following the phpcs/phpmd conventions while
+`projeto-engineering-practices`). Following the phpcs/phpmd conventions while
 writing code still applies.
 

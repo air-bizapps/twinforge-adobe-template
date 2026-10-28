@@ -123,7 +123,7 @@ faster each time.
 - One-off task specifics that won't recur — those belong in the issue's own
   comments, not in durable memory.
 - Anything already covered by `adobe-commerce-standards` (general Magento
-  conventions) or `bunge-engineering-practices` (company process) — this
+  conventions) or `projeto-engineering-practices` (company process) — this
   system is for what's specific to *this* codebase's history, not general
   knowledge those skills already carry.
 

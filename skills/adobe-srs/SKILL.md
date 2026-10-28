@@ -1,13 +1,13 @@
 ---
 name: srs
-description: "Produz uma Especificação de Requisitos de Software (SRS, IEEE 830 adaptado para Adobe Commerce) para cards grandes ou genuinamente ambíguos demais para o template padrão de bunge-backlog-item — requisitos funcionais testáveis, requisitos não-funcionais com métrica, escopo MVP vs. evolução futura, e lista de tarefas acionável por dev sem retrabalho. Use quando o Tech Lead julgar que um card precisa de mais estrutura antes de decompor em subtarefas. Adaptado da skill srs de um time irmão (FTD B2C) — sem o requisito de diagrama C4/Structurizr do original, que depende de uma skill que o Bunge não tem."
+description: "Produz uma Especificação de Requisitos de Software (SRS, IEEE 830 adaptado para Adobe Commerce) para cards grandes ou genuinamente ambíguos demais para o template padrão de backlog-item — requisitos funcionais testáveis, requisitos não-funcionais com métrica, escopo MVP vs. evolução futura, e lista de tarefas acionável por dev sem retrabalho. Use quando o Tech Lead julgar que um card precisa de mais estrutura antes de decompor em subtarefas. Adaptado da skill srs de um time irmão (FTD B2C) — sem o requisito de diagrama C4/Structurizr do original, que depende de uma skill que o Bunge não tem."
 ---
 
 # SRS (Software Requirements Specification)
 
 Adaptado em 2026-09-11 de `air-bizapps/ftd-b2c-agent-skills`'s `srs`. **Duas mudanças
 deliberadas**: (1) o artefato final vive como plano/anexo do card TwinForge, não como
-arquivo em `/SRS/` na raiz do repositório — mesma lógica de `bunge-backlog-item`, o board
+arquivo em `/SRS/` na raiz do repositório — mesma lógica de `backlog-item`, o board
 já é o TwinForge; (2) **o requisito de gerar um diagrama C4 versionado em
 `/structurizr/N/` foi removido** — depende da skill `diagrams` da FTD, que o Bunge não
 tem. Se um diagrama de arquitetura for genuinamente necessário para um SRS específico,

@@ -6,7 +6,7 @@ description: "Backend/Frontend Developer. Implementa as tarefas de uma subtarefa
 # openspec-apply-change (Backend / Frontend)
 
 Use quando a sua subtarefa começar com as linhas `Change:`, `Tarefas:`,
-`Branch:` e `Artefatos:`. Siga também tudo de `bunge-engineering-practices`
+`Branch:` e `Artefatos:`. Siga também tudo de `projeto-engineering-practices`
 (workspace, relatório de entrega antes de `done`). Esta skill só acrescenta o que é
 específico do OpenSpec.
 
@@ -16,7 +16,7 @@ específico do OpenSpec.
 números, ex. 2.1 2.2 2.3), `BR` (Branch). Faltando alguma linha: `blocked` +
 comentário para o Tech Lead. Pare.
 
-O resto da descrição segue `bunge-subtask-contract` (Entradas, Skills, Fora
+O resto da descrição segue `projeto-subtask-contract` (Entradas, Skills, Fora
 de escopo, Cenários a provar). Abra só o que ela lista, além dos artefatos da
 change no passo 3; não leia a card pai nem as subtarefas irmãs.
 
@@ -107,7 +107,7 @@ de "não houve push" é o comando acima listar seus commits, e não o
 `git ls-remote` vazio.
 
 Depois do commit, rode o `magento-verify` (skill `adobe-magento-toolbox`, comando em
-`bunge-engineering-practices`) e corrija até `VERIFY OK` antes do passo 6.
+`projeto-engineering-practices`) e corrija até `VERIFY OK` antes do passo 6.
 
 **6. Comentário final e `done`.**
 ```
@@ -126,7 +126,7 @@ Lacunas: <o que faltou na descrição, nos artefatos ou nas skills, ou "sem lacu
 ```
 Hash e saída do `git log` colados da execução real, nunca de memória: o Tech
 Lead confere a existência do commit antes de liberar a próxima subtarefa.
-Este é o relatório de entrega (ver `bunge-engineering-practices`): o Tech Lead
+Este é o relatório de entrega (ver `projeto-engineering-practices`): o Tech Lead
 usa ele direto para o PR, sem reverificar. Todo cenário da linha
 `Cenários a provar:` precisa aparecer em `Cenários atendidos`, apontando o
 código que o implementa. **Não rode testes para isso**, e nunca escreva que os

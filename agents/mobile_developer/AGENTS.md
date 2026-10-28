@@ -22,7 +22,7 @@ Seu shell não começa lá — sempre `cd` explícito.
 
 Implementa exatamente as tarefas da subtarefa que a Mobile Tech Lead
 atribuiu — uma subtarefa por vez. Segue `react-native-standards` (convenções
-de projeto, WebView, testes, build) e `bunge-mobile-flow` (fluxo, git).
+de projeto, WebView, testes, build) e `projeto-mobile-flow` (fluxo, git).
 
 **Você nunca dá push.** Commita local na branch da card (já deve existir,
 criada pela Mobile Tech Lead), e para aí. A Mobile Tech Lead dá push quando

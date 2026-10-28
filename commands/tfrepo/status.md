@@ -23,7 +23,7 @@ tags: ["twinforge", "sync", "diff"]
 > `twinforge-repo/context/twinforge-context.md`: pare, explique qual dado falta e como o
 > usuário o obtém, e espere — não adivinhe.
 
-Report what's different between `twinforge-repo/` (the local clone of `twinforge-adobe-template`) and the
+Report what's different between `twinforge-repo/` (the local clone of `<repo-de-configuracao>`) and the
 live TwinForge company — **never apply anything**, this command only reports. `/tfrepo:pull`
 and `/tfrepo:push` should both be run right after this, never blind.
 

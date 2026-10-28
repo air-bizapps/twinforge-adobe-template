@@ -34,9 +34,8 @@ desired_skills:
   - company/{{company_id}}/adobe-commerce-standards
   - company/{{company_id}}/adobe-magento-backend-standards
   - company/{{company_id}}/bunge-backend-code-quality
-  - company/{{company_id}}/bunge-engineering-practices
+  - company/{{company_id}}/projeto-engineering-practices
   - company/{{company_id}}/adobe-magento-toolbox
-  - company/{{company_id}}/adobe-magento-house-rules
   - company/{{company_id}}/engineering-memory
   - company/{{company_id}}/adobe-magento-ui-component-developer
   - company/{{company_id}}/adobe-create-unit-tests
@@ -52,13 +51,13 @@ desired_skills:
   - company/{{company_id}}/adobe-inject-custom-logger
   - company/{{company_id}}/adobe-inject-debug-logger
   - company/{{company_id}}/adobe-create-http-client
-  - company/{{company_id}}/bunge-link-verification
+  - company/{{company_id}}/link-verification
   - company/{{company_id}}/adobe-magento-uicomponent-debug
-  - company/{{company_id}}/bunge-openspec-flow
-  - company/{{company_id}}/bunge-subtask-contract
+  - company/{{company_id}}/projeto-openspec-flow
+  - company/{{company_id}}/projeto-subtask-contract
   - company/{{company_id}}/openspec-review-proposal
   - company/{{company_id}}/openspec-apply-change
-  - company/{{company_id}}/bunge-domain-lookup
+  - company/{{company_id}}/projeto-domain-lookup
   - company/{{company_id}}/adobe-run-unit-tests
   - air-bizapps/agentes-forjados/blocked-exige-blocker-declarado
   - company/{{company_id}}/adobe-magento-module-developer

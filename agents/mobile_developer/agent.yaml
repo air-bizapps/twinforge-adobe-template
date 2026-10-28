@@ -30,7 +30,7 @@ permissions:
 
 desired_skills:
   - company/{{company_id}}/react-native-standards
-  - company/{{company_id}}/bunge-mobile-flow
+  - company/{{company_id}}/projeto-mobile-flow
   - air-bizapps/agentes-forjados/blocked-exige-blocker-declarado
 
 instructions:

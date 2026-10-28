@@ -32,11 +32,11 @@ permissions:
 # create) e a ligação é feita em adapterConfig.env, como secret_ref.
 env:
   SLACK_BOT_TOKEN:
-    secret_ref: slack_bot_token  # bot token do app Slack; notifica bloqueios em #twinforge-adobe-template
+    secret_ref: slack_bot_token  # bot token do app Slack; notifica bloqueios em #<canal-slack-do-projeto>
 
 desired_skills:
   - air-bizapps/bundled/twinforge-operations/issue-triage
-  - company/{{company_id}}/bunge-po-issue-recovery
+  - company/{{company_id}}/po-issue-recovery
 
 instructions:
   entry_file: AGENTS.md

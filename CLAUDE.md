@@ -4,7 +4,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Repo `twinforge-adobe-template`: configuração e skills da TwinForge pro projeto **Bunge Magento 2**
+Repo `<repo-de-configuracao>`: configuração e skills da TwinForge pro projeto **Bunge Magento 2**
 (código da aplicação em outro repo, `Bunge-Magento2`). Aqui **não há código de aplicação**: o
 conteúdo é Markdown/YAML que descreve agentes, skills e fluxo, e que é sincronizado com uma
 instância remota da TwinForge via `twinforgecli`. A única exceção é `integrations/slack-bridge/`

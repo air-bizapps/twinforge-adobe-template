@@ -5,7 +5,7 @@ description: "OpenSpec Manager only. Revisa os artefatos de uma change OpenSpec 
 
 # openspec-update-change (OpenSpec Manager)
 
-Se você **não** é o OpenSpec Manager, pare (ver `bunge-openspec-flow`).
+Se você **não** é o OpenSpec Manager, pare (ver `projeto-openspec-flow`).
 
 Só artefatos (`openspec/changes/<CH>/`). Nunca código. O pedido de mudança que
 te acordou **é** a autorização: aplique exatamente o que foi pedido, nada além.
@@ -104,7 +104,7 @@ vai prová-lo.
 
 Ao reescrever a descrição, **preserve** as 4 linhas de cabeçalho
 (`Change:`/`Tarefas:`/`Branch:`/`Artefatos:`) e as seções de
-`bunge-subtask-contract` (Objetivo, Entradas, Skills, Fora de escopo). Se o
+`projeto-subtask-contract` (Objetivo, Entradas, Skills, Fora de escopo). Se o
 `design.md` mudou de forma que afeta o grupo, atualize as Entradas
 correspondentes. Grupo novo → corpo completo, como em `openspec-propose` passo 11.
 

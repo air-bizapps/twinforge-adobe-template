@@ -8,7 +8,7 @@ description: "Delivery sequence for a Magento 2.4.8 feature: map what exists, pl
 How to take a requirement to a working, deployable feature. The table of layers and the skill for
 each one is in `adobe-commerce-standards`, "Feature completeness"; this skill is the order and the
 decisions between them. Project business rules come from the project's domain skill (Bunge:
-`bunge-domain-lookup`). `$T` is the `scripts/` folder of `adobe-magento-toolbox`.
+`projeto-domain-lookup`). `$T` is the `scripts/` folder of `adobe-magento-toolbox`.
 
 ## Rules
 
