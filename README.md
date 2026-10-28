@@ -22,7 +22,7 @@ Base para configurar um projeto **TwinForge + Adobe Commerce (Magento 2)**: o pa
 | `commands/tfrepo/` | Repositório de configuração: `/tfrepo:init`, `:status`, `:pull`, `:push`, `:agent`, `:local-sync`, `:help`. Fixam a instância e conferem o projeto antes de escrever. |
 | `agents/` | 12 agentes (`agent.yaml` portável + `AGENTS.md`/`CONTEXT.md`). |
 | `skills/` | 77 skills da plataforma: `adobe-*` (Magento 2; várias ainda citam o projeto de origem), `openspec-*`, skills de processo sem prefixo, 6 `projeto-*` (fluxo do projeto de origem, a adaptar) e 2 `bunge-*` (camadas de qualidade de código, a adaptar). |
-| `twinforge/` | `workflow.yaml` (fases e aprovações), `roles.yaml` (papel → agente, com placeholders), `toolkit.yaml`. |
+| `twinforge/` | `workflow.yaml` (fases e aprovações), `roles.yaml` (papel → agente, com placeholders). |
 | `context/`, `knowledge/` | Como a plataforma e o `twinforgecli` se comportam e lições do fluxo de agentes. |
 | `integrations/` | Ponte com o Slack e verificação local. |
 | `docs/` | Vazia de propósito: documentação de domínio é de cada projeto. O pacote de skills está descrito em `docs/twinforge-skills.md`. |

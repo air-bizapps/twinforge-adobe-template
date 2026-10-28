@@ -276,8 +276,3 @@ para outro projeto:
   fizer, isso é sinal de que `workflow.yaml` também precisa de ajuste, não só
   os ids.
 
-## `toolkit.yaml`
-
-Lido pelo Agentic Toolkit (funcionalidade Twinforge), não pelos agentes: limites e regras
-desligadas das regras de saúde que transformam o quadro da instância em problemas com correção
-sugerida. Tabela das regras e de onde cada uma veio em `context/agentic-toolkit.md`.

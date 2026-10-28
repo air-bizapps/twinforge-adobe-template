@@ -5,7 +5,7 @@ description: Configuração inicial guiada do twinforgecli, em passos, retomáve
 
 # twinforge-setup
 
-Leva o usuário da máquina sem configuração até um `twinforgecli` logado, com perfil, company e projetos visíveis. Funciona em qualquer pasta e sem o app Agentic Toolkit aberto. O objetivo final é a pessoa **encontrar os projetos dela**.
+Leva o usuário da máquina sem configuração até um `twinforgecli` logado, com perfil, company e projetos visíveis. Funciona em qualquer pasta. O objetivo final é a pessoa **encontrar os projetos dela**.
 
 ## Regras inegociáveis
 
@@ -97,6 +97,3 @@ Compare os agentes da instância (`twinforgecli agent list --json`) com `twinfor
 
 Mostre um resumo: versão do CLI, instância (URL), identidade logada, perfil, company, **projetos encontrados** e situação do repositório de agentes. Sugira os próximos passos: `/twinforge:projects`, `/twinforge:status` ou `/twinforge:explore`.
 
-## App Agentic Toolkit (opcional)
-
-Se o app estiver aberto com o MCP ligado e a ferramenta `abrir_tela` existir, você pode usá-la para mostrar o passo humano (por exemplo, o comando para copiar) na tela de configuração inicial do app. É só uma melhoria: sem o app, entregue tudo na própria conversa, com o mesmo conteúdo.

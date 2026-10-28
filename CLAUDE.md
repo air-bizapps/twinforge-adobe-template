@@ -23,9 +23,6 @@ da conversa: **português (pt-BR)**.
    antes de mudar `AGENTS.md`, a curadoria da card ou o contrato das subtarefas. A visão
    prática (que texto vira prompt e onde vê-lo na UI): `context/engenharia-de-prompt-aplicada.md`.
 4. `skills/README.md` e `agents/README.md` — escopo, prefixos, compatibilidade e pendências.
-5. `context/agentic-toolkit.md` — a interface de operação da instância (app Agentic Toolkit →
-   Twinforge): o que ela lê daqui, as regras de saúde (`twinforge/toolkit.yaml`), o MCP
-   (`.mcp.json`) e as garantias. Mudou uma lição que vira regra de saúde? Atualize os dois.
 
 ## Mapa do repo
 
@@ -33,8 +30,7 @@ da conversa: **português (pt-BR)**.
 |---|---|
 | `skills/<slug>/` | Espelho das skills ativas da company (`SKILL.md` + `references/`/`scripts/` só se existirem em produção). Prefixos: `bunge-` (específico do projeto), `adobe-` (Magento genérico), sem prefixo (processo/plataforma) |
 | `agents/<role_key>/` | `agent.yaml` portável (`{{company_id}}` é placeholder; `reports_to` é role key) + `AGENTS.md`/`CONTEXT.md`/… exatamente como em produção |
-| `twinforge/` | `workflow.yaml` (fases, aprovação, worktree), `roles.yaml` (papel → id real), `toolkit.yaml` (regras de saúde lidas pelo Agentic Toolkit), README |
-| `.mcp.json` | Conecta o Claude Code deste repo ao MCP do Agentic Toolkit (ferramentas `twinforge_*`); token por `AGENTIC_MCP_TOKEN`, nunca no arquivo |
+| `twinforge/` | `workflow.yaml` (fases, aprovação, worktree), `roles.yaml` (papel → id real), README |
 | `docs/` | Regras de negócio do Bunge (fonte única; o `docs/` do repo de código foi descontinuado) |
 | `commands/` | Slash commands `/twinforge*` (carregados via `.claude/commands`, que é symlink pra cá) |
 | `context/` | Contexto operacional, lições e planos (ex.: `plano-notificacoes-slack.md`), **sem dados de instância** |

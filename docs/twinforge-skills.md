@@ -1,6 +1,6 @@
 # twinforge-adobe-skills
 
-Skills e comandos do Claude Code para usar o `twinforgecli` em projetos Adobe Commerce (Magento 2), direto do terminal, sem precisar do Agentic Toolkit (dashboard local) aberto.
+Skills e comandos do Claude Code para usar o `twinforgecli` em projetos Adobe Commerce (Magento 2), direto do terminal.
 
 > **Estado:** as cinco skills (`*/SKILL.md`) e os oito comandos (`commands/twinforge/`) já foram escritos, mas **ainda não foram testados em uso real** (nem instalados em `~/.claude`). Este documento descreve como tudo **deve funcionar**. A fonte de verdade do planejamento é a mudança OpenSpec `openspec/changes/twinforge-adobe-skills-v1/` (proposal, specs, design e tasks). Quando algo aqui divergir de lá, vale o que está lá.
 
@@ -102,7 +102,6 @@ O setup **lê o estado real** (máquina e instância) a cada execução, pula o 
 7. **Auditoria.** Só com repositório: compara por `id` os agentes da instância com `roles.yaml` e relata divergências, sem alterar nada.
 8. **Conferência final.** Resumo com versão do CLI, instância, identidade logada, perfil, company, projetos encontrados e situação do repositório, e sugere `/twinforge:projects`, `/twinforge:status` ou `/twinforge:explore`.
 
-Se o app Agentic Toolkit estiver aberto com o MCP ligado, a skill pode usar a ferramenta `abrir_tela` para mostrar o passo humano na tela do app. É só uma melhoria; sem o app, tudo é entregue na própria conversa.
 
 ## Linguagem natural: `twinforge` e `/twinforge:explore`
 
