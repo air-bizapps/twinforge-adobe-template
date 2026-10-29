@@ -39,6 +39,23 @@ Antes do primeiro comando do `twinforgecli` em cada sessão, fixe a instância d
 4. **Monte o comando** com `--json` quando existir, `--project-id` do **projeto da pasta** quando o comando aceitar projeto e o usuário não indicar outro (seção "Projeto da pasta"; diga qual projeto está usando), `--context "<arquivo>" --profile "<perfil>"` sempre, e `-C <companyId>` quando o comando pedir company (use a do perfil). Resolva nomes em ids consultando a listagem correspondente; **nunca peça uuid** ao usuário.
 5. **Execute** conforme o tipo.
 
+## Documentação oficial (MCP `twinforge-docs`)
+
+O catálogo do CLI diz **como chamar** um comando; não diz **o que ele causa** na plataforma. Para isso existe a doc oficial, exposta como MCP (`.mcp.json` do repositório; ferramentas `search_docs`, `get_page` e `ask`). Consulte-a, sem pedir confirmação (é leitura pública), quando:
+
+- **o usuário perguntar como algo funciona** ("o que é heartbeat?", "como funciona a aprovação?", "o que acontece se eu atribuir a card?"): responda pela doc, **sem rodar o CLI**, citando o link da página;
+- **a escrita tiver efeito que o catálogo não explica** (acordar agente, custo, mudança de status, aprovação, política): consulte antes de montar o rascunho e traga o efeito para a linha `Ação:`;
+- **um termo do pedido não casar com o catálogo** (a doc chama o agente de "Twin" e a company de "organização"; o CLI usa `agent` e `company`): use `search_docs` para achar o conceito e só então volte ao catálogo;
+- **aparecer um erro fora da tabela abaixo**: busque a mensagem antes de repetir tentativas.
+
+Como usar:
+
+1. `search_docs` primeiro (rápida, sem modelo, até 60 chamadas/min). `get_page` só para ler a página inteira de um resultado. `ask` por último, para uma explicação passo a passo que a busca não deu: usa modelo e tem limite de 8 por minuto, então não chame em laço.
+2. **O que a doc diz sobre o produto não substitui o CLI.** Sintaxe, opções e existência de comando vêm sempre de `twinforgecli commands`/`--help`. Se a doc e o catálogo divergirem, vale o catálogo; avise a divergência ao usuário.
+3. **A consulta sai para um serviço externo:** use só termos gerais ("aprovação de issue", "heartbeat"). Nunca ponha na consulta token, id, URL da instância, nome de cliente ou conteúdo de card.
+4. Cite o link da página usada. Se a doc não cobrir o assunto, diga isso; não complete de cabeça.
+5. **Sem as ferramentas** (MCP não aprovado ou fora do ar): peça ao usuário para rodar `/mcp` e conectar `twinforge-docs` (ver README), ou leia direto `https://docs.twinforge.webjump.ai/llms.txt` (índice) e `<link-da-página>.md`. Falta da doc **não bloqueia** o pedido; só deixa de enriquecer a resposta.
+
 ## Projeto da pasta (contexto)
 
 A CLI **não tem campo de projeto** no perfil (e o `context set` apaga chaves que não conhece), então o projeto escolhido fica em **`.twinforge/project.json`**, na raiz do repositório (`git rev-parse --show-toplevel`, ou a pasta atual): `{"apiBase":"<URL>","companyId":"<id>","projectId":"<id>","projectName":"<nome>"}`. Não tem token e fica fora do git (`.twinforge/` está no `.gitignore`). O `projectId` também vai para `scope.project_id` de `twinforge/roles.yaml` (versionado, vale para o time).
@@ -95,6 +112,7 @@ Ao encontrar um destes erros, use a explicação abaixo em vez de repetir tentat
 | 403 sem essa mensagem, "forbidden", página/mensagem de bloqueio do proxy | "O acesso foi bloqueado antes de chegar ao TwinForge ou o usuário não tem permissão." Diga o que pedir aos responsáveis (liberar o acesso, confirmar convite e permissões). Não repita. |
 | `Internal server error` (500) ao criar o desafio de `auth login` | Quase sempre é a CLI enviando a company do **contexto padrão** (de outra instância) ao servidor novo, mesmo sem flags. Refaça o login com `--api-base` **e** `--context` apontando para um arquivo vazio (`{}`). Se persistir assim, é a instância: considere o horário e avise os responsáveis. |
 | Company inexistente / não pertence ao usuário (`403 ... does not have access to this company`) | Mostre a company em uso e ofereça listar as disponíveis (`company list`). |
+| Erro que não está nesta tabela | Busque a mensagem com `search_docs` (seção "Documentação oficial") e explique a causa pela doc, citando a página. Não repita a tentativa. |
 | Comando ou opção desconhecidos | CLI possivelmente desatualizada: sugira `/twinforge:update` e consulte o catálogo de novo. |
 | `E404` ao instalar `twinforgecli` | Registry npm privado interferindo; repita com `--registry https://registry.npmjs.org`. |
 | `node` ausente ou < 20 | Explique o requisito do Node 20+ antes de instalar o CLI. |

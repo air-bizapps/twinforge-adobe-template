@@ -153,6 +153,8 @@ Você pede, a skill traduz em comando do `twinforgecli` **consultando `twinforge
 
 `/twinforge:explore` inicia um **modo de conversa**: seleciona a instância, lê o catálogo uma vez, anuncia o modo e passa a interpretar as suas mensagens seguintes como pedidos, até você pedir para sair. Dá para trocar de instância dentro do modo.
 
+**Documentação oficial (MCP `twinforge-docs`).** O catálogo diz como chamar um comando, não o que ele causa. Quando o MCP está conectado, a skill consulta a doc (`search_docs`, depois `get_page`, `ask` só por último) para responder perguntas conceituais sem rodar o CLI, trazer o efeito de uma escrita para o rascunho, mapear termos ("Twin"/"organização" na doc × `agent`/`company` no CLI) e explicar erros fora da tabela. O catálogo vence a doc em sintaxe; a consulta usa só termos gerais (serviço externo); sem o MCP a skill segue só com o CLI. Como ativar: README, seção "A documentação do TwinForge no Claude (MCP)".
+
 `/twinforge:projects [company]` lista os projetos da company do perfil (ou da company informada). Com várias companies e sem argumento, agrupa por company.
 
 O `SKILL.md` também traz uma seção separada, opcional, de atalhos para projetos Magento 2 (por exemplo o fluxo Tech Lead / OpenSpec Manager / Backend / Frontend). O núcleo não assume nenhum cliente.
