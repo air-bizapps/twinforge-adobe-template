@@ -23,6 +23,12 @@ da conversa: **português (pt-BR)**.
    antes de mudar `AGENTS.md`, a curadoria da card ou o contrato das subtarefas. A visão
    prática (que texto vira prompt e onde vê-lo na UI): `context/engenharia-de-prompt-aplicada.md`.
 4. `skills/README.md` e `agents/README.md` — escopo, prefixos, compatibilidade e pendências.
+5. **Doc oficial da plataforma (MCP `twinforge-docs`, em `.mcp.json`)** — para "como o TwinForge
+   faz X": `search_docs` → `get_page` → `ask` (último, limite de 8/min); sem o MCP, páginas `.md`
+   em `https://docs.twinforge.webjump.ai` e `/llms.txt`. Vale para conceito; **comportamento
+   observado na instância** (`context/`) e **sintaxe do CLI** (`twinforgecli commands`) valem mais
+   que a doc, e divergência é motivo de corrigir a doc. Consultas saem para serviço externo:
+   nada de token, id ou URL de instância na busca.
 
 ## Mapa do repo
 
@@ -32,6 +38,7 @@ da conversa: **português (pt-BR)**.
 | `agents/<role_key>/` | `agent.yaml` portável (`{{company_id}}` é placeholder; `reports_to` é role key) + `AGENTS.md`/`CONTEXT.md`/… exatamente como em produção |
 | `twinforge/` | `workflow.yaml` (fases, aprovação, worktree), `roles.yaml` (papel → id real), README |
 | `docs/` | Regras de negócio do Bunge (fonte única; o `docs/` do repo de código foi descontinuado) |
+| `.mcp.json` | MCP da doc oficial (`twinforge-docs`, HTTP, sem login); uso nas skills em `.claude/skills/twinforge/SKILL.md` (seção "Documentação oficial") |
 | `commands/` | Slash commands `/twinforge*` (carregados via `.claude/commands`, que é symlink pra cá) |
 | `context/` | Contexto operacional, lições e planos (ex.: `plano-notificacoes-slack.md`), **sem dados de instância** |
 | `knowledge/` | Defeitos reais dos agentes e casos de avaliação do verificador (`knowledge/README.md`); vira regra do `magento-verify`, não prosa para os agentes |

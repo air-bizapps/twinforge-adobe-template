@@ -63,6 +63,8 @@ Instâncias hospedadas podem ser ligadas e desligadas em horários fixos (por ex
 3. Se não houver horário conhecido, diga que pode ser horário de funcionamento e **pergunte** se a instância tem um. Se o usuário informar, use-o no restante da sessão e ofereça registrá-lo na memória dele para as próximas.
 4. Nunca afirme um horário que você não recebeu do usuário.
 
+**Falha que o status não explica:** se a mensagem não casar com nenhuma linha acima nem com a tabela de erros, e o MCP `twinforge-docs` estiver disponível, busque-a com `search_docs` (só termos gerais; nunca token, id ou URL da instância) e cite a página usada. Sem o MCP, siga só com o que o status mostrou. A doc explica o comportamento do produto; o diagnóstico continua vindo das checagens.
+
 ## Fix (corrige com confirmação)
 
 1. Rode todas as checagens do status.

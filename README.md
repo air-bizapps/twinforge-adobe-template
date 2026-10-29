@@ -13,6 +13,40 @@ Base para configurar um projeto **TwinForge + Adobe Commerce (Magento 2)**: o pa
 2. Abra o Claude Code na pasta e rode `/twinforge:setup`. Ele guia os passos da tabela abaixo.
 3. Adapte o repositório (checklist em `TEMPLATE.md`) e suba o template pelo passo 9 do setup. O `/twinforge:repo:push` é barrado enquanto `scope.project_id` em `twinforge/roles.yaml` for um placeholder.
 
+## A documentação do TwinForge no Claude (MCP)
+
+O repositório traz o MCP da [documentação oficial](https://docs.twinforge.webjump.ai) em `.mcp.json` (servidor `twinforge-docs`, sem login). Com ele o Claude consulta a doc sozinho, sem você colar trechos, quando precisa saber **como algo da plataforma funciona**.
+
+| Ferramenta | O que faz |
+|---|---|
+| `search_docs` | Acha as seções sobre um assunto, com o link de cada uma. Rápida, sem modelo (até 60 chamadas/min). |
+| `get_page` | Lê uma página inteira, pelo caminho ou pelo link. |
+| `ask` | Responde uma pergunta passo a passo, com as páginas citadas. Usa modelo: lenta e limitada a **8 por minuto**. |
+
+**Ativar (uma vez por pessoa):**
+
+1. Abra o Claude Code **nesta pasta**. Ele pergunta se confia no servidor `twinforge-docs` do `.mcp.json`: aprove.
+2. Rode `/mcp` e confira que `twinforge-docs` aparece como conectado, com as três ferramentas. Para testar: *"consulta a doc do TwinForge e me diz o que é heartbeat"*.
+
+Alternativas:
+
+| Situação | O que fazer |
+|---|---|
+| Quer a doc em **todos** os seus projetos, não só neste | `claude mcp add --scope user --transport http twinforge-docs https://docs.twinforge.webjump.ai/mcp` |
+| Já usa o conector da organização no claude.ai | `/mcp` → **claude.ai TwinForge Documentation MCP** → conectar. As ferramentas são as mesmas; mantenha só um dos dois para não duplicar |
+| Prefere sem MCP | Qualquer página sai em markdown acrescentando `.md` à URL; o índice está em [`/llms.txt`](https://docs.twinforge.webjump.ai/llms.txt) (inglês: `/en/llms.txt`) |
+| Aparece "requires authentication" ou "pending approval" | É só o passo de aprovar/conectar acima; não é problema do servidor |
+
+**Como o repositório usa:**
+
+- **`/twinforge` e `/twinforge:explore` (linguagem natural)** consultam a doc para: responder "como funciona X?" sem rodar o CLI; entender o **efeito** de uma escrita antes de montar o rascunho (por exemplo, o que acorda um agente); mapear termos ("Twin" e "organização" na doc, `agent` e `company` no CLI); e explicar erros que a tabela da skill não cobre.
+- **`/twinforge:status` e `:fix`** buscam na doc as falhas que as checagens não explicam.
+- **Regra de precedência:** o catálogo vivo (`twinforgecli commands`) manda na sintaxe; a doc, no conceito. Para o conteúdo **deste** repositório, vale o repositório e a instância; divergência com a doc é motivo de corrigir a doc.
+- **Privacidade:** as consultas saem para um serviço externo; as skills só enviam termos gerais, nunca token, id, URL da instância, cliente ou conteúdo de card.
+- Sem o MCP, nada quebra: as skills seguem só com o catálogo do CLI (e podem ler as páginas `.md` direto).
+
+> O TwinForge também tem um MCP que **opera** a sua instância (issues, comentários, aprovações), descrito em [O TwinForge no seu agente](https://docs.twinforge.webjump.ai/instalacao/mcp-plataforma). Ele não faz parte deste repositório: exige credencial da instância e hoje o `twinforgecli` já cobre esse papel.
+
 ## `/twinforge:setup`: o que cada passo faz
 
 O setup **sempre começa perguntando como você quer seguir**: continuar um setup em andamento, revalidar uma instância (checkup) ou configurar uma nova. Nada é escrito em uma instância sem a sua confirmação.
@@ -89,6 +123,7 @@ Os comandos `repo:*` fixam a instância e **param** se `scope.project_id` de `tw
 
 | Onde | O que é |
 |---|---|
+| `.mcp.json` | MCP da documentação do TwinForge (`twinforge-docs`); ver a seção acima. |
 | `.claude/skills/` | Pacote de skills `twinforge`: `twinforge`, `twinforge-setup`, `twinforge-instancias`, `twinforge-diagnostico`, `twinforge-apply`, `twinforge-workspace`. |
 | `commands/twinforge/` | Os comandos `/twinforge:*`. Cada um só aciona a skill. |
 | `commands/twinforge/repo/` | Os comandos `/twinforge:repo:*`. |

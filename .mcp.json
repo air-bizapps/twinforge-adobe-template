@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "twinforge-docs": {
+      "type": "http",
+      "url": "https://docs.twinforge.webjump.ai/mcp"
+    }
+  }
+}

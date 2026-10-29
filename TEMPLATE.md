@@ -6,6 +6,7 @@ Este repositório é a **base a adaptar** para projetos TwinForge + Adobe Commer
 | Parte | Onde |
 |---|---|
 | Pacote de skills `twinforge` (setup, instâncias, diagnóstico, linguagem natural, apply, repositório do projeto) | `.claude/skills/` e `commands/twinforge/` (`/twinforge:*`) |
+| MCP da documentação do TwinForge (`twinforge-docs`), usado pela skill `twinforge` | `.mcp.json` (instruções no README) |
 | Comandos do repositório de configuração | `commands/twinforge/repo/` (`/twinforge:repo:*`) |
 | Agentes, skills da plataforma, fluxo e papéis | `agents/` (11), `skills/` (76), `twinforge/` |
 | Conhecimento operacional | `context/`, `knowledge/` |
